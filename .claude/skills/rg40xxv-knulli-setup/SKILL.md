@@ -55,7 +55,7 @@ Você está no PC Windows do usuário, com o Claude Code. Os dois microSD do con
 - Confira: compare os tamanhos e a contagem de arquivos e mostre ao usuário.
 
 ### 2. Baixar o Knulli
-- Pegue a release estável mais recente em `github.com/knulli-cfw/distribution/releases`, na **imagem do H700** (cobre o RG40XX V). **[verificar]** o nome exato do arquivo e se a versão está marcada como estável.
+- Pegue a release estável mais recente em `github.com/knulli-cfw/knulli-linux/releases` (o repositório antigo, `knulli-cfw/distribution`, parou em ago/2025). Em nov/2026 a mais recente era a **Scarab (20260511)**. Baixe a **imagem do H700** (cobre o RG40XX V). **[verificar]** o nome exato do arquivo e se saiu versão mais nova.
 - Confira o checksum se a release publicar um.
 
 ### 3. Gravar o Knulli no cartão de sistema
