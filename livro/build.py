@@ -103,7 +103,7 @@ def build_sections():
             h = add_icons(h)
         if s['id'] == 'vida':
             i = h.index('<h2>')
-            h = h[:i] + timeline_html() + h[i:]
+            h = h[:i] + '<!--MAPA-->' + h[i:] + tracos_html()
         if s['id'] in BALLOON_CHAPTERS:
             h = add_balloons(h)
         elif s['kind'] == 'chapter':
@@ -233,23 +233,55 @@ def add_icons(h):
     return re.sub(r'<h2>([^<]+)</h2>', lambda m: (f'<h2 class="ic"><img class="icon" src="img/icons/{ICONS_H2[m.group(1)]}.svg" alt=""/>{m.group(1)}</h2>'
                                                   if m.group(1) in ICONS_H2 else m.group(0)), h)
 
-TIMELINE = [('1853–1880', 'Antes da arte', None, 'Zundert, Haia, Londres, Paris, o Borinage. Seis anos entre gravuras na Goupil e, no fim, os primeiros desenhos dos mineiros.'),
-            ('1880–1881', 'Bruxelas e Etten', 'sower2', 'Copia as sessenta pranchas de Bargue e os camponeses de Millet. O traço ainda é duro e correto demais.'),
-            ('1881–1883', 'Haia', 'sorrow', 'A escola do preto e branco: lápis de carpinteiro, giz litográfico e a moldura de perspectiva nas dunas.'),
-            ('1883–1885', 'Drenthe e Nuenen', 'peasant', 'Tecelões e camponeses. Passa a começar a forma pelas massas, de dentro para fora.'),
-            ('1885–1888', 'Antuérpia e Paris', 'sp_straw', 'A paleta clareia e chegam as gravuras japonesas: cada superfície ganha um padrão próprio.'),
-            ('1888–1889', 'Arles', 'harvest', 'A pena de junco e o alfabeto de marcas. Redesenha a pena as próprias pinturas.'),
-            ('1889–1890', 'Saint-Rémy', 'cypress', 'O traço curto se alonga em curvas que ligam terra, árvore e céu.'),
-            ('1890', 'Auvers-sur-Oise', 'gachet', 'Setenta pinturas em dois meses e a única água-forte que fez, o retrato do Dr. Gachet.')]
+ENDERECOS = [('Borinage', '1879–1880', 'Pregador entre os mineiros, começa a desenhá-los.'),
+             ('Bruxelas', '1880–1881', 'Anatomia, perspectiva e as pranchas de Bargue.'),
+             ('Etten', '1881', 'Na casa dos pais, copia Millet e desenha do natural.'),
+             ('Haia', '1881–1883', 'A escola do preto e branco.'),
+             ('Drenthe', '1883', 'Três meses entre as turfeiras do norte.'),
+             ('Nuenen', '1883–1885', 'Tecelões, camponeses e a forma pelas massas.'),
+             ('Antuérpia', '1885–1886', 'Poucos meses na academia.'),
+             ('Paris', '1886–1888', 'A paleta clareia e chegam as gravuras japonesas.'),
+             ('Arles', '1888–1889', 'A pena de junco e o alfabeto de marcas.'),
+             ('Saint-Rémy', '1889–1890', 'O traço curto se alonga em curvas.'),
+             ('Auvers-sur-Oise', '1890', 'Setenta pinturas em dois meses e a única água-forte.')]
+# ano, lugar, imagem, centro x, centro y, largura (fração), obra, texto
+TRACOS = [('1881', 'Etten', 'sower2', .55, .22, .95, 'Semeador de perfil', 'Lápis duro e contorno contínuo. Ainda copia Millet.'),
+          ('1882', 'Haia', 'sorrow', .5, .62, .8, 'Sorrow', 'Uma linha só, mais grossa embaixo das formas.'),
+          ('1882', 'Haia', 'wornout', .5, .28, .85, 'Worn Out', 'Lápis sobre papel de aquarela. A pose carrega a emoção.'),
+          ('1885', 'Nuenen', 'peasant', .5, .3, .85, 'Camponesa curvada', 'Giz preto em aros sobre massas ovais.'),
+          ('1885', 'Nuenen', 'hands', .5, .5, .9, 'Três mãos', 'Mãos grandes e pesadas, construídas pelas massas.'),
+          ('1887', 'Paris', 'sp_chi', .5, .45, .7, 'Autorretrato', 'Tracinhos de cor separados, em raios a partir do nariz.'),
+          ('1888', 'Arles', 'lacrau', .5, .62, .6, 'La Crau vista de Montmajour', 'Pena de junco: uma marca para cada superfície.'),
+          ('1888', 'Arles', 'cover-roulin', .5, .58, .6, 'Retrato de Joseph Roulin', 'Quatro substâncias, quatro marcas num só rosto.'),
+          ('1889', 'Saint-Rémy', 'cypress', .45, .25, .8, 'Ciprestes', 'Curvas que sobem e se enrolam como chamas.'),
+          ('1890', 'Auvers', 'gachet', .5, .45, .85, 'Dr. Gachet', 'A única água-forte: hachura nervosa e rápida.')]
 
-def timeline_html():
-    rows = []
-    for yrs, place, img, txt in TIMELINE:
-        pic = f'<img src="img/{img}.jpg" alt=""/>' if img else '<span class="noimg"></span>'
-        cap = f'<span class="tlwork"><i>{esc(PL[img]["t"])}</i></span>' if img and img in PL else ''
-        rows.append(f'<div class="tlrow"><div class="tlyear">{yrs}</div><div class="tlpic">{pic}</div>'
-                    f'<div class="tltxt"><p class="tlplace">{place}</p><p>{txt}</p>{cap}</div></div>')
-    return '<div class="timeline"><h2>Linha do tempo</h2>' + ''.join(rows) + '</div>'
+def make_tracos():
+    from PIL import Image
+    for i, (yy, pl, k, cx, cy, w, t, tx) in enumerate(TRACOS, 1):
+        im = Image.open(f'img/{k}.jpg').convert('RGB'); W = w * im.width; H = W / 2.1
+        x0 = max(0, min(im.width - W, cx * im.width - W / 2)); y0 = max(0, min(im.height - H, cy * im.height - H / 2))
+        im.crop((round(x0), round(y0), round(x0 + W), round(y0 + H))).resize((840, 400), Image.LANCZOS).save(f'img/traco-{i:02d}.jpg', quality=90)
+
+def map_html(inline=True):
+    if inline:
+        svg = open('img/mapa-caminho.svg').read()
+        mp = f'<div class="mapa">{svg}</div>'
+    else:
+        mp = '<figure class="mapa"><img src="img/mapa-caminho.svg" alt="Mapa com os endereços de Van Gogh entre 1879 e 1890"/></figure>'
+    rows = ''.join(f'<div class="end"><span class="en">{i}</span><div><p><b>{c}</b> <span class="ey">{y}</span></p><p>{t}</p></div></div>'
+                   for i, (c, y, t) in enumerate(ENDERECOS, 1))
+    return (mp + '<div class="enderecos"><h2>Onze endereços</h2><p class="sub">Cada cidade deixou alguma coisa no traço. '
+            'Zundert, onde nasceu em 1853, e Londres, onde trabalhou de 1873 a 1876, aparecem no mapa como pontos vazados.</p>' + rows + '</div>')
+
+def tracos_html():
+    def row(i, x):
+        yy, pl, k, cx, cy, w, t, tx = x
+        return (f'<div class="tr"><img src="img/traco-{i:02d}.jpg" alt="Detalhe de {esc(t)}"/>'
+                f'<div class="trt"><p class="ty">{yy}</p><p class="tp">{pl} · <i>{esc(t)}</i></p><p>{tx}</p></div></div>')
+    rows = [row(i, x) for i, x in enumerate(TRACOS, 1)]
+    return ('<div class="tracos"><h2>Dez anos em dez traços</h2><p class="sub">O mesmo desenhista, de 1881 a 1890, sempre visto de perto.</p>'
+            + ''.join(rows[:5]) + '<div class="tr2">' + ''.join(rows[5:]) + '</div></div>')
 
 # ---------------------------------------------------------------- PDF (edição ilustrada)
 FONTDIR = os.path.join(ROOT, 'fonts')
@@ -345,16 +377,20 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
 .bal figcaption{margin:0;font-size:7pt;line-height:1.4}
 .bal figcaption b{display:block;font-weight:700;color:#1E1913;margin-bottom:.02in}
-.timeline{margin:1.2em 0 1.6em;break-before:page}
-.timeline h2{margin-top:0}
-.tlrow{display:flex;gap:.16in;padding:.1in 0;border-top:.6pt solid #CFC4B0;break-inside:avoid;position:relative}
-.tlyear{width:.92in;flex:none;font:400 11pt/1.15 Disp}
-.tlpic{width:1.05in;height:1.05in;flex:none}
-.tlpic img{width:1.05in;height:1.05in;object-fit:cover;display:block}
-.tlpic .noimg{display:block;width:1.05in;height:1.05in;background:#E3D9C6}
-.tltxt p{text-align:left;margin:0 0 .15em;font-size:9.2pt;line-height:1.38}
-.tltxt .tlplace{font:700 8.6pt Sans;margin-bottom:.05in}
-.tlwork{font:400 7pt Sans;color:#6E6253}
+.mapa{page:full;break-before:page;width:6in;height:9in}
+.mapa svg{display:block;width:6in;height:9in}
+.enderecos{break-before:page}
+.enderecos h2,.tracos h2{font:400 17pt/1.1 Disp;margin:0 0 .05in}
+.enderecos .sub,.tracos .sub{font:italic 10pt/1.35 Serif;margin:0 0 .2in;text-align:left}
+.end{display:flex;gap:.12in;border-top:.6pt solid #CFC4B0;padding:.07in 0}
+.end .en{flex:none;width:.2in;height:.2in;border-radius:50%;background:#1E1913;color:#F4EFE6;font:700 6.8pt/.2in Sans;text-align:center}
+.end p{margin:0;text-align:left;font-size:9.2pt;line-height:1.32}.end b{font:700 8.4pt Sans}.end .ey{font:400 7.6pt Sans;color:#6E6253}
+.tracos{break-before:page}
+.tr{display:flex;gap:.16in;border-top:.6pt solid #CFC4B0;padding:.07in 0 .08in;break-inside:avoid}
+.tr img{width:2.3in;height:1.1in;flex:none}
+.trt p{margin:0;text-align:left;font-size:9pt;line-height:1.32}.trt .ty{font:400 16pt/1 Disp}
+.trt .tp{font:700 7.6pt Sans;margin:.05in 0 .04in}.trt .tp i{font-weight:400}
+.tr2{break-before:page;padding-top:.68in}
 .lvhead .lvtag{position:absolute;left:0;bottom:.62in;font:400 30pt/1 Disp;color:#BF8A5A;margin:0}
 
 /* capa */
@@ -651,7 +687,7 @@ def pdf_html(S):
             lab = s['title'].replace("'", "’")
             P.append(f'<section class="chap" id="{s["id"]}" style="bookmark-level:{lvl};bookmark-label:\'{lab}\'">{head}{body}</section>')
     P.append('</body></html>')
-    html_ = '\n'.join(P)
+    html_ = '\n'.join(P).replace('<!--MAPA-->', map_html(True))
     # cada capítulo ganha um nome de página próprio, para a primeira página sair sem rodapé
     n = [0]
     def pg(m):
@@ -704,12 +740,12 @@ h2.ic img.icon{width:1.6em;height:1.6em;vertical-align:middle;margin-right:.4em}
 .bal{display:inline-block;width:30%;margin:.4em 1.2% .8em;vertical-align:top;text-align:left}
 .bal img{width:100%;border-radius:50%}
 .bal figcaption b{display:block;font-weight:700}
-.tlrow{border-top:1px solid #CFC4B0;padding:.6em 0;overflow:hidden;page-break-inside:avoid}
-.tlyear{font-family:Disp,sans-serif;font-size:1.05em}
-.tlpic img{float:left;width:28%;margin:.2em .8em .3em 0}
-.tlpic .noimg{display:none}
-.tltxt p{margin:0 0 .2em}.tltxt .tlplace{font-family:Sans,sans-serif;font-weight:700;font-size:.85em}
-.tlwork{font-family:Sans,sans-serif;font-size:.72em;color:#5F5446}
+.mapa{margin:0 0 1.2em;text-align:center}
+.end{border-top:1px solid #CFC4B0;padding:.4em 0;overflow:hidden}.end .en{float:left;font-family:Sans,sans-serif;font-weight:700;width:1.6em}
+.end p{margin:0 0 0 1.6em}.end .ey{font-family:Sans,sans-serif;font-size:.8em;color:#5F5446}
+.tr{border-top:1px solid #CFC4B0;padding:.6em 0;page-break-inside:avoid}.tr img{width:100%}
+.trt .ty{font-family:Disp,sans-serif;font-size:1.3em;margin:.3em 0 0}.trt .tp{font-family:Sans,sans-serif;font-size:.85em;font-weight:700;margin:0}
+.tracos .sub,.enderecos .sub{font-style:italic}
 .titlepage{text-align:center;margin-top:25%}.titlepage .t{font-size:2.1em;line-height:1.1}.titlepage .s{font-style:italic;color:#5F5446}
 .titlepage .a{font-family:Sans,sans-serif;font-size:.8em;letter-spacing:.2em;margin-top:3em}
 """
@@ -738,7 +774,7 @@ def build_epub(S, out, small=None):
             body = (f'<section id="{s["id"]}"><figure><img src="{img}" alt=""/></figure><div class="parttitle"><p class="pn">{n_}</p>'
                     f'<h1>{lab_}</h1><h2>{name_}</h2><p>{intro_}</p></div></section>')
         else:
-            body = f'<section id="{s["id"]}">{s["html"]}</section>'
+            body = f'<section id="{s["id"]}">{s["html"].replace("<!--MAPA-->", map_html(False))}</section>'
         files.append((name, s['title'], body, s['kind']))
         for m in re.finditer(r'id="([^"]+)"', body):
             idfile[m.group(1)] = name
@@ -840,7 +876,7 @@ if __name__ == '__main__':
     S += [catalogue(), ex_index(), CREDITS]
     os.makedirs('out', exist_ok=True)
     args = sys.argv[1:] or ['cover', 'pdf']  # EPUB só com: python3 build.py epub
-    make_details()
+    make_details(); make_tracos()
     if 'cover' in args:
         make_cover(); print('capa ok')
     if 'pdf' in args:
