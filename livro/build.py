@@ -104,8 +104,10 @@ def build_sections():
         if s['id'] == 'vida':
             i = h.index('<h2>')
             h = h[:i] + timeline_html() + h[i:]
-        if s['kind'] == 'chapter':
-            h += details_html(s['id']) if s['id'] in DETAILS else practice_list(s['id'])
+        if s['id'] in BALLOON_CHAPTERS:
+            h = add_balloons(h)
+        elif s['kind'] == 'chapter':
+            h += practice_list(s['id'])
         S.append({**s, 'html': h})
         if s['id'] == 'cap8':  # depois da Parte II vem a Parte III
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
@@ -152,50 +154,75 @@ CREDITS = {'id': 'creditos', 'title': 'Créditos', 'kind': 'back', 'html': md2ht
 
 As reproduções de obras de Vincent van Gogh são de domínio público e foram obtidas no Wikimedia Commons. A reprodução do *Retrato de Joseph Roulin* usada na capa vem do Open Content Program do J. Paul Getty Museum, em Los Angeles. Os dados de catálogo vêm do Wikidata e do Wikimedia Commons. As citações das cartas são traduções livres do autor a partir da edição em inglês publicada pelo Van Gogh Museum e pelo Huygens Institute em vangoghletters.org.
 
-Os desenhos-modelo dos exercícios, as demonstrações em etapas, as amostras de marcas, as ilustrações de abertura das partes e as fotografias de materiais foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele.
+Os desenhos-modelo dos exercícios, as demonstrações em etapas, as amostras de marcas e as fotografias de materiais foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele.
 
 Texto composto em EB Garamond e Archivo.""")}
 
-# ---------------------------------------------------------------- detalhes das obras (balões)
-# capítulo: [(imagem, centro x, centro y, lado como fração da largura, título, texto)]
-DETAILS = {
- 'cap2': [('lacrau', .45, .62, .22, 'Faixas de tracinhos', 'Cada campo da planície é uma faixa de tracinhos deitados. Mais longe, a marca encolhe.'),
-          ('boats', .78, .84, .2, 'Areia em pontos', 'A praia é feita só de pontos. O papel que sobra entre eles vira luz.'),
-          ('garden', .3, .72, .2, 'Uma marca por canteiro', 'Vírgulas num canteiro, pontos no outro. A fronteira aparece só pela troca de marca.')],
- 'cap3': [('starry', .885, .14, .2, 'A coroa da lua', 'Os tracinhos giram em anéis em volta do astro, como correntes.'),
-          ('cypress', .45, .18, .26, 'O cacho em chama', 'Cada cacho é um C de dois a quatro traços paralelos, sempre subindo.'),
-          ('wheatcyp', .5, .15, .24, 'O céu que se enrola', 'As nuvens correm em curvas que se fecham em redemoinho.')],
- 'cap4': [('cover-roulin', .39, .385, .15, 'O olho como redemoinho', 'Anéis curtos em volta da órbita. A pálpebra de cima é a linha mais grossa.'),
-          ('cover-roulin', .5, .6, .24, 'A barba em leque', 'Curvas que descem e se abrem, em vez de fios soltos.'),
-          ('escalier2', .86, .16, .2, 'O fundo pontilhado', 'Pontos em fileiras empurram a cabeça para a frente.')],
- 'cap5': [('sp_felt', .13, .42, .24, 'O halo de tracinhos', 'Pinceladas curtas irradiam da cabeça e formam um halo.'),
-          ('sp_orsay', .14, .2, .26, 'O fundo em redemoinho', 'Em 1889 o fundo inteiro gira em correntes.'),
-          ('sp_chi', .5, .44, .2, 'A pele em tracinhos', 'Cada toque de cor é um tracinho separado, como no desenho.')],
- 'cap6': [('sorrow', .45, .66, .26, 'O contorno com peso', 'A linha engrossa embaixo da coxa e no pé, e afina onde bate luz.'),
-          ('peasant', .3, .52, .24, 'A hachura em aros', 'No braço, a hachura dá a volta na forma, como aros de barril.'),
-          ('peasant', .55, .3, .3, 'Duas massas ovais', 'Costas e quadril são duas massas. A hachura muda de direção em cada uma.')],
+# ---------------------------------------------------------------- detalhes das obras (balões logo depois de cada obra)
+# obra: (imagem de origem, [(centro x, centro y, lado como fração da largura, título, texto)])
+WORK_DETAILS = {
+ 'lacrau': ('lacrau', [(.62, .14, .24, 'O horizonte', 'Perto do horizonte a marca fica miúda e quase some.'),
+                       (.45, .62, .22, 'Faixas de tracinhos', 'Cada campo é uma faixa de tracinhos deitados.'),
+                       (.25, .88, .22, 'O primeiro plano', 'Embaixo as marcas crescem e escurecem. É ali que entram os pretos.')]),
+ 'boats': ('boats', [(.45, .66, .2, 'Contorno firme', 'Os cascos têm a linha mais segura da folha.'),
+                     (.8, .86, .18, 'Areia em pontos', 'A praia é só pontos. O papel entre eles vira luz.')]),
+ 'garden': ('garden', [(.55, .12, .22, 'Ao fundo', 'As casas e as árvores do fundo recebem marcas bem menores.'),
+                       (.3, .72, .2, 'Uma marca por canteiro', 'Vírgulas num canteiro, pontos no outro. Não há contorno entre eles.')]),
+ 'cypress': ('cypress', [(.45, .18, .26, 'O cacho em chama', 'Cada cacho é um C de dois a quatro traços paralelos, sempre subindo.'),
+                         (.42, .55, .26, 'O miolo apertado', 'No miolo os cachos se apertam até quase fundirem.'),
+                         (.5, .9, .3, 'O chão em ondas', 'Embaixo, o chão repete o movimento em ondas longas.')]),
+ 'starry': ('starry', [(.885, .14, .2, 'A coroa da lua', 'Os tracinhos giram em anéis em volta do astro.'),
+                       (.5, .42, .22, 'As correntes do céu', 'O céu corre em faixas que se enrolam.'),
+                       (.25, .55, .26, 'O cipreste', 'A única massa densa da folha, ligando o chão ao céu.')]),
+ 'wheatcyp': ('wheatcyp', [(.5, .15, .24, 'O céu que se enrola', 'As nuvens correm em curvas que se fecham em redemoinho.'),
+                           (.82, .45, .2, 'O cipreste', 'Pinceladas que sobem e se torcem como chamas.'),
+                           (.35, .86, .22, 'O trigo', 'Toques curtos e inclinados, todos na mesma direção.')]),
+ 'roulin': ('cover-roulin', [(.39, .385, .15, 'O olho como redemoinho', 'Anéis curtos em volta da órbita. A pálpebra de cima é a linha mais grossa.'),
+                             (.5, .6, .24, 'A barba em leque', 'Curvas que descem e se abrem, em vez de fios soltos.'),
+                             (.25, .86, .26, 'O casaco', 'Hachura grossa e cruzada, que acompanha a lapela.')]),
+ 'escalier2': ('escalier2', [(.55, .2, .3, 'O chapéu em branco', 'O chapéu fica quase só em contorno.'),
+                             (.5, .44, .2, 'O rosto', 'Tracinhos curtos seguem as rugas e os planos.'),
+                             (.86, .16, .2, 'O fundo pontilhado', 'Pontos em fileiras empurram a cabeça para a frente.')]),
+ 'mousme': ('mousme', [(.47, .33, .26, 'Quase papel', 'Contorno pesado só nos olhos, nas sobrancelhas, nas narinas e na boca.'),
+                       (.5, .72, .3, 'A blusa listrada', 'Listras grossas que seguem as pregas da roupa.')]),
+ 'sp_felt': ('sp_felt', [(.5, .2, .3, 'A aba do chapéu', 'Tracinhos que dão a volta inteira na aba.'),
+                         (.13, .42, .24, 'O halo de tracinhos', 'Pinceladas curtas irradiam da cabeça e a destacam.')]),
+ 'sp_chi': ('sp_chi', [(.5, .44, .2, 'Raios a partir do nariz', 'Os tracinhos do rosto saem do nariz como raios.'),
+                       (.12, .2, .22, 'O fundo pontilhado', 'Pontos maiores que as marcas do rosto.')]),
+ 'sp_gauguin': ('sp_gauguin', [(.45, .4, .22, 'Planos firmes', 'Cabeça raspada, planos firmes e contorno pesado.'),
+                               (.85, .2, .25, 'O fundo calmo', 'Quase liso. Toda a energia fica no rosto.')]),
+ 'sp_orsay': ('sp_orsay', [(.14, .2, .26, 'O fundo em redemoinho', 'O fundo inteiro gira em correntes, como água.'),
+                           (.5, .4, .2, 'O rosto parado', 'Marcas mais curtas e mais firmes que as do fundo.'),
+                           (.62, .82, .26, 'O casaco na corrente', 'Linhas onduladas iguais às do fundo.')]),
+ 'wornout': ('wornout', [(.55, .3, .45, 'O rosto escondido', 'A cabeça entre as mãos. A emoção inteira está na pose.')]),
+ 'peasant': ('peasant', [(.55, .3, .3, 'Duas massas ovais', 'Costas e quadril são duas massas. A hachura muda de direção em cada uma.'),
+                         (.3, .52, .24, 'A hachura em aros', 'No braço, a hachura dá a volta na forma.')]),
+ 'sorrow': ('sorrow', [(.45, .66, .26, 'O contorno com peso', 'A linha engrossa embaixo da coxa e no pé, e afina onde bate luz.')]),
 }
+BALLOON_CHAPTERS = ('cap2', 'cap3', 'cap4', 'cap5', 'cap6')
 
 def make_details():
     from PIL import Image
-    for ch, items in DETAILS.items():
-        for i, (k, cx, cy, sz, *_ ) in enumerate(items, 1):
-            out = f'img/det-{ch}-{i}.jpg'
-            im = Image.open(f'img/{k}.jpg').convert('RGB')
+    for key, (src, items) in WORK_DETAILS.items():
+        im = Image.open(f'img/{src}.jpg').convert('RGB')
+        for i, (cx, cy, sz, *_ ) in enumerate(items, 1):
             side = sz * im.width
             x0 = max(0, min(im.width - side, cx * im.width - side / 2))
             y0 = max(0, min(im.height - side, cy * im.height - side / 2))
-            im.crop((round(x0), round(y0), round(x0 + side), round(y0 + side))).resize((600, 600), Image.LANCZOS).save(out, quality=90)
+            im.crop((round(x0), round(y0), round(x0 + side), round(y0 + side))).resize((520, 520), Image.LANCZOS).save(f'img/det-{key}-{i}.jpg', quality=90)
 
-def details_html(chid):
-    items = DETAILS.get(chid)
-    if not items:
-        return ''
-    cells = ''.join(f'<figure class="bal"><img src="img/det-{chid}-{i}.jpg" alt="{esc(t)}"/>'
+def balloons_html(key):
+    src, items = WORK_DETAILS[key]
+    cells = ''.join(f'<figure class="bal"><img src="img/det-{key}-{i}.jpg" alt="{esc(t)}"/>'
                     f'<figcaption><b>{esc(t)}</b> {esc(d)}</figcaption></figure>'
-                    for i, (k, cx, cy, sz, t, d) in enumerate(items, 1))
-    return f'<div class="balloons"><h4>Detalhes para observar</h4><div class="balrow">{cells}</div></div>'
+                    for i, (cx, cy, sz, t, d) in enumerate(items, 1))
+    return f'<div class="balrow n{len(items)}">{cells}</div>'
 
+def add_balloons(h):
+    def rep(m):
+        key = m.group(1)
+        return f'<div class="figbal">{m.group(0)}{balloons_html(key)}</div>' if key in WORK_DETAILS else m.group(0)
+    return re.sub(r'<figure[^>]*>\s*<img src="img/([a-z0-9_]+)\.jpg"[^>]*>.*?</figure>', rep, h, flags=re.S)
 
 # ---------------------------------------------------------------- ícones e linha do tempo
 ICONS_H2 = {'Por onde começar': 'comecar', 'Os desenhos-modelo': 'modelo', 'Material para desenhar por cima': 'imprimir',
@@ -234,6 +261,7 @@ PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho',
                     'Os 91 exercícios, em quatro níveis. Cada um parte de um desenho-modelo e diz quando está pronto. Cada um indica também o capítulo que explica a teoria.'),
          'parte4': ('04', 'Parte IV', 'Prática',
                     'Um plano de estudo de oito semanas e uma autoavaliação, para transformar a leitura em hábito.')}
+PART_ART = {'parte1': 'sower2', 'parte2': 'zouavepen', 'parte3': 'fountain', 'parte4': 'roulin2'}
 ICONS = ['sorrow', 'cafe', 'roulin', 'mousme2', 'starry', 'cypress']
 CAT_ORDER = ['sorrow', 'wornout', 'orphan', 'yard', 'peasant', 'reaper', 'head85', 'hands', 'sower1', 'sower2', 'digger',
              'lacrau', 'arlesview', 'rock', 'boats', 'street', 'cottages2', 'garden', 'harvest', 'stacks', 'cafe',
@@ -310,12 +338,13 @@ dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 /* ícones, balões, linha do tempo */
 h2.ic{display:flex;align-items:center;gap:.1in}
 h2.ic .icon{width:.36in;height:.36in;flex:none}
-.balloons{margin-top:1.6em;border-top:.6pt solid #1E1913;padding-top:.12in;break-inside:avoid}
-.balrow{display:flex;gap:.2in}
-.bal{flex:1;margin:0;text-align:left}
-.bal img{width:1.45in;height:1.45in;border-radius:50%;object-fit:cover;display:block;margin:0 0 .1in}
-.bal figcaption{margin:0;font-size:7.2pt;line-height:1.42}
-.bal figcaption b{display:block;font-weight:700;color:#1E1913;margin-bottom:.03in}
+.figbal{break-inside:avoid;margin:1em 0 1.3em}
+.figbal > figure{margin:0 0 .16in}
+.balrow{display:flex;gap:.22in;justify-content:center}
+.bal{width:1.45in;flex:none;margin:0;text-align:left}
+.bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
+.bal figcaption{margin:0;font-size:7pt;line-height:1.4}
+.bal figcaption b{display:block;font-weight:700;color:#1E1913;margin-bottom:.02in}
 .timeline{margin:1.2em 0 1.6em;break-before:page}
 .timeline h2{margin-top:0}
 .tlrow{display:flex;gap:.16in;padding:.1in 0;border-top:.6pt solid #CFC4B0;break-inside:avoid;position:relative}
@@ -359,8 +388,10 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .toc li.front a,.toc li.back a{font-style:italic}
 
 /* páginas de parte */
-.partimg{page:full;break-before:page;width:6in;height:9in}
-.partimg img{width:6in;height:9in;object-fit:cover;display:block}
+.partimg{page:kraft;break-before:page;width:6in;height:9in;position:relative}
+.partimg img{position:absolute;left:.55in;top:.55in;width:4.9in;height:7.4in;object-fit:contain}
+.partimg .pcap{position:absolute;left:.55in;right:.55in;bottom:.45in;font:400 7pt/1.4 Sans;color:#4A4034;text-align:center}
+.partimg .pcap i{color:#1E1913}
 .part{page:part;break-before:page;position:relative;width:6in;height:9in;color:#1E1913}
 .part .plab{position:absolute;left:.55in;top:1.72in;font:500 7.4pt Sans;margin:0}
 .part .prule{position:absolute;left:.55in;right:.55in;top:1.95in;border-top:.6pt solid #1E1913}
@@ -594,8 +625,9 @@ def pdf_html(S):
         if k == 'part':
             part = PARTS[s['id']]
             n, lab, name, intro = part
-            img = s['opener'].replace('ex/', 'img/')
-            P.append(f'<section class="partimg"><img src="{img}" alt=""/></section>')
+            art = PART_ART[s['id']]
+            P.append(f'<section class="partimg"><img src="img/{art}.jpg" alt="{esc(PL[art]["t"])}"/>'
+                     f'<p class="pcap"><i>{esc(PL[art]["t"])}</i>. {esc(PL[art]["c"])}</p></section>')
             P.append(f'<section class="part" id="{s["id"]}" style="bookmark-level:1;bookmark-label:\'{lab} · {name}\'">'
                      f'<p class="plab">{lab}</p><div class="prule"></div><p class="pnum">{n}</p><h1>{name}</h1><p class="pintro">{intro}</p></section>')
         elif k == 'front':
@@ -668,8 +700,8 @@ dl.gloss dt{font-family:Sans,sans-serif;font-weight:700;font-size:.9em;margin-to
 .parttitle h1{page-break-before:avoid;font-family:Sans,sans-serif;font-weight:700;font-size:.8em;margin:.6em 0 .2em}
 .parttitle h2{font-size:1.7em;margin:0 0 .6em}
 h2.ic img.icon{width:1.6em;height:1.6em;vertical-align:middle;margin-right:.4em}
-.balloons{border-top:1px solid #1E1913;margin-top:1.6em;padding-top:.6em}
-.bal{display:inline-block;width:30%;margin:.4em 1.5% .8em 0;vertical-align:top;text-align:left}
+.balrow{text-align:center;margin:-.4em 0 1.2em}
+.bal{display:inline-block;width:30%;margin:.4em 1.2% .8em;vertical-align:top;text-align:left}
 .bal img{width:100%;border-radius:50%}
 .bal figcaption b{display:block;font-weight:700}
 .tlrow{border-top:1px solid #CFC4B0;padding:.6em 0;overflow:hidden;page-break-inside:avoid}
@@ -701,7 +733,7 @@ def build_epub(S, out, small=None):
     for i, s in enumerate(S):
         name = f'{i:02d}-{s["id"]}.xhtml'
         if s['kind'] == 'part':
-            img = s['opener'].replace('ex/', 'img/')
+            img = f'img/{PART_ART[s["id"]]}.jpg'
             n_, lab_, name_, intro_ = PARTS[s['id']]
             body = (f'<section id="{s["id"]}"><figure><img src="{img}" alt=""/></figure><div class="parttitle"><p class="pn">{n_}</p>'
                     f'<h1>{lab_}</h1><h2>{name_}</h2><p>{intro_}</p></div></section>')
