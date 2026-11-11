@@ -1,66 +1,59 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<title>Van Gogh a Lápis · capas</title>
-<style>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Van Gogh a Lápis · capas</title><style>
 @font-face{font-family:Sans;src:url("fonts/archivo-latin-400-normal.woff");font-weight:400}
 @font-face{font-family:Sans;src:url("fonts/archivo-latin-500-normal.woff");font-weight:500}
 @font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-400-normal.ttf");font-weight:400}
 @font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-400-italic.ttf");font-weight:400;font-style:italic}
-@font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-500-normal.ttf");font-weight:500}
 @page{size:6in 9in;margin:0}
 *{box-sizing:border-box;margin:0;padding:0}
-.pg{width:6in;height:9in;position:relative;overflow:hidden;break-after:page;background:#F4F1EA}
+.pg{width:6in;height:9in;position:relative;overflow:hidden;break-after:page;background:#2A2119;color:#FBF8F1}
 .art{position:absolute;top:0;bottom:0;left:.13in;right:0;background-repeat:no-repeat}
-.spine{position:absolute;top:0;bottom:0;left:0;width:.13in;background:#F7F4EE;border-right:.4pt solid rgba(0,0,0,.12)}
-.ed{position:absolute;top:.3in;left:.13in;right:0;text-align:center;font-family:Sans;font-size:7.6pt;letter-spacing:.02em}
-.t{position:absolute;left:.13in;right:0;text-align:center;font-family:Serif;font-weight:400;line-height:.95;letter-spacing:-.012em}
+.shade{position:absolute;left:.13in;right:0;bottom:0;height:5in;background:linear-gradient(to bottom,rgba(20,15,10,0),rgba(20,15,10,.55) 45%,rgba(20,15,10,.66))}
+.top{position:absolute;left:.13in;right:0;top:0;height:1.1in;background:linear-gradient(to bottom,rgba(20,15,10,.32),rgba(20,15,10,0))}
+.spine{position:absolute;top:0;bottom:0;left:0;width:.13in;background:#F7F4EE}
+.ed{position:absolute;top:.36in;left:.13in;right:0;text-align:center;font-family:Sans;font-weight:500;font-size:11pt;letter-spacing:.04em}
+.t{position:absolute;left:.13in;right:0;text-align:center;font-family:Serif;font-size:50pt;line-height:1;letter-spacing:-.012em;white-space:nowrap}
 .d{position:absolute;left:.13in;right:0;text-align:center;font-family:Serif;font-style:italic;font-size:15pt}
-.mark{position:absolute;bottom:.5in;left:50%;margin-left:-.52in;width:1.17in;text-align:center;font-family:Sans;font-weight:500;font-size:7.4pt;letter-spacing:.16em;padding:.07in 0 .06in}
-.coll{position:absolute;bottom:.3in;left:.13in;right:0;text-align:center;font-family:Serif;font-style:italic;font-size:8.2pt}
-.light{color:#FBF8F1}.light .mark{background:#FBF8F1;color:#1E1913}
-.ink{color:#1E1913}.ink .mark{background:#1E1913;color:#F4F1EA}
-.shade{position:absolute;left:.13in;right:0;bottom:0;height:4.2in;background:linear-gradient(to bottom,rgba(20,15,10,0),rgba(20,15,10,.38))}
-</style>
-</head>
-<body>
-
-<!-- A · Roulin: retrato fechado, título branco sobre o casaco -->
-<section class="pg light">
-  <div class="art" style="background-image:url('img/roulin.jpg');background-size:118% auto;background-position:46% 0"></div>
-  <div class="shade" style="height:4.8in;background:linear-gradient(to bottom,rgba(20,15,10,0),rgba(20,15,10,.55) 45%,rgba(20,15,10,.62))"></div>
-  <div class="spine"></div>
-  <div class="ed">Pedro Torres</div>
-  <div class="t" style="top:5.55in;font-size:52pt">Van Gogh a Lápis</div>
-  <div class="d" style="top:6.42in">Desenhos, 1880–1890</div>
-  <div class="mark">A LÁPIS</div>
-  <div class="coll">Teoria, exercícios e catálogo</div>
-</section>
-
-<!-- B · Zuavo: a cor quente do papel, título em duas linhas -->
-<section class="pg light">
-  <div class="art" style="background-image:url('img/zouave-sepia.jpg');background-size:122% auto;background-position:56% 4%"></div>
-  <div class="shade" style="height:4.4in;background:linear-gradient(to bottom,rgba(40,22,10,0),rgba(40,22,10,.6) 40%,rgba(40,22,10,.7))"></div>
-  <div class="spine"></div>
-  <div class="ed">Pedro Torres</div>
-  <div class="t" style="top:5.3in;font-size:60pt">Van Gogh<br>a Lápis</div>
-  <div class="d" style="top:6.98in">Desenhos, 1880–1890</div>
-  <div class="mark">A LÁPIS</div>
-  <div class="coll">Teoria, exercícios e catálogo</div>
-</section>
-
-<!-- C · Ciprestes: a folha clara, título em tinta -->
-<section class="pg ink">
-  <div class="art" style="background-image:url('img/cypress.jpg');background-size:112% auto;background-position:40% 0"></div>
-  <div class="shade" style="height:4.3in;background:linear-gradient(to bottom,rgba(244,236,220,0),rgba(244,236,220,.94) 42%,#F4ECDC)"></div>
-  <div class="spine"></div>
-  <div class="ed">Pedro Torres</div>
-  <div class="t" style="top:6.05in;font-size:52pt">Van Gogh a Lápis</div>
-  <div class="d" style="top:6.92in">Desenhos, 1880–1890</div>
-  <div class="mark">A LÁPIS</div>
-  <div class="coll">Teoria, exercícios e catálogo</div>
-</section>
-
-</body>
-</html>
+.coll{position:absolute;bottom:.42in;left:.13in;right:0;text-align:center;font-family:Serif;font-style:italic;font-size:10.5pt}
+</style></head><body><section class="pg"><!-- Retrato de Joseph Roulin, 1888 -->
+<div class="art" style="background-image:url('../img/roulin.jpg');background-size:118% auto;background-position:46% 0"></div>
+<div class="top"></div><div class="shade"></div><div class="spine"></div>
+<div class="ed">Pedro Torres</div>
+<div class="t" style="top:5.75in">Van Gogh a Lápis</div>
+<div class="d" style="top:6.57in">Desenhos, 1880–1890</div>
+<div class="coll">Teoria, exercícios e catálogo</div>
+</section><section class="pg"><!-- Terraço do café à noite, 1888 -->
+<div class="art" style="background-image:url('../img/cafe.jpg');background-size:125% auto;background-position:50% 0"></div>
+<div class="top"></div><div class="shade"></div><div class="spine"></div>
+<div class="ed">Pedro Torres</div>
+<div class="t" style="top:5.95in">Van Gogh a Lápis</div>
+<div class="d" style="top:6.7700000000000005in">Desenhos, 1880–1890</div>
+<div class="coll">Teoria, exercícios e catálogo</div>
+</section><section class="pg"><!-- Retrato de Patience Escalier, 1888 -->
+<div class="art" style="background-image:url('../img/escalier2.jpg');background-size:120% auto;background-position:50% 0"></div>
+<div class="top"></div><div class="shade"></div><div class="spine"></div>
+<div class="ed">Pedro Torres</div>
+<div class="t" style="top:5.75in">Van Gogh a Lápis</div>
+<div class="d" style="top:6.57in">Desenhos, 1880–1890</div>
+<div class="coll">Teoria, exercícios e catálogo</div>
+</section><section class="pg"><!-- La Mousmé sentada, 1888 -->
+<div class="art" style="background-image:url('../img/mousme2.jpg');background-size:112% auto;background-position:40% 0"></div>
+<div class="top"></div><div class="shade"></div><div class="spine"></div>
+<div class="ed">Pedro Torres</div>
+<div class="t" style="top:5.95in">Van Gogh a Lápis</div>
+<div class="d" style="top:6.7700000000000005in">Desenhos, 1880–1890</div>
+<div class="coll">Teoria, exercícios e catálogo</div>
+</section><section class="pg"><!-- A Noite Estrelada, desenho, 1889 -->
+<div class="art" style="background-image:url('../img/starry.jpg');background-size:auto 100%;background-position:30% 50%"></div>
+<div class="top"></div><div class="shade"></div><div class="spine"></div>
+<div class="ed">Pedro Torres</div>
+<div class="t" style="top:5.95in">Van Gogh a Lápis</div>
+<div class="d" style="top:6.7700000000000005in">Desenhos, 1880–1890</div>
+<div class="coll">Teoria, exercícios e catálogo</div>
+</section><section class="pg"><!-- Trigal com ciprestes, 1889 -->
+<div class="art" style="background-image:url('../img/wheatcyp2.jpg');background-size:auto 100%;background-position:62% 50%"></div>
+<div class="top"></div><div class="shade"></div><div class="spine"></div>
+<div class="ed">Pedro Torres</div>
+<div class="t" style="top:5.95in">Van Gogh a Lápis</div>
+<div class="d" style="top:6.7700000000000005in">Desenhos, 1880–1890</div>
+<div class="coll">Teoria, exercícios e catálogo</div>
+</section></body></html>
