@@ -468,9 +468,9 @@ def pdf_html(S):
     P = [f'<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Van Gogh a Lápis</title>'
          f'<meta name="author" content="Pedro Torres"><style>{font_faces()}{PDF_CSS}</style></head><body>']
     P.append('<div class="cover"><div class="art"></div><div class="topsh"></div><div class="shade"></div><div class="spine"></div>'
-             '<div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Desenhos, 1880–1890</div>'
-             '<div class="coll">Teoria, exercícios e catálogo</div></div>')
-    P.append('<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Ranhuras, fluxo e rostos:<br/>um curso no traço de Vincent</p><p class="a">PEDRO TORRES</p></div>')
+             '<div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Teoria e prática para desenhar como Vincent</div>'
+             '<div class="coll">91 exercícios em quatro níveis</div></div>')
+    P.append('<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Teoria e prática para<br/>desenhar como Vincent</p><p class="a">PEDRO TORRES</p></div>')
     P.append(f'<div class="copy"><p>© {yr} Pedro Torres. Todos os direitos reservados.</p>'
              '<p>Nenhuma parte deste livro pode ser reproduzida sem autorização do autor, exceto as folhas de exercício destinadas ao uso pessoal do leitor.</p>'
              '<p>Capa: <i>Retrato de Joseph Roulin</i>, Arles, agosto de 1888. Pena de junco e pena de ave, tinta e giz preto. J. Paul Getty Museum, Los Angeles (85.GA.299), Open Content Program.</p>'
@@ -589,7 +589,7 @@ def page(title, body):
 
 def build_epub(S, out, small=None):
     files = []  # (name, title, body, kind)
-    files.append(('titulo.xhtml', 'Folha de rosto', '<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Ranhuras, fluxo e rostos: um curso no traço de Vincent</p><p class="a">PEDRO TORRES</p></div>'
+    files.append(('titulo.xhtml', 'Folha de rosto', '<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Teoria e prática para desenhar como Vincent</p><p class="a">PEDRO TORRES</p></div>'
                   f'<p style="margin-top:3em;font-size:.8em;color:#666">© {datetime.date.today().year} Pedro Torres. Todos os direitos reservados.</p>', 'front'))
     idfile = {}
     for i, s in enumerate(S):
@@ -678,8 +678,8 @@ COVER_EBOOK = """<!doctype html><html><head><meta charset="utf-8"><style>{fonts}
 .d{{position:absolute;left:0;right:0;top:6.9in;text-align:center;font:italic 400 16pt Serif}}
 .coll{{position:absolute;bottom:.5in;left:0;right:0;text-align:center;font:italic 400 11.5pt Serif}}
 </style></head><body><div class="c"><div class="art"></div><div class="topsh"></div><div class="shade"></div>
-<div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Desenhos, 1880–1890</div>
-<div class="coll">Teoria, exercícios e catálogo</div></div></body></html>"""
+<div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Teoria e prática para desenhar como Vincent</div>
+<div class="coll">91 exercícios em quatro níveis</div></div></body></html>"""
 
 def make_cover():
     """Capa do e-book em 1600 × 2560 px (proporção pedida pela Amazon)."""
