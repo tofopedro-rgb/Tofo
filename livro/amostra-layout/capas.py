@@ -24,7 +24,7 @@ CSS = '''
 .shade{position:absolute;left:.13in;right:0;bottom:0;height:5in;background:linear-gradient(to bottom,rgba(20,15,10,0),rgba(20,15,10,.55) 45%,rgba(20,15,10,.66))}
 .top{position:absolute;left:.13in;right:0;top:0;height:1.1in;background:linear-gradient(to bottom,rgba(20,15,10,.32),rgba(20,15,10,0))}
 .spine{position:absolute;top:0;bottom:0;left:0;width:.13in;background:#F7F4EE}
-.ed{position:absolute;top:.36in;left:.13in;right:0;text-align:center;font-family:Sans;font-weight:500;font-size:11pt;letter-spacing:.04em}
+.ed{position:absolute;top:.36in;left:.13in;right:0;text-align:center;font-family:Sans;font-weight:500;font-size:10.5pt;letter-spacing:.2em}
 .t{position:absolute;left:.13in;right:0;text-align:center;font-family:Serif;font-size:50pt;line-height:1;letter-spacing:-.012em;white-space:nowrap}
 .d{position:absolute;left:.13in;right:0;text-align:center;font-family:Serif;font-style:italic;font-size:15pt}
 .coll{position:absolute;bottom:.42in;left:.13in;right:0;text-align:center;font-family:Serif;font-style:italic;font-size:10.5pt}
@@ -35,7 +35,7 @@ for key, obra, size, pos, top, theme in CAPAS:
     pages.append(f'''<section class="pg"><!-- {obra} -->
 <div class="art" style="background-image:url('{src}');background-size:{size};background-position:{pos}"></div>
 <div class="top"></div><div class="shade"></div><div class="spine"></div>
-<div class="ed">Pedro Torres</div>
+<div class="ed">PEDRO TORRES</div>
 <div class="t" style="top:{top}in">Van Gogh a Lápis</div>
 <div class="d" style="top:{top + .82}in">Desenhos, 1880–1890</div>
 <div class="coll">Teoria, exercícios e catálogo</div>
