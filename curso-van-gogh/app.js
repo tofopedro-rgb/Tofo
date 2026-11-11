@@ -70,8 +70,10 @@ const MARKS=[
 ];
 const marksEl=$('#marks');
 MARKS.forEach((m,i)=>{const d=document.createElement('article');d.className='mark';
-  d.innerHTML='<button type="button" aria-label="Ver a marca '+m.n+' ser desenhada"><canvas></canvas></button><h4>'+m.n+'</h4><p><b>Onde:</b> '+m.w+'</p><p><b>Como:</b> '+m.h+'</p>';
-  marksEl.appendChild(d);const p=new Panel($('canvas',d),inkScene(300,190,m.f,i+3),{dur:1500,seed:i+3});watch(p);$('button',d).addEventListener('click',()=>p.draw(true))});
+  const src='ex/m/'+String(i+1).padStart(2,'0')+'.jpg';
+  d.innerHTML='<img loading="lazy" alt=""><h4></h4><p><b>Onde:</b> '+m.w+'</p><p><b>Como:</b> '+m.h+'</p>';
+  const im=$('img',d);im.src=src;im.alt='Amostra da marca '+m.n;$('h4',d).textContent=m.n;im.addEventListener('click',()=>zoom(src,m.n+'. '+m.h));
+  marksEl.appendChild(d)});
 
 /* ---------- laboratório de profundidade ---------- */
 const lab={ratio:6,dens:1,dir:20,sky:false},labScene=()=>VG.scene(['fields',{n:6,ratio:lab.ratio,dens:lab.dens,wind:lab.dir*Math.PI/180,sky:lab.sky,horK:.24}]);
@@ -126,6 +128,10 @@ $$('[data-gal]').forEach(g=>{g.dataset.gal.split(',').forEach(k=>{const pl=PL[k]
   const f=document.createElement('figure');f.innerHTML='<div class="pic"><img loading="lazy" alt=""></div><figcaption><b></b><br><i></i><span></span></figcaption>';
   const img=$('img',f);img.src='img/'+k+'.jpg';img.alt=pl.t;$('b',f).textContent=pl.t;$('i',f).textContent=pl.c;$('i',f).style.fontStyle='normal';$('span',f).textContent=pl.l||'';
   img.tabIndex=0;img.addEventListener('click',()=>zoom(img.src,pl.t+'. '+pl.c));
+  const fc=(window.VG_FICHA||{})[k];if(fc){const dl=document.createElement('dl');dl.className='ficha';
+    [['Catálogo',fc.cat],['Técnica',fc.med],['Dimensões',fc.dim],['Acervo',fc.inst]].forEach(r=>{if(!r[1])return;const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];dl.append(dt,dd)});
+    if(fc.page){const dt=document.createElement('dt'),dd=document.createElement('dd'),a=document.createElement('a');dt.textContent='Fonte';a.href=fc.page;a.target='_blank';a.rel='noopener';a.textContent='Wikimedia Commons';dd.append(a);dl.append(dt,dd)}
+    $('figcaption',f).appendChild(dl)}
   if(pl.flow){const b=document.createElement('button');b.textContent='Mostrar direção';let svg=null;b.addEventListener('click',()=>{if(!svg){if(!img.naturalWidth)return;svg=overlay($('.pic',f),img,pl);b.textContent='Esconder direção'}else{svg.hidden=!svg.hidden;svg.style.display=svg.hidden?'none':'';b.textContent=svg.hidden?'Mostrar direção':'Esconder direção'}});f.appendChild(b)}
   const xb=document.createElement('button');xb.textContent='Raio-X no Ateliê';xb.addEventListener('click',()=>xray(k));f.appendChild(xb);
   g.appendChild(f)})});
@@ -134,14 +140,19 @@ $('#n-pl').textContent=nPl;$('#n-ex').textContent=EX.length;
 /* ---------- exercícios ---------- */
 const KEY='vg-lapis-v2';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}};
+const TAGN={w:'Aquecimento',e:'Essencial',d:'Aprofundamento',p:'Prova'};
+const STAGES={r13:1,r16:1,r19:1,f13:1,f17:1,c11:1,c12:1,c16:1,a01:1,a13:1,b04:1,b06:1};
+const STN=['1 Esboço de grafite','2 Primeiras tintas','3 Quase pronto','4 Acabado'];
+function stepsHTML(id,big){return STN.map((t,k)=>'<figure><img loading="lazy" src="'+(k<3?'ex/st/'+id+'-'+(k+1):'ex/'+id)+'.jpg" alt="'+t+'"><figcaption>'+(big?'<b>'+t+'</b>':t)+'</figcaption></figure>').join('')}
+function wireSteps(el,id){$$('img',el).forEach((im,k)=>im.addEventListener('click',()=>zoom(im.src,id.toUpperCase()+' · etapa '+STN[k])))}
 const LV=[[4,'Modelo'],[1,'1 Estrutura'],[2,'2 Direção'],[3,'3 Amostra']],LVN={1:'1 Estrutura',2:'2 Direção',3:'3 Amostra',4:'Modelo'};
 EX.forEach((x,i)=>{const host=$('.exlist[data-ch="'+x.ch+'"]');if(!host)return;const a=document.createElement('article');a.className='xc';a.id='x-'+x.id;
   const ref=x.ref&&PL[x.ref]?'<p class="ref"><img loading="lazy" src="img/'+x.ref+'.jpg" alt=""><span>Obra dele para comparar: '+PL[x.ref].t+'</span></p>':'';
   a.innerHTML='<div class="xg"><div class="cvbox"><img class="model" loading="lazy" alt=""><canvas hidden aria-label="Rascunho-guia do exercício"></canvas></div><div class="lv" role="group" aria-label="Estado do rascunho">'+LV.map(l=>'<button type="button" data-l="'+l[0]+'" aria-pressed="'+(l[0]===4)+'">'+l[1]+'</button>').join('')+
     '</div><div class="xa"><button type="button" data-a="draw" class="solid">Desenhar aqui</button><button type="button" data-a="img">Abrir como imagem</button></div></div>'+
-    '<div class="xt"><p class="num">'+x.id.toUpperCase()+'</p><h4></h4><p class="meta"></p><p class="d"></p><p class="crit"><b>Pronto quando:</b> <span></span></p>'+ref+
-    '<div class="done"><label><input type="checkbox" id="ex-'+x.id+'"> Feito</label><button type="button" data-a="timer">Cronômetro '+x.min+':00</button></div></div>';
-  $('h4',a).textContent=x.t;$('.meta',a).textContent=x.m;$('.d',a).textContent=x.d;$('.crit span',a).textContent=x.c;host.appendChild(a);
+    '<div class="xt"><p class="num">'+x.id.toUpperCase()+'<span class="tag lv-'+x.lv+'">'+TAGN[x.lv]+'</span>'+(STAGES[x.id]?'<span class="tag">Etapas</span>':'')+'</p><h4></h4><p class="meta"></p><p class="d"></p><p class="crit"><b>Pronto quando:</b> <span></span></p>'+ref+
+    (STAGES[x.id]?'<div class="steps">'+stepsHTML(x.id)+'</div>':'')+'<div class="done"><label><input type="checkbox" id="ex-'+x.id+'"> Feito</label><button type="button" data-a="timer">Cronômetro '+x.min+':00</button></div></div>';
+  $('h4',a).textContent=x.t;$('.meta',a).textContent=x.m;$('.d',a).textContent=x.d;$('.crit span',a).textContent=x.c;a.dataset.lv=x.lv;host.appendChild(a);const stp=$('.steps',a);if(stp)wireSteps(stp,x.id);
   const img=$('img.model',a),cv=$('canvas',a),src='ex/'+x.id+'.jpg';img.src=src;img.alt='Desenho-modelo: '+x.t;let S=null,P=null,level=4,pend=null;
   const need=()=>S?Promise.resolve(S):(pend||(pend=VGAnalyze.load(src).then(im=>{S=VGModel.make(im);P=new Panel(cv,S,{level:1,seed:i+2});return S})));
   $$('.lv button',a).forEach(b=>b.addEventListener('click',()=>{level=+b.dataset.l;$$('.lv button',a).forEach(o=>o.setAttribute('aria-pressed',o===b));
@@ -153,6 +164,25 @@ EX.forEach((x,i)=>{const host=$('.exlist[data-ch="'+x.ch+'"]');if(!host)return;c
   $('[data-a=timer]',a).addEventListener('click',()=>startTimer(x.min,x.id.toUpperCase()+' '+x.t));
   const r=$('.ref img',a);if(r)r.addEventListener('click',()=>zoom(r.src,PL[x.ref].t+'. '+PL[x.ref].c));
   const cb=$('#ex-'+x.id,a);cb.checked=!!saved[cb.id];cb.addEventListener('change',()=>{saved[cb.id]=cb.checked;save();refresh()})});
+$$('.exlist').forEach(h=>{const f=document.createElement('div');f.className='filt';f.setAttribute('role','group');f.setAttribute('aria-label','Filtrar exercícios');
+  [['all','Todos'],['w','Aquecimento'],['e','Essencial'],['d','Aprofundamento'],['p','Prova']].forEach(o=>{const n=o[0]==='all'?$$('.xc',h).length:$$('.xc[data-lv="'+o[0]+'"]',h).length;if(!n)return;
+    const b=document.createElement('button');b.type='button';b.textContent=o[1]+' ('+n+')';b.setAttribute('aria-pressed',String(o[0]==='all'));
+    b.addEventListener('click',()=>{$$('button',f).forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$$('.xc',h).forEach(c=>{c.hidden=o[0]!=='all'&&c.dataset.lv!==o[0]})});f.appendChild(b)});
+  h.parentNode.insertBefore(f,h)});
+$$('#v-copia .plate img,#v-glossario .gloss img').forEach(im=>im.addEventListener('click',()=>zoom(im.src,im.alt)));
+[['bigsteps','r13'],['copysteps','c12']].forEach(p=>{const el=$('#'+p[0]);if(el){el.innerHTML=stepsHTML(p[1],true);wireSteps(el,p[1])}});
+const WEEKS=[['Semana 1','Ranhuras: marcas e valor','r01 r02 r04 r07 r10 r12','r19 começa na semana 2'],
+ ['Semana 2','Ranhuras: profundidade e paisagem','r13 r16 r14 r17','r19'],
+ ['Semana 3','Fluxo: centros e correntes','f03 f04 f06 f08 f09 f10','f18'],
+ ['Semana 4','Fluxo: ciprestes e noturnos','f13 f14 f15 f17','f19'],
+ ['Semana 5','Rostos: partes e direções','c01 c02 c03 c05 c09 c10 c11','c23 começa na semana 6'],
+ ['Semana 6','Rostos: cabeças inteiras','c12 c13 c14 c16 c17','c23'],
+ ['Semana 7','Autorretratos e corpo','a01 a04 a05 a06 b02 b04','a12 ou a13, e b07'],
+ ['Semana 8','Projeto final','p01 p02 p03 p04 p05','p06 e a autoavaliação']];
+const wk=$('#weeks');if(wk)WEEKS.forEach(w=>{const d=document.createElement('div');d.innerHTML='<b></b><div><p class="t"></p><p class="l"></p></div>';$('b',d).textContent=w[0];
+  $('.t',d).textContent=w[1]+'. Prova da semana: '+w[3].replace(/\b([rfcabp]\d\d)\b/g,m=>m.toUpperCase())+'.';const l=$('.l',d);w[2].split(' ').forEach(id=>{const x=EX.find(e=>e.id===id);if(!x)return;const a=document.createElement('a');
+  const ch={r:'ranhuras',f:'fluxo',c:'rostos',a:'autorretratos',b:'corpo',p:'projeto'}[id[0]];a.href='#'+ch;a.textContent=id.toUpperCase();a.title=x.t;
+  a.addEventListener('click',()=>setTimeout(()=>{const t=document.getElementById('x-'+id);if(t)t.scrollIntoView({block:'start'})},60));l.appendChild(a)});wk.appendChild(d)});
 const rubs=$$('#rubric input');rubs.forEach(b=>{b.checked=!!saved[b.id];b.addEventListener('change',()=>{saved[b.id]=b.checked;save();refresh()})});
 function refresh(){const done=EX.filter(x=>saved['ex-'+x.id]).length;$('#total-txt').textContent=done+' de '+EX.length+' feitos';$('#total-bar').style.width=(done/EX.length*100)+'%';
   $$('#rail-list a[data-ch]').forEach(a=>{const l=EX.filter(x=>x.ch===a.dataset.ch);$('span',a).textContent=l.filter(x=>saved['ex-'+x.id]).length+'/'+l.length});

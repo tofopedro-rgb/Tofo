@@ -197,6 +197,52 @@ td.yr{font:500 13px/1.7 var(--mono);font-variant-numeric:tabular-nums}
 .chip.hot{border-color:var(--sun);border-width:2px}
 footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-size:14px;color:var(--ink-2);max-width:70ch}
 
+
+/* Pranchas de método */
+.plate{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:start}
+.plate figure{margin:0;background:var(--sheet);border:1px solid var(--rule);padding:10px;display:grid;gap:8px}
+.plate img{display:block;width:100%;height:auto;cursor:zoom-in}
+.plate figcaption{font:400 12px/1.5 var(--mono);color:var(--ink-2)}
+.look{display:grid;gap:10px}
+.look h4{font:500 12px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--sun-ink)}
+.look ol{margin:0;padding-left:1.2em;display:grid;gap:8px}
+@media (max-width:720px){.plate{grid-template-columns:minmax(0,1fr)}}
+/* Trilha, etapas, fichas, glossário */
+.tag{display:inline-block;font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border:1px solid var(--rule);color:var(--ink-2);margin-left:8px;vertical-align:2px}
+.tag.lv-e{border-color:var(--sun);color:var(--sun-ink)}
+.tag.lv-p{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.filt{display:flex;flex-wrap:wrap;gap:0;margin-bottom:-8px}
+.filt button{font:500 12px/1 var(--mono);padding:8px 10px;border-color:var(--rule);margin-left:-1px;color:var(--ink-2)}
+.filt button:first-child{margin-left:0}
+.filt button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:4px}
+.steps figure{margin:0;display:grid;gap:3px}
+.steps img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border:1px solid var(--rule);cursor:zoom-in}
+.steps figcaption{font:400 11px/1.3 var(--mono);color:var(--ink-2)}
+.stepbig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stepbig figure{margin:0;display:grid;gap:6px;align-content:start}
+.stepbig img{display:block;width:100%;height:auto;border:1px solid var(--rule);cursor:zoom-in}
+.stepbig figcaption{font-size:14.5px;line-height:1.4;color:var(--ink-2)}
+.stepbig figcaption b{display:block;font:500 12px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--sun-ink);margin-bottom:3px}
+.ficha{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;font:400 12px/1.45 var(--mono);color:var(--ink-2);margin:0;border-top:1px solid var(--rule);padding-top:6px}
+.ficha dt{color:var(--ink)}.ficha dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.ficha a{color:var(--blue)}
+.marks .mark img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--sheet);border:1px solid var(--rule);cursor:zoom-in}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.gloss article{display:grid;gap:8px;align-content:start}
+.gloss img{display:block;width:100%;height:auto;border:1px solid var(--rule);cursor:zoom-in}
+.gloss h4{font:700 18px/1.2 var(--body)}
+.gloss p{font-size:15px;line-height:1.5;color:var(--ink-2)}
+.terms{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px 28px;margin:0}
+.terms div{border-top:1px solid var(--rule);padding-top:8px}
+.terms dt{font-weight:700}.terms dd{margin:2px 0 0;color:var(--ink-2);font-size:15px;line-height:1.5}
+.week{display:grid;gap:0;border-top:1px solid var(--ink)}
+.week>div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.week b{font:500 13px/1.4 var(--mono)}
+.week p{color:var(--ink-2);font-size:15.5px}
+.week a{font:500 12px/1 var(--mono);margin-right:6px;white-space:nowrap}
+@media (max-width:720px){.stepbig{grid-template-columns:repeat(2,minmax(0,1fr))}.week>div{grid-template-columns:minmax(0,1fr);gap:4px}}
+
 @media (max-width:940px){
   .shell{grid-template-columns:minmax(0,1fr);gap:22px}
   .rail{top:env(safe-area-inset-top,0px);z-index:9;background:var(--paper);padding:8px 0;border-bottom:1px solid var(--rule);gap:6px}
@@ -222,6 +268,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
   <div class="total"><span id="total-txt"></span><div class="bar"><i id="total-bar"></i></div></div>
   <ol id="rail-list">
     <li><a href="#inicio" data-v="inicio">Início</a></li>
+    <li><a href="#trilha" data-v="trilha">Trilha de estudo</a></li>
     <li><a href="#antes" data-v="antes">Antes de Arles</a></li>
     <li><a href="#ranhuras" data-v="ranhuras" data-ch="r">1 · Ranhuras <span></span></a></li>
     <li><a href="#fluxo" data-v="fluxo" data-ch="f">2 · Direção e fluxo <span></span></a></li>
@@ -229,7 +276,9 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <li><a href="#autorretratos" data-v="autorretratos" data-ch="a">4 · Autorretratos <span></span></a></li>
     <li><a href="#corpo" data-v="corpo" data-ch="b">5 · Corpo <span></span></a></li>
     <li><a href="#projeto" data-v="projeto" data-ch="p">6 · Projeto <span></span></a></li>
+    <li><a href="#copia" data-v="copia">Cópia de mestre</a></li>
     <li><a href="#atelie" data-v="atelie">Ateliê</a></li>
+    <li><a href="#glossario" data-v="glossario">Glossário</a></li>
     <li><a href="#pinceis" data-v="pinceis">Pincéis e arquivos</a></li>
   </ol>
 </nav>
@@ -271,6 +320,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 
   <h3>Capítulos</h3>
   <div class="chips">
+    <a class="chip hot" href="#trilha"><small>Comece por aqui</small><b>Trilha de estudo</b><span>Oito semanas com aquecimento diário, exercícios essenciais e uma prova por capítulo.</span></a>
     <a class="chip hot" href="#atelie"><small>Novo</small><b>Ateliê</b><span>Desenhe por cima de qualquer guia e veja, traço a traço, se a direção está certa. Transforme a sua foto em rascunho. Veja o Raio-X de direção de cada obra.</span></a>
     <a class="chip" href="#ranhuras"><small>Capítulo 1</small><b>Ranhuras</b><span>O alfabeto de doze marcas de Arles e como elas constroem profundidade.</span></a>
     <a class="chip" href="#fluxo"><small>Capítulo 2</small><b>Direção e fluxo</b><span>Por que os traços dele nunca se cruzam, como ele faz as ondas e onde ficam os centros.</span></a>
@@ -279,6 +329,30 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <a class="chip" href="#corpo"><small>Capítulo 5</small><b>Corpo</b><span>Massas ovais e hachura em aros. Mais curto, porque o seu foco é o rosto.</span></a>
     <a class="chip" href="#projeto"><small>Capítulo 6</small><b>Projeto</b><span>Seis desenhos do seu mundo e uma autoavaliação em oito critérios.</span></a>
   </div>
+</section>
+
+<!-- ===================== TRILHA ===================== -->
+<section class="view" id="v-trilha" hidden>
+  <div class="sec-head"><p class="eyebrow">Como usar o curso</p><h2>Trilha <em>de estudo</em></h2></div>
+  <div class="prose">
+    <p>Os 91 exercícios não têm o mesmo peso. Cada um traz um selo que diz o papel dele no percurso, e em cada capítulo você pode filtrar por selo.</p>
+    <ul>
+      <li><b>Aquecimento (31).</b> Entre 8 e 15 minutos. Folhas de treino de uma marca só e closes do rosto. Faça um ou dois antes de cada sessão.</li>
+      <li><b>Essencial (18).</b> O núcleo do curso. Se você fizer só estes, já aprende a linguagem.</li>
+      <li><b>Aprofundamento (28).</b> Variações e casos mais difíceis, para quando o essencial estiver firme.</li>
+      <li><b>Prova (14).</b> Estudos de mestre longos e o projeto final. Fecham cada capítulo e mostram se a lição assentou.</li>
+    </ul>
+    <p>O plano abaixo pede cinco sessões por semana, de 45 a 90 minutos. Comece cada sessão com 10 minutos de aquecimento e reserve a última sessão da semana para a prova do capítulo. Se a semana apertar, faça só os essenciais.</p>
+  </div>
+  <h3>Oito semanas</h3>
+  <div class="week" id="weeks"></div>
+  <h3>Rotina de aquecimento diário</h3>
+  <div class="prose"><ol>
+    <li><b>2 minutos:</b> uma linha de tracinhos deitados, do maior ao menor, sem levantar o ritmo (R01).</li>
+    <li><b>3 minutos:</b> uma faixa de cachos de cipreste, alternando o lado para onde enrolam (F02).</li>
+    <li><b>5 minutos:</b> um olho em anéis (C01) ou um centro de fluxo (F03), alternando a cada dia.</li>
+  </ol><p>Faça o aquecimento com a mesma ferramenta da sessão. No Procreate, use o Junco médio. No papel, o 6B rombo.</p></div>
+  <div class="next"><a href="#inicio">← Início</a><a href="#antes">Antes de Arles →</a></div>
 </section>
 
 <!-- ===================== ANTES DE ARLES ===================== -->
@@ -308,7 +382,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
       <tr><td class="yr">1890</td><td>Auvers-sur-Oise</td><td>Lápis, giz, pincel</td><td>Setenta dias. Traço rápido e solto.</td></tr>
     </tbody>
   </table></div>
-  <div class="next"><a href="#inicio">← Início</a><a href="#ranhuras">Capítulo 1 · Ranhuras →</a></div>
+  <div class="next"><a href="#trilha">← Trilha de estudo</a><a href="#ranhuras">Capítulo 1 · Ranhuras →</a></div>
 </section>
 
 <!-- ===================== 1 RANHURAS ===================== -->
@@ -325,8 +399,12 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <p><b>Tamanhos, medidos nas reproduções.</b> Numa folha de cerca de 50 × 60 cm, as marcas dele de primeiro plano têm de 8 a 15 mm de comprimento e 2 a 3 mm de largura. As do plano médio, 4 a 6 mm. As do horizonte, 1 a 2 mm, quase pontos. Num canvas A3 a 300 dpi no Procreate, isso dá traços de 25 a 35 px de largura na frente e 8 a 12 px no fundo. São medidas aproximadas.</p>
   </div>
 
+  <h3>Como ele construía uma folha</h3>
+  <div class="prose"><p>Os desenhos a pena de Arles não nasciam direto na tinta. Primeiro vinha um esboço leve de grafite, que ainda aparece por baixo em muitas folhas. Depois a pena entrava pelo fundo e avançava para a frente, e os pretos mais fortes ficavam para o fim. A sequência abaixo mostra essa ordem num dos modelos do curso. Doze exercícios têm a mesma demonstração em quatro etapas, marcada com o selo "Etapas".</p></div>
+  <div class="stepbig" id="bigsteps"></div>
+
   <h3>As doze marcas</h3>
-  <p class="hint">Toque em qualquer quadro para ver a marca ser feita.</p>
+  <p class="hint">Toque em qualquer quadro para ampliar.</p>
   <div class="marks" id="marks"></div>
 
   <h3>Laboratório de profundidade</h3>
@@ -491,7 +569,46 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <li><input type="checkbox" id="rub-7"><div><label for="rub-7">O contorno pesado é econômico</label><p>Aparece nos olhos e onde a forma vira ou apoia, não em volta de tudo.</p></div></li>
     <li><input type="checkbox" id="rub-8"><div><label for="rub-8">Funciona a três metros e a trinta centímetros</label><p>De longe, massas claras e escuras. De perto, caligrafia.</p></div></li>
   </ol>
-  <div class="next"><a href="#corpo">← Capítulo 5</a><a href="#atelie">Ateliê →</a></div>
+  <div class="next"><a href="#corpo">← Capítulo 5</a><a href="#copia">Cópia de mestre →</a></div>
+</section>
+
+<!-- ===================== CÓPIA DE MESTRE ===================== -->
+<section class="view" id="v-copia" hidden>
+  <div class="sec-head"><p class="eyebrow">Método</p><h2>Cópia <em>de mestre</em></h2></div>
+  <div class="prose">
+    <p>Van Gogh aprendeu a desenhar copiando. Nos dois primeiros anos copiou mais de uma vez as pranchas do curso de Charles Bargue e as gravuras de Millet. Em Saint-Rémy, já maduro, voltou a Millet e "traduziu" para a pintura as gravuras dele, que chamava de interpretações, como um músico que toca a partitura de outro. Copiar não é decalcar: é entender por que cada marca está onde está.</p>
+    <p>Os estudos de mestre deste curso (selo "Prova") pedem um destes cinco métodos. Use o que o exercício indicar, ou siga a ordem abaixo, do mais guiado ao mais livre.</p>
+  </div>
+  <h3>1. Pela grade</h3>
+  <div class="plate"><figure><img src="ex/g/7.jpg" alt="Reprodução com grade de lápis ao lado de uma folha com a mesma grade" loading="lazy"><figcaption>Grade sobre a reprodução e a mesma grade, bem leve, na folha.</figcaption></figure>
+  <div class="look"><h4>Como fazer</h4><ol>
+    <li>Divida a reprodução em quadrados de 3 a 4 cm. No Procreate, use a Guia de desenho em grade numa camada à parte.</li>
+    <li>Repita a grade na sua folha, na mesma proporção, com grafite bem leve.</li>
+    <li>Copie quadrado por quadrado só as grandes divisões: horizonte, contornos, eixos.</li>
+    <li>Apague a grade antes de começar as marcas. Ela serve para a estrutura, nunca para o traço.</li>
+  </ol></div></div>
+  <h3>2. Pela medida a olho</h3>
+  <div class="plate"><figure><img src="ex/g/8.jpg" alt="Mão segurando um lápis à distância do braço para medir um retrato" loading="lazy"><figcaption>O lápis à distância do braço vira régua e transferidor.</figcaption></figure>
+  <div class="look"><h4>Como fazer</h4><ol>
+    <li>Escolha uma unidade, por exemplo a altura da cabeça, e meça tudo em relação a ela.</li>
+    <li>Segure o lápis sempre com o braço esticado, para a medida não variar.</li>
+    <li>Use o lápis também para copiar ângulos: incline-o até coincidir com a linha e leve o ângulo para o papel.</li>
+    <li>É mais lento que a grade e ensina muito mais. Use nas cópias de rosto.</li>
+  </ol></div></div>
+  <h3>3. Em etapas, como ele</h3>
+  <div class="prose"><p>Siga a ordem de construção da folha: esboço leve, fundo em tinta, meio, frente, acentos. Os doze exercícios com o selo "Etapas" mostram essa ordem imagem por imagem. Pare ao fim de cada etapa e compare com a demonstração antes de seguir.</p></div>
+  <div class="stepbig" id="copysteps"></div>
+  <h3>4. Por substância</h3>
+  <div class="prose"><p>Faça a legenda do desenho no canto da folha antes de começar: céu, trigo, pele, barba, casaco. Depois copie uma substância inteira de cada vez, em toda a folha, antes de passar à próxima. Assim a marca de cada zona fica coerente do começo ao fim, que é o que dá a cara dos desenhos dele.</p></div>
+  <h3>5. De memória</h3>
+  <div class="prose"><ol>
+    <li>Olhe o modelo por 5 minutos e descreva para você mesmo a ordem das zonas e a direção de cada uma.</li>
+    <li>Esconda o modelo e desenhe por 15 minutos.</li>
+    <li>Compare. Anote o que esqueceu. Repita no dia seguinte com o mesmo modelo.</li>
+  </ol><p>Em 1890, doente e sem poder sair, ele encheu folhas de camponeses e paisagens do Norte desenhados de memória. A memória descarta o detalhe e guarda o ritmo.</p></div>
+  <h3>A tradução: de pintura para desenho</h3>
+  <div class="prose"><p>No verão de 1888 ele redesenhou as próprias pinturas a pena para mandar a amigos. Para cada cor da tela precisou escolher uma marca. É o exercício mais completo que existe para este curso: escolha uma pintura dele, faça uma tabela de cor para marca e redesenhe tudo em tinta. O exercício R19 e os autorretratos do Capítulo 4 usam esse método.</p></div>
+  <div class="next"><a href="#projeto">← Capítulo 6</a><a href="#atelie">Ateliê →</a></div>
 </section>
 
 <!-- ===================== ATELIÊ ===================== -->
@@ -536,7 +653,37 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
   <h3>Raio-X das obras</h3>
   <div class="prose"><p>Toque numa obra. Ela abre no Ateliê com as setas de direção calculadas a partir da própria pintura ou desenho, e com a obra aparecendo por baixo. Mova o controle "Modelo por baixo" para comparar. Em pinturas a leitura segue a pincelada, e em desenhos segue o traço.</p></div>
   <div class="xr" id="xray"></div>
-  <div class="next"><a href="#projeto">← Capítulo 6</a><a href="#pinceis">Pincéis e arquivos →</a></div>
+  <div class="next"><a href="#copia">← Cópia de mestre</a><a href="#glossario">Glossário →</a></div>
+</section>
+
+<!-- ===================== GLOSSÁRIO ===================== -->
+<section class="view" id="v-glossario" hidden>
+  <div class="sec-head"><p class="eyebrow">Referência</p><h2>Glossário <em>ilustrado</em></h2></div>
+  <div class="prose"><p>Os materiais e termos que aparecem no curso. As fotos foram geradas para ilustrar o curso e não mostram objetos que pertenceram a ele.</p></div>
+  <div class="gloss">
+    <article><img src="ex/g/1.jpg" alt="Penas de junco cortadas, canivete e aparas sobre a mesa" loading="lazy"><h4>Pena de junco</h4><p>Um pedaço de cana seca cortado em bisel com canivete, com uma fenda na ponta para guardar tinta. Faz traço largo, rombo e irregular, que começa cheio e seca no fim. Em Arles ele cortava as suas dos juncos dos canais. É a ferramenta das ranhuras.</p></article>
+    <article><img src="ex/g/2.jpg" alt="Papel vergê contra a luz mostrando as linhas" loading="lazy"><h4>Papel vergê</h4><p>Papel feito em fôrma de arame, que deixa linhas finas e próximas (vergaturas) e linhas espaçadas (pontusais) visíveis contra a luz. A textura quebra o traço da pena. Muitos desenhos de Arles são em vergê, às vezes com marca-d'água.</p></article>
+    <article><img src="ex/g/3.jpg" alt="Tinta ferrogálica fresca e a mesma tinta desbotada num papel antigo" loading="lazy"><h4>Tinta ferrogálica e o desbotamento</h4><p>Tinta de sais de ferro e taninos, quase preta quando fresca. Com o tempo, a tinta de muitos desenhos dele desbotou para marrom e cinza, de forma desigual. O marrom que vemos hoje não é a cor original, e por isso os modelos do curso imitam o papel envelhecido.</p></article>
+    <article><img src="ex/g/4.jpg" alt="Lápis de carpinteiro, giz preto, giz litográfico e carvão com amostras" loading="lazy"><h4>Os materiais secos</h4><p>Lápis de carpinteiro (chato, largo ou fino conforme o lado), giz preto natural (fosco e quente), giz litográfico (gorduroso, o preto mais profundo, que ele raspava com canivete para abrir luzes) e carvão vegetal (para massas). São os materiais de Haia e Nuenen.</p></article>
+    <article><img src="ex/g/5.jpg" alt="Moldura de perspectiva com fios, cravada nas dunas" loading="lazy"><h4>Moldura de perspectiva</h4><p>Moldura de madeira com fios na vertical, na horizontal e nas diagonais, presa a estacas com ponta de ferro. Ele a mandou fazer em Haia, em 1882, para desenhar nas dunas. Olhando por ela, o motivo já vem dividido.</p></article>
+    <article><img src="ex/g/6.jpg" alt="Desenho meio em grafite, meio coberto de tinta" loading="lazy"><h4>Esboço de grafite</h4><p>O desenho leve a lápis que vinha antes da pena. Em muitas folhas de Arles ele ainda aparece por baixo da tinta. Marca só as grandes divisões e nunca é apagado com cuidado: a tinta passa por cima.</p></article>
+  </div>
+  <h3>Termos</h3>
+  <dl class="terms">
+    <div><dt>Ranhura</dt><dd>Neste curso, o nome geral para as marcas curtas e repetidas da pena: ponto, tracinho, vírgula, cacho, laço.</dd></div>
+    <div><dt>Hachura</dt><dd>Linhas paralelas que dão valor. Cruzada, quando uma segunda camada vem em outro ângulo.</dd></div>
+    <div><dt>Contorno quebrado</dt><dd>Linha de contorno feita em pedaços, com pequenas falhas, mais pesada embaixo da forma.</dd></div>
+    <div><dt>Papel reservado</dt><dd>Área deixada em branco de propósito, como o céu de La Crau. É o que deixa as zonas marcadas vibrarem.</dd></div>
+    <div><dt>Linha de corrente</dt><dd>A direção que os traços seguem numa zona, como a limalha em volta de um ímã. Os traços vizinhos ficam quase paralelos.</dd></div>
+    <div><dt>Centro de fluxo</dt><dd>O ponto em volta do qual as linhas de corrente giram: um astro, um olho, o topo de uma colina.</dd></div>
+    <div><dt>Razão de escala</dt><dd>Quantas vezes a maior marca da folha é maior que a menor. Acima de 6 vezes, o chão afunda.</dd></div>
+    <div><dt>Estudo de mestre</dt><dd>Cópia feita para entender o método de outro artista, não para reproduzir a obra.</dd></div>
+    <div><dt>Números F e JH</dt><dd>Os números de catálogo das obras dele: F, de Jacob-Baart de la Faille, e JH, de Jan Hulsker. Servem para achar uma obra sem confusão de títulos.</dd></div>
+    <div><dt>Manchas de oxidação</dt><dd>Pontos marrons que aparecem em papéis antigos com o tempo (em inglês, foxing).</dd></div>
+    <div><dt>Bargue</dt><dd>Charles Bargue, autor dos <i>Exercices au fusain</i>, curso de desenho em pranchas que Van Gogh copiou em 1880 e 1881.</dd></div>
+    <div><dt>Tradução</dt><dd>Redesenhar uma pintura em outro meio, escolhendo uma marca para cada cor. Ele fez isso com as próprias telas e com Millet.</dd></div>
+  </dl>
+  <div class="next"><a href="#atelie">← Ateliê</a><a href="#pinceis">Pincéis e arquivos →</a></div>
 </section>
 
 <!-- ===================== PINCÉIS ===================== -->
@@ -599,8 +746,8 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <li>Coleções online do <a href="https://www.vangoghmuseum.nl/en/collection" target="_blank" rel="noopener">Van Gogh Museum</a>, do <a href="https://www.metmuseum.org/art/collection" target="_blank" rel="noopener">Metropolitan Museum</a> e do <a href="https://krollermuller.nl/en" target="_blank" rel="noopener">Kröller-Müller</a>, para dar zoom até o grão do papel.</li>
     <li><i>Vincent van Gogh: The Drawings</i> (Ives, Stein, van Heugten e Vellekoop, Metropolitan Museum of Art, 2005).</li>
   </ul>
-  <p>As citações das cartas são paráfrases em português. As reproduções são de obras em domínio público, obtidas no Wikimedia Commons. As medidas de traço são estimativas feitas sobre as reproduções.</p></div>
-  <div class="next"><a href="#projeto">← Capítulo 6</a><a href="#inicio">Início →</a></div>
+  <p>As citações das cartas são paráfrases em português. As reproduções são de obras em domínio público, obtidas no Wikimedia Commons. A ficha técnica de cada obra (números de catálogo F e JH, dimensões e acervo) vem do Wikidata e do Wikimedia Commons. Onde um dado não estava disponível nessas fontes, a ficha fica sem ele. As medidas de traço são estimativas feitas sobre as reproduções.</p></div>
+  <div class="next"><a href="#glossario">← Glossário</a><a href="#inicio">Início →</a></div>
 </section>
 
 </main>
@@ -633,6 +780,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 <script src="engine.js"></script>
 <script src="exercises.js"></script>
 <script src="plates.js"></script>
+<script src="fichas.js"></script>
 <script src="analyze.js"></script>
 <script src="imgscene.js"></script>
 <script src="studio.js"></script>
