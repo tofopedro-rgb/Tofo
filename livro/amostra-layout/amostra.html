@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Van Gogh a Lápis · amostra de layout</title>
+<style>
+@font-face{font-family:Disp;src:url("fonts/archivo-black-latin-400-normal.woff")}
+@font-face{font-family:Sans;src:url("fonts/archivo-latin-400-normal.woff");font-weight:400}
+@font-face{font-family:Sans;src:url("fonts/archivo-latin-500-normal.woff");font-weight:500}
+@font-face{font-family:Sans;src:url("fonts/archivo-latin-700-normal.woff");font-weight:700}
+@font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-400-normal.ttf");font-weight:400}
+@font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-400-italic.ttf");font-weight:400;font-style:italic}
+@font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-500-normal.ttf");font-weight:500}
+@font-face{font-family:Serif;src:url("fonts/eb-garamond-latin-600-normal.ttf");font-weight:600}
+
+@page{size:6in 9in;margin:0}
+:root{--paper:#EEEAE0;--kraft:#D6C7A8;--clay:#BF8A5A;--ink:#1E1913;--mute:#6E6253;--soft:#A39682}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-family:Serif,serif;font-size:9.6pt;line-height:1.42;color:var(--ink);hyphens:auto}
+.pg{width:6in;height:9in;position:relative;overflow:hidden;background:var(--paper);break-after:page}
+.pg.kraft{background:var(--kraft)}
+.pg.clay{background:var(--clay)}
+.pg.dark{background:#241C15;color:#E9E1D0}
+p{text-align:justify;margin-bottom:.55em}
+i,em{font-style:italic}
+
+/* sistema de página */
+.lab{font-family:Sans;font-size:6.4pt;letter-spacing:.09em;text-transform:uppercase;line-height:1.35}
+.disp{font-family:Disp;line-height:.92;letter-spacing:-.01em}
+.circ{position:absolute;top:.42in;width:.24in;height:.24in;border:.6pt solid currentColor;border-radius:50%;
+      font-family:Sans;font-size:6.2pt;font-weight:500;text-align:center;line-height:.225in}
+.L .circ{left:.5in}.R .circ{right:.5in}
+.foot{position:absolute;bottom:.42in;left:.5in;right:.5in;font-family:Sans;font-size:6.2pt;line-height:1.3}
+.foot .box{display:flex;border-top:.6pt solid currentColor;border-bottom:.6pt solid currentColor}
+.foot .box div{padding:.05in 0;flex:1}
+.foot .box div+div{border-left:.6pt solid currentColor;padding-left:.08in;text-align:right;flex:0 0 1.1in}
+.foot .fol{font-weight:700;margin-top:.06in;font-size:6.6pt}
+.R .foot .fol{text-align:right}
+.full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cap{font-family:Sans;font-size:6.3pt;line-height:1.4;color:var(--mute)}
+.cap b{font-weight:500;color:var(--ink)}
+.vert{position:absolute;transform-origin:left top;transform:rotate(90deg);white-space:nowrap}
+.cols2{column-count:2;column-gap:.2in}
+h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bottom:.35em}
+
+/* 1 capa */
+.cover .band{position:absolute;left:0;top:0;bottom:0;width:2.15in;background:#2E241B}
+.cover .title{position:absolute;left:1.82in;top:.55in;transform:rotate(90deg);transform-origin:left top;font-size:50pt;color:#EEEAE0;white-space:nowrap}
+.cover .title span{color:var(--clay)}
+.cover .art{position:absolute;right:.5in;bottom:1.25in;width:3.15in}
+.cover .art img{width:100%;display:block}
+.cover .meta{position:absolute;left:2.55in;top:.55in;right:.5in}
+.cover .auth{position:absolute;left:2.55in;bottom:.5in;right:.5in;display:flex;justify-content:space-between;border-top:.6pt solid #E9E1D0;padding-top:.07in}
+
+/* sumário */
+.toc h1{font-size:20pt;position:absolute;left:.5in;top:.95in}
+.toc .grid{position:absolute;left:.5in;right:.5in;top:1.75in;display:flex;flex-wrap:wrap;gap:.32in .16in}
+.toc .it{width:1.53in;border-top:.6pt solid var(--ink);padding-top:.08in}
+.toc .it .n{font-family:Disp;font-size:19pt;line-height:1}
+.toc .it .t{font-family:Sans;font-weight:700;font-size:7.2pt;margin:.06in 0 .05in}
+.toc .it ul{list-style:none;font-size:8.2pt;line-height:1.35;color:#3A3128}
+.toc .it li:before{content:"· ";color:var(--soft)}
+
+/* prefácio */
+.pref h1{position:absolute;top:.95in;left:0;right:0;text-align:center;font-size:17pt}
+.pref .sub{position:absolute;top:1.32in;left:0;right:0;text-align:center;color:var(--mute)}
+.pref .body{position:absolute;top:1.85in;left:.95in;right:.95in;font-size:9.4pt}
+.pref .body .ini{font-family:Disp;font-size:30pt;float:left;line-height:.85;margin:.03in .06in 0 0}
+.sign{font-style:italic;text-align:right !important;margin-top:.8em}
+
+/* abertura de parte */
+.part .num{position:absolute;left:.5in;top:2.1in;font-size:118pt;color:var(--ink)}
+.part h1{position:absolute;left:.5in;top:3.75in;font-size:22pt;width:4in}
+.part .intro{position:absolute;left:.5in;top:4.85in;width:3.35in;font-size:9pt;color:#2B221A}
+.part .rule{position:absolute;left:.5in;right:.5in;top:1.95in;border-top:.6pt solid var(--ink)}
+.part .sec{position:absolute;left:.5in;top:1.72in}
+
+/* página de capítulo com linha do tempo */
+.tl h1{position:absolute;left:.5in;top:.85in;font-size:21pt;width:3.6in}
+.tl .lead{position:absolute;left:.5in;right:.5in;top:1.75in;font-style:italic;font-size:10.2pt;line-height:1.4;text-align:left}
+.tl .row{position:absolute;left:.5in;right:.5in;top:2.75in;display:flex;gap:.16in}
+.tl .row>div{flex:1}
+.tl .dot{width:.32in;height:.32in;border:.8pt solid var(--ink);border-radius:50%;font-family:Disp;font-size:10pt;text-align:center;line-height:.3in;margin-bottom:.12in}
+.tl .row h4{min-height:2.6em}
+.tl .wide{position:absolute;left:.5in;right:.5in;top:5.0in}.tl .wide img{width:100%;height:2.55in;object-fit:cover;display:block}.tl .wide .cap{margin-top:.07in}
+.tl .row p{font-size:8.1pt;line-height:1.38;hyphens:auto}
+
+/* página de texto com imagem */
+.txt h2{position:absolute;right:.5in;top:.8in;width:2.5in;font-size:17pt;text-align:right}
+.txt .fig{position:absolute;left:.5in;top:1.75in;width:2.3in}
+.txt .fig img{width:100%;display:block}
+.txt .fig .cap{margin-top:.07in}
+.txt .col{position:absolute;left:3.0in;right:.5in;top:1.75in;font-size:8.9pt}
+.txt .pull{font-family:Sans;font-weight:700;font-size:8.6pt;line-height:1.35;font-style:normal;text-align:left;margin-bottom:.8em}
+
+/* prancha */
+.plate .vtitle{left:5.28in;top:.55in;font-size:15pt}
+.plate .vtitle small{font-family:Sans;font-size:6.5pt;letter-spacing:.09em;margin-left:.15in;text-transform:uppercase}
+.plate .disc{position:absolute;left:.85in;top:1.05in;width:2.25in;height:2.25in;border-radius:50%;
+             background:url("img/starry-kraft.jpg") 83% 14%/520% auto no-repeat}
+.plate .k{position:absolute;left:.85in;top:3.6in;width:3.6in}
+.plate .k .no{font-family:Disp;font-size:30pt;line-height:1}
+.plate .k h3{font-family:Serif;font-weight:500;font-size:13pt;line-height:1.2;margin:.08in 0 .12in}
+.plate .k p{font-size:9pt}
+.plate table{border-collapse:collapse;width:100%;margin-top:.15in;font-family:Sans;font-size:6.6pt}
+.plate td{border-top:.6pt solid var(--soft);padding:.045in 0;vertical-align:top}
+.plate td:first-child{width:.95in;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+
+/* exercício */
+.ex .code{position:absolute;left:.5in;top:.85in;font-size:44pt}
+.ex .lvl{position:absolute;left:.5in;top:1.62in}
+.ex h1{position:absolute;left:.5in;top:1.95in;width:3.6in;font-size:16pt}
+.ex .meta{position:absolute;left:.5in;right:.5in;top:2.7in;display:flex;border-top:.6pt solid var(--ink);border-bottom:.6pt solid var(--ink)}
+.ex .meta div{flex:1;padding:.06in 0}
+.ex .meta div+div{border-left:.6pt solid var(--ink);padding-left:.08in}
+.ex .meta b{display:block;font-family:Sans;font-weight:700;font-size:8pt;text-transform:none;letter-spacing:0;margin-top:.02in}
+.ex .desc{position:absolute;left:.5in;width:3.1in;top:3.25in;font-size:9.6pt}
+.ex .done{position:absolute;right:.5in;width:1.45in;top:3.25in;border-left:.6pt solid var(--ink);padding-left:.1in}
+.ex .done p{text-transform:none;letter-spacing:0;font-family:Sans;font-size:7.6pt;line-height:1.4;text-align:left}
+.ex .steps{position:absolute;left:.5in;right:.5in;top:5.05in;display:flex;gap:.12in}
+.ex .steps figure{flex:1}
+.ex .steps img{width:100%;display:block}
+.ex .steps .dot{display:inline-block;width:.17in;height:.17in;border:.6pt solid var(--ink);border-radius:50%;text-align:center;line-height:.155in;font-family:Sans;font-size:6pt;margin-right:.04in}
+.ex .steps figcaption{font-family:Sans;font-size:6.6pt;margin-top:.06in}
+.ex .ref{position:absolute;left:.5in;width:3.1in;top:6.95in;font-size:8.4pt;color:var(--mute)}
+.model .frame{position:absolute;left:.6in;right:.6in;top:.95in;bottom:1.45in;background:#E3D7BE;padding:.18in}
+.model .frame img{width:100%;height:100%;object-fit:contain;display:block}
+.model .cap{position:absolute;left:.6in;right:.6in;bottom:1.1in}
+
+/* abertura de capítulo */
+.quote .q{left:4.4in;top:1.0in;font-family:Serif;font-size:15pt;font-style:italic;line-height:1.3;white-space:normal;width:6.4in}
+.quote .src{left:3.62in;top:1.0in}
+.quote .disc{position:absolute;left:.55in;bottom:1.05in;width:1.7in;height:1.7in;border-radius:50%;
+             background:url("img/roulin-kraft.jpg") 52% 40%/300% auto no-repeat}
+.quote .dcap{position:absolute;left:.55in;bottom:.6in;width:2.2in}
+.chap .num{position:absolute;right:.45in;top:.55in;font-size:150pt;color:var(--clay)}
+.chap .sec{position:absolute;left:.5in;top:1.0in}
+.chap h1{position:absolute;left:.5in;top:2.95in;width:3.4in;font-size:24pt}
+.chap .lead{position:absolute;left:.5in;width:3.0in;top:4.0in;font-size:10pt;font-style:italic;text-align:left;line-height:1.42}
+.chap .body{position:absolute;left:.5in;right:.5in;top:5.35in}
+.chap .body h4{border-top:.6pt solid var(--ink);padding-top:.07in}
+.chap .body p{font-size:8.8pt}
+</style>
+</head>
+<body>
+
+<!-- 1 · CAPA -->
+<section class="pg dark cover R">
+  <div class="band"></div>
+  <div class="title disp">VAN GOGH <span>A LÁPIS</span></div>
+  <div class="meta lab">Desenho à maneira de Vincent<br>Teoria, 91 exercícios e catálogo<br><br>Edição ilustrada</div>
+  <div class="art"><img src="img/roulin-kraft.jpg" alt=""></div>
+  <div class="auth lab"><span>Pedro Torres</span><span>Nº 01</span></div>
+</section>
+
+<!-- 2 · SUMÁRIO -->
+<section class="pg L toc">
+  <div class="circ">i</div>
+  <h1 class="disp">Sumário</h1>
+  <div class="grid">
+    <div class="it"><div class="n">00</div><div class="t">Abertura</div><ul><li>Prefácio</li><li>Como usar este livro</li></ul></div>
+    <div class="it"><div class="n">01</div><div class="t">Dez anos de desenho</div><ul><li>Antes da arte</li><li>Haia</li><li>Nuenen</li><li>Paris</li><li>Arles</li><li>Saint-Rémy</li><li>Auvers</li></ul></div>
+    <div class="it"><div class="n">02</div><div class="t">A linguagem</div><ul><li>Materiais</li><li>Ranhuras</li><li>Direção e fluxo</li><li>O rosto como terreno</li></ul></div>
+    <div class="it"><div class="n">03</div><div class="t">O corpo e a folha</div><ul><li>Os autorretratos</li><li>O corpo em aros</li><li>Como ele construía uma folha</li><li>Cópia de mestre</li></ul></div>
+    <div class="it"><div class="n">04</div><div class="t">Exercícios</div><ul><li>Nível 1 · Fundamentos</li><li>Nível 2 · Essenciais</li><li>Nível 3 · Aprofundamento</li><li>Nível 4 · Provas de mestre</li></ul></div>
+    <div class="it"><div class="n">05</div><div class="t">Prática</div><ul><li>Plano de oito semanas</li><li>Autoavaliação</li><li>Catálogo das obras</li></ul></div>
+  </div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Desenho à maneira de Vincent</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">ii</div></div>
+</section>
+
+<!-- 3 · PREFÁCIO -->
+<section class="pg R pref">
+  <div class="circ">iii</div>
+  <h1 class="disp">Prefácio</h1>
+  <div class="sub lab">Por que aprender a desenhar com Van Gogh</div>
+  <div class="body">
+    <p><span class="ini">P</span>oucos artistas atravessaram o tempo como Vincent van Gogh. Ele vendeu pouquíssimo em vida, morreu aos 37 anos sem ter visto o próprio nome reconhecido e hoje está entre os pintores mais vistos e mais estudados do mundo.</p>
+    <p>O que mais me interessa nele, porém, está nas folhas de papel. Van Gogh fez mais de mil desenhos, e foi desenhando que ele inventou a sua linguagem: pontos, tracinhos, vírgulas e redemoinhos, cada um com uma função e com uma direção que acompanha a forma.</p>
+    <p>Isso faz dele um professor generoso. Quem está começando consegue entrar no universo dele por uma única marca repetida com atenção. Quem já desenha bem encontra nas mesmas folhas um refinamento que leva anos para dominar.</p>
+    <p>O livro trata só do desenho: do lápis, do carvão e da pena. A pintura dele fica para outra ocasião.</p>
+    <p class="sign">Pedro Torres</p>
+  </div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Abertura</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">iii</div></div>
+</section>
+
+<!-- 4 · ABERTURA DE PARTE -->
+<section class="pg clay L part">
+  <div class="circ">01</div>
+  <div class="sec lab">Parte I</div>
+  <div class="rule"></div>
+  <div class="num disp">01</div>
+  <h1 class="disp">Dez anos de desenho</h1>
+  <div class="intro"><p>Entre a decisão de ser artista, em 1880, e a morte, em 1890, passaram-se dez anos. Ele fez nesse tempo cerca de 850 pinturas e mais de mil desenhos. Esta parte acompanha esses dez anos pelo que mudou no traço.</p></div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Parte I</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">12</div></div>
+</section>
+
+<!-- 5 · IMAGEM PLENA -->
+<section class="pg kraft R">
+  <img class="full" src="img/cypress-kraft.jpg" alt="">
+</section>
+
+<!-- 6 · LINHA DO TEMPO -->
+<section class="pg L tl">
+  <div class="circ">01</div>
+  <h1 class="disp">Quatro lugares, quatro traços</h1>
+  <p class="lead">Cada cidade onde ele morou deixou alguma coisa no desenho dele, e você vai reencontrar essas coisas nos capítulos seguintes.</p>
+  <div class="row">
+    <div><div class="dot">1</div><h4>Haia<br>1881 a 1883</h4><p>A escola do preto e branco. Lápis de carpinteiro, giz litográfico, grafite fixado com leite e a moldura de perspectiva levada às dunas.</p></div>
+    <div><div class="dot">2</div><h4>Nuenen<br>1883 a 1885</h4><p>Tecelões e camponeses. Lendo Delacroix, passa a começar a forma pelos centros, pelas massas, e não pela linha.</p></div>
+    <div><div class="dot">3</div><h4>Paris<br>1886 a 1888</h4><p>As gravuras japonesas: cada superfície ganha um padrão gráfico próprio. É a semente do alfabeto de marcas.</p></div>
+    <div><div class="dot">4</div><h4>Arles e Saint-Rémy<br>1888 a 1890</h4><p>A pena de junco. O traço curto de Arles se alonga em curvas que ligam terra, árvore e céu.</p></div>
+  </div>
+  <div class="wide"><img src="img/lacrau-kraft.jpg" alt=""><div class="cap"><b><i>La Crau vista de Montmajour</i></b>, Arles, julho de 1888. Pena de junco e pena de ave sobre grafite. Van Gogh Museum, Amsterdã.</div></div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Parte I · Dez anos de desenho</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">14</div></div>
+</section>
+
+<!-- 7 · TEXTO COM IMAGEM -->
+<section class="pg R txt">
+  <div class="circ">01</div>
+  <h2 class="disp">Haia, 1881 a 1883</h2>
+  <div class="fig"><img src="img/sorrow-kraft.jpg" alt=""><div class="cap"><b><i>Sorrow</i></b><br>Haia, abril de 1882. Lápis, pena e tinta. The New Art Gallery Walsall.</div></div>
+  <div class="col">
+    <p class="pull">Haia foi a escola do preto e branco.</p>
+    <p>No fim de 1881 mudou-se para Haia e teve algumas aulas com Anton Mauve, pintor importante da Escola de Haia e parente da família por casamento. A relação durou pouco. Vincent passou a viver com Sien Hoornik, uma mulher grávida e com uma filha, que posou para muitos desenhos, entre eles <i>Sorrow</i>.</p>
+    <p>Ele colecionava gravuras de revistas inglesas como <i>The Graphic</i>, experimentava o lápis de carpinteiro e o giz litográfico e fixava o grafite com leite para tirar o brilho (cartas 217 e 297). Mandou fazer a moldura de perspectiva que levava às dunas (cartas 253 e 254) e desenhava os velhos do asilo, que chamava de homens órfãos.</p>
+  </div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Parte I · Dez anos de desenho</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">15</div></div>
+</section>
+
+<!-- 8 · PRANCHA, IMAGEM -->
+<section class="pg kraft L">
+  <img class="full" src="img/starry-kraft.jpg" alt="" style="object-position:30% 50%">
+</section>
+
+<!-- 9 · PRANCHA, LEITURA -->
+<section class="pg R plate">
+  <div class="vert vtitle disp">A Noite Estrelada <small>Prancha 14</small></div>
+  <div class="disc"></div>
+  <div class="k">
+    <div class="no disp">14</div>
+    <h3><i>A Noite Estrelada</i>, desenho a partir da pintura</h3>
+    <p>Os tracinhos do céu seguem correntes em volta dos astros, e cada estrela tem a sua coroa. A vila fica parada em traços retos. O cipreste é a única massa densa da folha, ligando o chão ao céu.</p>
+    <table>
+      <tr><td>Lugar e data</td><td>Saint-Rémy, junho de 1889</td></tr>
+      <tr><td>Técnica</td><td>Pena e tinta</td></tr>
+      <tr><td>Medidas</td><td>47 × 62,5 cm</td></tr>
+      <tr><td>Catálogo</td><td>F1540 · JH1732</td></tr>
+      <tr><td>Acervo</td><td>Museu Estatal de Arquitetura Shchusev, Moscou</td></tr>
+    </table>
+  </div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Catálogo das obras</div><div>Detalhe no círculo<br>a lua e o redemoinho</div></div><div class="fol">231</div></div>
+</section>
+
+<!-- 10 · EXERCÍCIO -->
+<section class="pg L ex">
+  <div class="circ">N2</div>
+  <div class="code disp">C11</div>
+  <div class="lvl lab">Nível 2 · Essenciais · Capítulo 4</div>
+  <h1 class="disp">Rosto de frente, sem barba</h1>
+  <div class="meta lab"><div>Tempo<b>35 min</b></div><div>Material<b>Junco fino e médio</b></div><div>Teoria<b>O rosto como terreno</b></div></div>
+  <div class="desc"><p>Cinco zonas: cabelo, testa, bochechas, pescoço, casaco. O fundo fica vazio.</p><p>Antes de preencher, marque de leve a cruz do rosto e a linha dos olhos. Depois trabalhe zona por zona, sempre na direção do mapa: arcos na testa, anéis em volta dos olhos, chama no cabelo.</p></div>
+  <div class="done lab"><span>Pronto quando</span><p>cobrindo os olhos, a cabeça ainda tem volume.</p></div>
+  <div class="steps">
+    <figure><img src="img/st-c11-1.jpg" alt=""><figcaption><span class="dot">1</span>Esboço</figcaption></figure>
+    <figure><img src="img/st-c11-2.jpg" alt=""><figcaption><span class="dot">2</span>Primeiras tintas</figcaption></figure>
+    <figure><img src="img/st-c11-3.jpg" alt=""><figcaption><span class="dot">3</span>Quase pronto</figcaption></figure>
+  </div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Parte III · Exercícios</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">148</div></div>
+</section>
+
+<!-- 11 · MODELO -->
+<section class="pg kraft R model">
+  <div class="circ">N2</div>
+  <div class="frame"><img src="img/c11.jpg" alt=""></div>
+  <div class="cap"><b>C11 · Desenho-modelo acabado.</b> Etapa 4 de 4. Para desenhar por cima, use a folha de exercício com o modelo em azul claro.</div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Parte III · Exercícios</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">149</div></div>
+</section>
+
+<!-- 12 · CITAÇÃO -->
+<section class="pg kraft L quote">
+  <div class="vert q">“Ele é belo em linha e proporção, como um obelisco egípcio.”</div>
+  <div class="vert src lab">Carta 783 · sobre o cipreste · Saint-Rémy, 1889</div>
+  <div class="disc"></div>
+  <div class="dcap cap"><b><i>Retrato de Joseph Roulin</i></b>, detalhe. Arles, agosto de 1888.</div>
+</section>
+
+<!-- 13 · ABERTURA DE CAPÍTULO -->
+<section class="pg R chap">
+  <div class="num disp">4</div>
+  <div class="sec lab">Capítulo 4<br>Parte II · A linguagem</div>
+  <h1 class="disp">O rosto como terreno</h1>
+  <p class="lead">Nos retratos a pena de Arles, Vincent aplicou ao rosto o mesmo alfabeto da paisagem.</p>
+  <div class="body cols2">
+    <h4>O mapa de direções</h4>
+    <p>O rosto é tratado como um terreno: tem planos, e os traços correm sobre ele como curvas de nível num mapa. Cada parte tem a sua corrente, e é a mudança de direção entre uma parte e outra que dá o volume.</p>
+    <p>Os olhos são o centro de dois redemoinhos. Os tracinhos giram em anéis em volta da órbita e se espalham pela maçã do rosto. A pálpebra de cima é a linha mais grossa do rosto.</p>
+  </div>
+  <div class="foot"><div class="box"><div>Van Gogh a Lápis<br>Parte II · A linguagem</div><div>Escrito por<br>Pedro Torres</div></div><div class="fol">71</div></div>
+</section>
+
+</body>
+</html>
