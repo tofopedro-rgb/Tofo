@@ -292,7 +292,7 @@ PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho',
          'parte3': ('03', 'Parte III', 'Exercícios',
                     'Os 91 exercícios, em quatro níveis. Cada um parte de um desenho-modelo e diz quando está pronto. Cada um indica também o capítulo que explica a teoria.'),
          'parte4': ('04', 'Parte IV', 'Prática',
-                    'Um plano de estudo de oito semanas e uma autoavaliação, para transformar a leitura em hábito.')}
+                    'Um plano de estudo de oito semanas e uma autoavaliação para conferir o resultado.')}
 PART_ART = {'parte1': 'sower2', 'parte2': 'zouavepen', 'parte3': 'fountain', 'parte4': 'roulin2'}
 ICONS = ['sorrow', 'cafe', 'roulin', 'mousme2', 'starry', 'cypress']
 CAT_ORDER = ['sorrow', 'wornout', 'orphan', 'yard', 'peasant', 'reaper', 'head85', 'hands', 'sower1', 'sower2', 'digger',
@@ -335,6 +335,7 @@ p{margin:0 0 .55em;text-align:justify;orphans:2;widows:2}
 a{color:inherit;text-decoration:none}
 i,em{font-style:italic}
 .rh{string-set:sec content();display:block;height:0;overflow:hidden;margin:0}
+h1,h2,h3,h4{hyphens:manual}
 h1{font:400 21pt/1.05 Disp;margin:0 0 .8em;letter-spacing:-.01em}
 h2{font:400 12pt/1.2 Disp;margin:1.5em 0 .5em;break-after:avoid}
 h3{font:700 10.5pt/1.25 Sans;margin:1.1em 0 .35em;break-after:avoid}
@@ -372,6 +373,7 @@ h2.ic{display:flex;align-items:center;gap:.1in}
 h2.ic .icon{width:.36in;height:.36in;flex:none}
 .figbal{break-inside:avoid;margin:1em 0 1.3em}
 .figbal > figure{margin:0 0 .16in}
+.figbal > figure img{max-height:3.25in}
 .balrow{display:flex;gap:.22in;justify-content:center}
 .bal{width:1.45in;flex:none;margin:0;text-align:left}
 .bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
@@ -478,7 +480,7 @@ section.level{page:chap;break-before:page}
 .exart .steps img{width:100%;height:1.17in;object-fit:cover;display:block}
 .exart .steps figcaption{margin-top:.03in;font-size:6.6pt;color:#1E1913}
 .exsolo{text-align:center;margin-bottom:.14in}
-.exsolo img{max-width:100%;max-height:4.3in}
+.exsolo img{max-width:100%;max-height:4.7in}
 .half .exsolo img{max-height:1.75in}
 .half .exsolo{float:left;width:2.35in;margin:0 .18in .05in 0;text-align:left}.half .exsolo img{max-width:2.35in}
 .exfoot{display:flex;gap:.18in}

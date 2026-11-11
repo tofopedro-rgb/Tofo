@@ -1,7 +1,7 @@
 <!-- id: prefacio | Prefácio | front -->
 # Prefácio
 
-Poucos artistas atravessaram o tempo como Vincent van Gogh. Ele vendeu pouquíssimo em vida, morreu aos 37 anos sem ter visto o próprio nome reconhecido e hoje está entre os pintores mais vistos e mais estudados do mundo. Essa virada tem algo de metáfora da vida, e talvez por isso o nome dele chame a atenção desde a primeira vez que a gente o escuta. Há também o mistério que cerca a história e uma paleta que ninguém confunde com outra, com aqueles azuis profundos que muita gente já chama de azul Van Gogh.
+Poucos artistas atravessaram o tempo como Vincent van Gogh. Ele vendeu pouquíssimo em vida, morreu aos 37 anos sem ter visto o próprio nome reconhecido e hoje está entre os pintores mais vistos e mais estudados do mundo. Talvez por causa dessa virada o nome dele chame a atenção desde a primeira vez que a gente o escuta. A paleta ajuda: ninguém a confunde com outra, com aqueles azuis profundos que muita gente já chama de azul Van Gogh.
 
 A história da arte o coloca entre os pós-impressionistas, ao lado de Cézanne, Gauguin e Seurat. Ele chegou a Paris em 1886, absorveu o que os impressionistas tinham feito com a luz e a cor e seguiu adiante, rumo a uma pintura que mostra o que o artista sente diante do motivo. Por isso também é lembrado como um dos que abriram caminho para o expressionismo.
 
@@ -20,7 +20,7 @@ A proposta é aprender a rabiscar como Van Gogh, entender por que cada traço es
 
 O livro tem quatro partes. A Parte I conta, em poucas páginas, os dez anos em que Van Gogh desenhou, com o foco no que mudou no traço. A Parte II explica a linguagem dele capítulo por capítulo: os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. A Parte III reúne os 91 exercícios, organizados em quatro níveis. A Parte IV traz um plano de estudo de oito semanas e uma autoavaliação.
 
-Os exercícios estão separados da teoria de propósito. Cada um indica o capítulo que o explica, e cada capítulo termina com a lista dos exercícios que o praticam. Você pode ler a teoria inteira antes de pegar no lápis ou alternar um capítulo com os exercícios dele.
+Os exercícios estão separados da teoria de propósito. Cada um indica o capítulo que o explica, e o índice no fim do livro agrupa os exercícios por assunto. Você pode ler a teoria inteira antes de pegar no lápis ou alternar um capítulo com os exercícios dele.
 
 ## Por onde começar
 

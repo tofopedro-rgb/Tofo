@@ -23,7 +23,7 @@
 <dt>Pena de junco</dt><dd>Pedaço de cana seca cortado em bisel, com uma fenda na ponta. Faz traço largo, rombo e irregular.</dd>
 <dt>Pós-impressionismo</dt><dd>Nome dado depois ao grupo de pintores que partiu do impressionismo e seguiu caminhos próprios, entre eles Cézanne, Gauguin, Seurat e Van Gogh.</dd>
 <dt>Ranhura</dt><dd>Neste livro, o nome geral das marcas curtas e repetidas da pena: ponto, tracinho, vírgula, chama, laço.</dd>
-<dt>Razão de escala</dt><dd>Quantas vezes a maior marca da folha é maior que a menor. Acima de seis vezes, o chão parece afundar.</dd>
+<dt>Razão de escala</dt><dd>Quantas vezes a maior marca da folha é maior que a menor. Abaixo de três, o espaço fica chapado. Acima de cinco, o chão afunda. Nos desenhos de La Crau passa de oito.</dd>
 <dt>Tinta ferrogálica</dt><dd>Tinta feita de sais de ferro e taninos, quase preta quando fresca. Com o tempo desbota para marrom.</dd>
 <dt>Tradução</dt><dd>Redesenhar uma pintura em outro meio, escolhendo uma marca para cada cor. Vincent fez isso com as próprias telas e com obras de Millet.</dd>
 </dl>
