@@ -60,7 +60,7 @@ function fill(S,R,only){const o=[],owner=ownerOf(S),v=bounds(S);
 function arrowsOf(S){const o=[],owner=ownerOf(S),v=bounds(S),k=v[2]/600;
   for(const z of S.zones){if(!z.dir||z.noArrow)continue;const b=z.bb||[0,0,S.W,S.H],sp=(z.arrow||44)*k;
     for(let y=Math.max(b[1],v[1])+sp*.5;y<Math.min(b[3],v[1]+v[3]);y+=sp)for(let x=Math.max(b[0],v[0])+sp*.5;x<Math.min(b[2],v[0]+v[2]);x+=sp){
-      if(owner(x,y)===z)o.push([x,y,z.dir(x,y)])}}
+      if(owner(x,y)===z&&(!z.arrowIf||z.arrowIf(x,y)))o.push([x,y,z.dir(x,y)])}}
   return o}
 function build(S,level,seed){const R=rng((seed||1)*7919+13);let strokes=[];const first=s=>s.pts[0];
   if(level===3){strokes=fill(S,R,S.sample).concat((S.ink||[]).filter(s=>S.sample(first(s)[0],first(s)[1])))}
@@ -79,6 +79,7 @@ function paintGuides(ctx,B,S,C){const v=bounds(S),u=v[2]/600;ctx.lineCap='round'
   ctx.setLineDash([]);ctx.strokeStyle=C.arrow;ctx.fillStyle=C.arrow;ctx.lineWidth=1.6*u;
   for(const a of B.arrows){const L=17*u,c=Math.cos(a[2]),s=Math.sin(a[2]),x0=a[0]-c*L/2,y0=a[1]-s*L/2,x1=a[0]+c*L/2,y1=a[1]+s*L/2,h=5.5*u;
     ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();
+    if(S.isImage)continue;
     ctx.beginPath();ctx.moveTo(x1+c*h*.6,y1+s*h*.6);ctx.lineTo(x1-c*h+s*h*.6,y1-s*h-c*h*.6);ctx.lineTo(x1-c*h-s*h*.6,y1-s*h+c*h*.6);ctx.closePath();ctx.fill()}}
 /* desenha tudo de uma vez num canvas já dimensionado (largura em px = pxW) */
 function render(cv,S,level,C,seed,pxW){const v=bounds(S),k=pxW/v[2];cv.width=Math.round(pxW);cv.height=Math.round(pxW*v[3]/v[2]);
@@ -328,6 +329,6 @@ SC.figure=p=>{const S=mkS(520,680),P=POSES[p.pose],R=rng(17),k=p.k||1;
   S.zones.push({in:(x,y)=>y>P.g-8,dir:K(0),mark:{t:'dash',sp:16,len:26,w:2.4,jit:.1},keep:K(.4),arrow:70},{in:()=>true});
   S.guides.push(pl([[0,P.g-8],[520,P.g-8]]));S.sample=p.pose==='cyl'?((x,y)=>y>340):((x,y)=>y>P.g-330&&y<P.g-110);return S};
 
-G.VG={rng:rng,seg:seg,dot:dot,curl:curl,path:path,broken:broken,paint:paint,paintGuides:paintGuides,build:build,render:render,bounds:bounds,SC:SC,
+G.VG={ownerOf:ownerOf,rng:rng,seg:seg,dot:dot,curl:curl,path:path,broken:broken,paint:paint,paintGuides:paintGuides,build:build,render:render,bounds:bounds,SC:SC,
   scene:function(spec){return SC[spec[0]](spec[1]||{})}};
 })(window);

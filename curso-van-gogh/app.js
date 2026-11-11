@@ -121,7 +121,9 @@ PAIRS.forEach((p,i)=>{const row=document.createElement('div');row.className='pai
 
 /* ---------- galerias ---------- */
 const dlg=$('#zoom'),dimg=$('img',dlg),dtxt=$('#zoom-txt');
-function zoom(src,txt){dimg.src=src;dtxt.textContent=txt||'';if(dlg.showModal)dlg.showModal()}
+function zoom(src,txt){dimg.src=src;dtxt.textContent=txt||'';if(dlg.open)dlg.close();if(dlg.showModal)dlg.showModal()}
+window.VGApp={zoom:zoom};
+function xray(k){const pl=PL[k];VGAnalyze.load('img/'+k+'.jpg').then(im=>VGStudio.open(VGAnalyze.analyze(im),'Raio-X · '+pl.t,{level:2,under:.55,seed:5})).catch(()=>{})}
 $('#zoom-close').addEventListener('click',()=>dlg.close());dimg.addEventListener('click',()=>dlg.close());
 function overlay(pic,img,pl){const ar=img.naturalHeight/img.naturalWidth*100,ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 100 '+ar);
   (pl.flow||[]).forEach(L=>{const P=L.map(q=>[q[0],q[1]*ar/100]),pa=document.createElementNS(ns,'path');let d='M'+P[0][0]+' '+P[0][1];
@@ -136,6 +138,7 @@ $$('[data-gal]').forEach(g=>{g.dataset.gal.split(',').forEach(k=>{const pl=PL[k]
   const img=$('img',f);img.src='img/'+k+'.jpg';img.alt=pl.t;$('b',f).textContent=pl.t;$('i',f).textContent=pl.c;$('i',f).style.fontStyle='normal';$('span',f).textContent=pl.l||'';
   img.tabIndex=0;img.addEventListener('click',()=>zoom(img.src,pl.t+'. '+pl.c));
   if(pl.flow){const b=document.createElement('button');b.textContent='Mostrar direção';let svg=null;b.addEventListener('click',()=>{if(!svg){if(!img.naturalWidth)return;svg=overlay($('.pic',f),img,pl);b.textContent='Esconder direção'}else{svg.hidden=!svg.hidden;svg.style.display=svg.hidden?'none':'';b.textContent=svg.hidden?'Mostrar direção':'Esconder direção'}});f.appendChild(b)}
+  const xb=document.createElement('button');xb.textContent='Raio-X no Ateliê';xb.addEventListener('click',()=>xray(k));f.appendChild(xb);
   g.appendChild(f)})});
 $('#n-pl').textContent=nPl;$('#n-ex').textContent=EX.length;
 
@@ -146,7 +149,7 @@ const LV=[[1,'1 Estrutura'],[2,'2 Direção'],[3,'3 Amostra'],[4,'Pronto']];
 EX.forEach((x,i)=>{const host=$('.exlist[data-ch="'+x.ch+'"]');if(!host)return;const a=document.createElement('article');a.className='xc';a.id='x-'+x.id;
   const ref=x.ref&&PL[x.ref]?'<p class="ref"><img loading="lazy" src="img/'+x.ref+'.jpg" alt=""><span>Compare com: '+PL[x.ref].t+'</span></p>':'';
   a.innerHTML='<div class="xg"><div class="cvbox"><canvas aria-label="Rascunho-guia do exercício"></canvas></div><div class="lv" role="group" aria-label="Estado do rascunho">'+LV.map(l=>'<button type="button" data-l="'+l[0]+'" aria-pressed="'+(l[0]===3)+'">'+l[1]+'</button>').join('')+
-    '</div><div class="xa"><button type="button" data-a="play">Ver o gesto</button><button type="button" data-a="img">Abrir como imagem</button></div></div>'+
+    '</div><div class="xa"><button type="button" data-a="draw" class="solid">Desenhar aqui</button><button type="button" data-a="play">Ver o gesto</button><button type="button" data-a="img">Abrir como imagem</button></div></div>'+
     '<div class="xt"><p class="num">'+x.id.toUpperCase()+'</p><h4></h4><p class="meta"></p><p class="d"></p><p class="crit"><b>Pronto quando:</b> <span></span></p>'+ref+
     '<div class="done"><label><input type="checkbox" id="ex-'+x.id+'"> Feito</label><button type="button" data-a="timer">Cronômetro '+x.min+':00</button></div></div>';
   $('h4',a).textContent=x.t;$('.meta',a).textContent=x.m;$('.d',a).textContent=x.d;$('.crit span',a).textContent=x.c;host.appendChild(a);
@@ -155,6 +158,7 @@ EX.forEach((x,i)=>{const host=$('.exlist[data-ch="'+x.ch+'"]');if(!host)return;c
   $('[data-a=play]',a).addEventListener('click',()=>{if(p.level<3){p.level=4;$$('.lv button',a).forEach(o=>o.setAttribute('aria-pressed',o.dataset.l==='4'))}p.draw(true)});
   $('[data-a=img]',a).addEventListener('click',()=>{const c=document.createElement('canvas');VG.render(c,S,p.level,EXPORT,p.seed,1800);
     zoom(c.toDataURL('image/png'),x.id.toUpperCase()+' · '+LV[p.level-1][1]+'. Segure o dedo sobre a imagem e escolha Copiar ou Salvar. No Procreate: Ações › Adicionar › Colar. O fundo é transparente.')});
+  $('[data-a=draw]',a).addEventListener('click',()=>VGStudio.open(S,x.id.toUpperCase()+' · '+x.t,{level:p.level<4?p.level:3,seed:p.seed}));
   $('[data-a=timer]',a).addEventListener('click',()=>startTimer(x.min,x.id.toUpperCase()+' '+x.t));
   const r=$('.ref img',a);if(r)r.addEventListener('click',()=>zoom(r.src,PL[x.ref].t+'. '+PL[x.ref].c));
   const cb=$('#ex-'+x.id,a);cb.checked=!!saved[cb.id];cb.addEventListener('change',()=>{saved[cb.id]=cb.checked;save();refresh()})});
@@ -163,6 +167,19 @@ function refresh(){const done=EX.filter(x=>saved['ex-'+x.id]).length;$('#total-t
   $$('#rail-list a[data-ch]').forEach(a=>{const l=EX.filter(x=>x.ch===a.dataset.ch);$('span',a).textContent=l.filter(x=>saved['ex-'+x.id]).length+'/'+l.length});
   $('#rub-score').textContent=rubs.filter(b=>b.checked).length+' de '+rubs.length}
 refresh();
+
+/* ---------- ateliê: foto e raio-x ---------- */
+const ph={img:null,k:1,dens:1,panel:null,S:null};
+function phBuild(){if(!ph.img)return;ph.S=VGAnalyze.analyze(ph.img,{k:ph.k,dens:ph.dens});if(!ph.panel){ph.panel=new Panel($('#ph-cv'),ph.S,{level:4,seed:7,dur:3600});watch(ph.panel);if($('#ph-cv').offsetParent)ph.panel.draw(false)}else{ph.panel.S=ph.S;ph.panel.draw(false)}}
+VGAnalyze.load('img/sp_felt.jpg').then(im=>{ph.img=im;phBuild()}).catch(()=>{});
+$('#ph-file').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>VGAnalyze.load(rd.result).then(im=>{ph.img=im;$('#ph-tag').textContent='SUA FOTO';$('#ph-title').textContent='Sua imagem, lida pelo curso';phBuild()}).catch(()=>{$('#ph-title').textContent='Não consegui abrir esse arquivo. Tente uma foto em JPG ou PNG.'});rd.readAsDataURL(f)});
+let phT=0;const phRe=()=>{clearTimeout(phT);phT=setTimeout(phBuild,120)};
+$('#ph-k').addEventListener('input',e=>{ph.k=e.target.value/100;phRe()});$('#ph-d').addEventListener('input',e=>{ph.dens=e.target.value/100;phRe()});
+$$('#ph-lv button').forEach(b=>b.addEventListener('click',()=>{if(!ph.panel)return;ph.panel.level=+b.dataset.l;$$('#ph-lv button').forEach(o=>o.setAttribute('aria-pressed',o===b));ph.panel.draw(false)}));
+$('#ph-play').addEventListener('click',()=>{if(ph.panel)ph.panel.draw(true)});
+$('#ph-draw').addEventListener('click',()=>{if(ph.S)VGStudio.open(ph.S,$('#ph-title').textContent,{level:ph.panel.level<4?ph.panel.level:2,under:.35,seed:7})});
+$('#ph-img').addEventListener('click',()=>{if(!ph.S)return;const c=document.createElement('canvas');VG.render(c,ph.S,ph.panel.level,EXPORT,7,1800);zoom(c.toDataURL('image/png'),'Rascunho da sua imagem. Segure o dedo sobre ele e escolha Copiar ou Salvar. No Procreate: Ações › Adicionar › Colar.')});
+const xr=$('#xray');Object.keys(PL).forEach(k=>{const b=document.createElement('button');b.type='button';b.innerHTML='<img loading="lazy" alt=""><span></span>';$('img',b).src='img/'+k+'.jpg';$('span',b).textContent=PL[k].t;b.setAttribute('aria-label','Raio-X de '+PL[k].t);b.addEventListener('click',()=>xray(k));xr.appendChild(b)});
 
 /* ---------- cronômetro ---------- */
 const T={el:$('#timer'),left:0,total:0,run:false,id:0,end:0},fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');

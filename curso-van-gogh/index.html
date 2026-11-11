@@ -164,11 +164,36 @@ td.yr{font:500 13px/1.7 var(--mono);font-variant-numeric:tabular-nums}
 .timer.done .t-time{color:var(--sun)}
 .timer .btns button{color:var(--paper);border-color:var(--paper);padding:7px 10px;font-size:13px}
 .timer .btns button:hover{background:var(--paper);color:var(--ink)}
-dialog{border:0;padding:0;background:transparent;max-width:96vw;max-height:96vh;color:#eee}
-dialog::backdrop{background:rgba(10,11,12,.9)}
-dialog img{display:block;max-width:96vw;max-height:82vh;background:#fff}
-dialog p{font:400 13px/1.5 var(--mono);padding:10px 4px;max-width:70ch}
-dialog button{color:#eee;border-color:#eee;margin:0 4px 4px}
+#zoom{border:0;padding:0;background:transparent;max-width:96vw;max-height:96vh;color:#eee}
+#zoom::backdrop{background:rgba(10,11,12,.9)}
+#zoom img{display:block;max-width:96vw;max-height:82vh;background:#fff}
+#zoom p{font:400 13px/1.5 var(--mono);padding:10px 4px;max-width:70ch}
+#zoom button{color:#eee;border-color:#eee;margin:0 4px 4px}
+#studio{border:0;padding:0;margin:0;width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;background:var(--paper);color:var(--ink)}
+.st{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100%;padding:calc(8px + env(safe-area-inset-top,0px)) max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));gap:6px}
+.st-bar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.st-bar strong{font:700 15px/1.2 var(--body);margin-right:auto;min-width:0}
+.st-bar button{font:500 12px/1 var(--mono);padding:8px 9px}
+.st-bar button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.st-bar label{font:400 12px/1 var(--mono);display:flex;gap:6px;align-items:center;color:var(--ink-2)}
+.st-bar input[type=range]{width:90px;accent-color:var(--sun)}
+.seg{display:flex}.seg button{margin-left:-1px}.seg button:first-child{margin-left:0}
+.st-stage{min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#st-wrap{position:relative;border:1px solid var(--rule)}
+#st-wrap canvas{position:absolute;left:0;top:0;display:block}
+#st-ink{touch-action:none;cursor:crosshair}#st-hud{pointer-events:none}
+.st-foot{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;border-top:1px solid var(--rule);padding-top:6px}
+.st-foot dl{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0;font:400 12px/1.3 var(--mono);color:var(--ink-2)}
+.st-foot dl div{display:flex;gap:6px;align-items:baseline}.st-foot dd{margin:0;font:500 17px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.st-foot p{font-size:14.5px;line-height:1.35;flex:1 1 320px;min-width:0}
+.xr{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.xr button{all:unset;cursor:pointer;display:grid;gap:4px;background:var(--sheet);border:1px solid var(--rule);padding:6px}
+.xr button:focus-visible{outline:2px solid var(--sun);outline-offset:2px}
+.xr img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.xr span{font:400 11px/1.3 var(--mono);color:var(--ink-2);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.up{display:grid;gap:10px}.up input[type=file]{font:400 13px var(--mono);max-width:100%}
+.up label{display:grid;gap:4px;font-size:14.5px}.up input[type=range]{width:100%;max-width:260px;accent-color:var(--sun)}
+.chip.hot{border-color:var(--sun);border-width:2px}
 footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-size:14px;color:var(--ink-2);max-width:70ch}
 
 @media (max-width:940px){
@@ -203,6 +228,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <li><a href="#autorretratos" data-v="autorretratos" data-ch="a">4 · Autorretratos <span></span></a></li>
     <li><a href="#corpo" data-v="corpo" data-ch="b">5 · Corpo <span></span></a></li>
     <li><a href="#projeto" data-v="projeto" data-ch="p">6 · Projeto <span></span></a></li>
+    <li><a href="#atelie" data-v="atelie">Ateliê</a></li>
     <li><a href="#pinceis" data-v="pinceis">Pincéis e arquivos</a></li>
   </ol>
 </nav>
@@ -231,6 +257,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     </ul>
     <p class="legend"><span><i style="border-color:var(--guide)"></i>estrutura</span><span><i style="border-color:var(--arrow)"></i>direção do traço</span><span><i style="border-color:var(--ink-draw)"></i>marca final</span></p>
     <p><b>No Procreate:</b> toque em "Abrir como imagem", segure o dedo sobre ela e escolha Copiar. No Procreate, Ações › Adicionar › Colar. Baixe a opacidade da camada do guia para 40% e desenhe numa camada nova por cima. O pacote com todos os guias em PNG e os pincéis está em <a href="#pinceis">Pincéis e arquivos</a>.</p>
+    <p><b>Aqui mesmo:</b> toque em "Desenhar aqui". O exercício abre no <a href="#atelie">Ateliê</a>, com uma bússola que mostra a direção certa embaixo da caneta e uma avaliação dos seus traços.</p>
     <p><b>No papel:</b> imprima o PDF de guias (um exercício por página, em tons claros) e desenhe direto sobre a folha com lápis 6B, giz preto ou carvão.</p>
   </div>
 
@@ -244,6 +271,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 
   <h3>Capítulos</h3>
   <div class="chips">
+    <a class="chip hot" href="#atelie"><small>Novo</small><b>Ateliê</b><span>Desenhe por cima de qualquer guia e veja, traço a traço, se a direção está certa. Transforme a sua foto em rascunho. Veja o Raio-X de direção de cada obra.</span></a>
     <a class="chip" href="#ranhuras"><small>Capítulo 1</small><b>Ranhuras</b><span>O alfabeto de doze marcas de Arles e como elas constroem profundidade.</span></a>
     <a class="chip" href="#fluxo"><small>Capítulo 2</small><b>Direção e fluxo</b><span>Por que os traços dele nunca se cruzam, como ele faz as ondas e onde ficam os centros.</span></a>
     <a class="chip" href="#rostos"><small>Capítulo 3</small><b>Rostos</b><span>O rosto como terreno: redemoinhos nos olhos, barba em leque, fundo que trabalha.</span></a>
@@ -463,7 +491,52 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <li><input type="checkbox" id="rub-7"><div><label for="rub-7">O contorno pesado é econômico</label><p>Aparece nos olhos e onde a forma vira ou apoia, não em volta de tudo.</p></div></li>
     <li><input type="checkbox" id="rub-8"><div><label for="rub-8">Funciona a três metros e a trinta centímetros</label><p>De longe, massas claras e escuras. De perto, caligrafia.</p></div></li>
   </ol>
-  <div class="next"><a href="#corpo">← Capítulo 5</a><a href="#pinceis">Pincéis e arquivos →</a></div>
+  <div class="next"><a href="#corpo">← Capítulo 5</a><a href="#atelie">Ateliê →</a></div>
+</section>
+
+<!-- ===================== ATELIÊ ===================== -->
+<section class="view" id="v-atelie" hidden>
+  <div class="sec-head"><p class="eyebrow">Desenhar, medir, corrigir</p><h2>Ateliê: desenhe aqui, <em>com retorno</em></h2></div>
+  <div class="prose">
+    <p>Você disse que tenta reproduzir os traços dele e sente que algo está errado, sem saber o quê. O Ateliê existe para responder essa pergunta com números. Ele faz três coisas.</p>
+    <ul>
+      <li><b>Desenho com avaliação.</b> Em qualquer exercício, toque em "Desenhar aqui". Você desenha por cima do guia com a Apple Pencil, o dedo ou o mouse, e cada traço é comparado com a corrente daquele ponto.</li>
+      <li><b>Sua foto vira rascunho.</b> Envie um retrato ou uma paisagem. O curso lê o claro-escuro e os contornos da foto e devolve um guia nos mesmos três níveis, pronto para desenhar por cima.</li>
+      <li><b>Raio-X das obras.</b> A mesma leitura aplicada às 47 obras do curso. A direção das pinceladas é extraída da própria imagem, e você pode traçar por cima dela com a obra aparecendo por baixo.</li>
+    </ul>
+  </div>
+  <h3>O que a avaliação mede</h3>
+  <ol class="rules">
+    <li><b>Direção</b><span>O ângulo de cada traço contra a corrente do ponto onde ele passa. Até 22 graus de desvio conta como alinhado. Em "Ver avaliação", os alinhados ficam verdes, os duvidosos amarelos e os contrários vermelhos.</span></li>
+    <li><b>Cruzamentos</b><span>Quantas vezes um traço atravessa outro. Nos desenhos dele esse número é quase zero, fora das hachuras cruzadas.</span></li>
+    <li><b>Tamanho</b><span>O comprimento das suas marcas dividido pelo comprimento que o guia espera naquela zona. Perto de 1,0× está certo.</span></li>
+    <li><b>Cobertura</b><span>Quanto da área que pede marca já recebeu alguma. Áreas de papel reservado não contam, e traço nelas é apontado.</span></li>
+    <li><b>Bússola</b><span>Um círculo ao lado da ponta mostra a direção certa e o tipo de marca do lugar onde a caneta está. Em iPads com hover, ela aparece antes de você encostar.</span></li>
+  </ol>
+  <div class="prose"><p>Os seus desenhos não são guardados. Eles existem enquanto o Ateliê está aberto. Use "Abrir como imagem" se quiser copiar um para o Procreate.</p></div>
+
+  <h3>Sua foto vira rascunho</h3>
+  <div class="xc" id="ph-card">
+    <div class="xg">
+      <div class="cvbox"><canvas id="ph-cv" aria-label="Rascunho gerado a partir da imagem"></canvas></div>
+      <div class="lv" role="group" aria-label="Estado do rascunho" id="ph-lv"><button type="button" data-l="1" aria-pressed="false">1 Estrutura</button><button type="button" data-l="2" aria-pressed="false">2 Direção</button><button type="button" data-l="3" aria-pressed="false">3 Amostra</button><button type="button" data-l="4" aria-pressed="true">Pronto</button></div>
+      <div class="xa"><button type="button" id="ph-draw" class="solid">Desenhar aqui</button><button type="button" id="ph-play">Ver o gesto</button><button type="button" id="ph-img">Abrir como imagem</button></div>
+    </div>
+    <div class="xt up">
+      <p class="num" id="ph-tag">EXEMPLO</p>
+      <h4 id="ph-title">Autorretrato com chapéu de feltro, lido pelo curso</h4>
+      <p>Escolha uma foto sua. Funciona melhor com luz lateral, fundo simples e o rosto ocupando boa parte do quadro. A imagem é processada neste aparelho e não é enviada a lugar nenhum.</p>
+      <input type="file" id="ph-file" accept="image/*" aria-label="Escolher foto">
+      <label for="ph-k">Tamanho da marca <input type="range" id="ph-k" min="60" max="180" step="10" value="100"></label>
+      <label for="ph-d">Densidade <input type="range" id="ph-d" min="50" max="180" step="10" value="100"></label>
+      <p class="crit"><b>Como ler:</b> no nível 1, as linhas azuis são as fronteiras entre claro, médio e escuro. No nível 2, as setas seguem os contornos e as texturas da foto. O estado "Pronto" é a foto inteira traduzida em ranhuras.</p>
+    </div>
+  </div>
+
+  <h3>Raio-X das obras</h3>
+  <div class="prose"><p>Toque numa obra. Ela abre no Ateliê com as setas de direção calculadas a partir da própria pintura ou desenho, e com a obra aparecendo por baixo. Mova o controle "Obra por baixo" para comparar. Em pinturas a leitura segue a pincelada, e em desenhos segue o traço.</p></div>
+  <div class="xr" id="xray"></div>
+  <div class="next"><a href="#projeto">← Capítulo 6</a><a href="#pinceis">Pincéis e arquivos →</a></div>
 </section>
 
 <!-- ===================== PINCÉIS ===================== -->
@@ -542,7 +615,24 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 </div>
 <dialog id="zoom"><img alt=""><p id="zoom-txt"></p><button id="zoom-close">Fechar</button></dialog>
 
+<dialog id="studio" aria-label="Ateliê"><div class="st">
+  <div class="st-bar">
+    <strong id="st-title"></strong>
+    <div class="seg" id="st-lv" role="group" aria-label="Guia"><button data-v="0">Sem guia</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">Pronto</button></div>
+    <div class="seg" id="st-bw" role="group" aria-label="Ponta"><button data-v="1.4">Fina</button><button data-v="2.4">Média</button><button data-v="3.8">Grossa</button></div>
+    <button id="st-comp" aria-pressed="true">Bússola</button><button id="st-eval" aria-pressed="false">Ver avaliação</button>
+    <label id="st-underbox" hidden>Obra por baixo <input type="range" id="st-under" min="0" max="100" value="0"></label>
+    <button id="st-undo">Desfazer</button><button id="st-clear">Limpar</button><button id="st-save">Abrir como imagem</button><button id="st-close" class="solid">Fechar</button>
+  </div>
+  <div class="st-stage" id="st-stage"><div id="st-wrap"><canvas id="st-base"></canvas><canvas id="st-ink"></canvas><canvas id="st-hud"></canvas></div></div>
+  <div class="st-foot">
+    <dl><div><dt>Traços</dt><dd id="st-m-n">0</dd></div><div><dt>Direção</dt><dd id="st-m-dir">–</dd></div><div><dt>Cruzamentos</dt><dd id="st-m-x">0</dd></div><div><dt>Tamanho</dt><dd id="st-m-size">–</dd></div><div><dt>Cobertura</dt><dd id="st-m-cov">0%</dd></div></dl>
+    <p id="st-msg"></p>
+  </div>
+</div></dialog>
 <script src="engine.js"></script>
 <script src="exercises.js"></script>
 <script src="plates.js"></script>
+<script src="analyze.js"></script>
+<script src="studio.js"></script>
 <script src="app.js"></script>
