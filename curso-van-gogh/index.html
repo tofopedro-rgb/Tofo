@@ -1,0 +1,773 @@
+<title>Van Gogh a Lápis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: manual de desenho em pranchas. Trilho de lições à esquerda, coluna de leitura, pranchas com a obra e o que olhar nela. */
+:root{
+  --paper:#E5E7E2; --sheet:#F2F3EF; --ink:#1C2024; --ink-2:#4B5258; --rule:#C2C6C0;
+  --sun:#E3A40B; --sun-ink:#6F4E00; --blue:#27466B; --ink-draw:#22262A;
+  --display:"Bodoni Moda","Didot","Bodoni MT",Georgia,serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#15171A; --sheet:#1E2125; --ink:#EAE8E1; --ink-2:#A6ABAE; --rule:#373C41;
+  --sun:#F0B429; --sun-ink:#F0B429; --blue:#9DBBE0; --ink-draw:#E7E4DB; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#15171A; --sheet:#1E2125; --ink:#EAE8E1; --ink-2:#A6ABAE; --rule:#373C41;
+  --sun:#F0B429; --sun-ink:#F0B429; --blue:#9DBBE0; --ink-draw:#E7E4DB; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--blue);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--sun);outline-offset:2px}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1120px;margin-inline:auto}
+
+/* Abertura */
+.hero{padding-block:44px 28px;display:grid;gap:22px}
+.eyebrow{font:500 12px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.hero h1{font:700 clamp(44px,8.5vw,104px)/.92 var(--display);letter-spacing:-.02em}
+.hero h1 em{font-weight:500;font-style:italic}
+.hero .lede{max-width:60ch;font-size:19px;color:var(--ink-2)}
+.hero .lede b{color:var(--ink)}
+.stage{background:var(--sheet);border:1px solid var(--rule);padding:10px}
+.stage canvas{display:block;width:100%}
+.stage-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:10px 4px 2px}
+.stage-bar p{font-size:14px;color:var(--ink-2);min-width:0;flex:1 1 260px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:600 14px/1 var(--body);color:var(--ink);background:transparent;border:1px solid var(--ink);padding:9px 14px;cursor:pointer;border-radius:0}
+button:hover{background:var(--ink);color:var(--paper)}
+button.solid{background:var(--sun);border-color:var(--sun);color:#1C2024}
+button.solid:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* Estrutura */
+.shell{display:grid;grid-template-columns:210px minmax(0,1fr);gap:56px;align-items:start}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);font-size:15px;display:grid;gap:14px}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.rail a{display:flex;justify-content:space-between;gap:8px;padding:6px 8px;color:var(--ink-2);text-decoration:none;border-left:2px solid var(--rule)}
+.rail a:hover{color:var(--ink)}
+.rail a.on{color:var(--ink);border-left-color:var(--sun);font-weight:600}
+.rail a span{font:400 12px/1.9 var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.total{font:400 12px/1.4 var(--mono);color:var(--ink-2)}
+.bar{height:4px;background:var(--rule);margin-top:6px}
+.bar i{display:block;height:100%;width:0;background:var(--sun);transition:width .3s}
+main{display:grid;gap:88px;min-width:0}
+section{display:grid;gap:26px;min-width:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+section>*{min-width:0}
+.sec-head{display:grid;gap:8px;border-top:2px solid var(--ink);padding-top:14px}
+.sec-head h2{font:700 clamp(32px,5vw,52px)/1 var(--display);letter-spacing:-.01em}
+.sec-head h2 em{font-style:italic;font-weight:500}
+h3{font:700 22px/1.2 var(--body);margin-top:10px}
+.prose{display:grid;gap:14px;max-width:66ch}
+.prose ul,.prose ol{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.note{border-left:3px solid var(--sun);padding:2px 0 2px 16px;max-width:62ch;font-size:18px}
+.note cite{display:block;font:400 12px/1.5 var(--mono);color:var(--ink-2);font-style:normal;margin-top:6px}
+
+/* Pranchas */
+.plate{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:start}
+.plate.wide{grid-template-columns:minmax(0,1fr)}
+.plate figure{margin:0;background:var(--sheet);border:1px solid var(--rule);padding:10px}
+.plate img{display:block;width:100%;height:auto;max-height:640px;object-fit:contain;cursor:zoom-in;background:var(--sheet)}
+.plate figcaption{font:400 12px/1.5 var(--mono);color:var(--ink-2);padding-top:8px}
+.plate figcaption b{color:var(--ink);font-weight:500}
+.look{display:grid;gap:10px}
+.look h4{font:500 12px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--sun-ink)}
+.look ol{margin:0;padding-left:1.2em;display:grid;gap:8px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pair figure{margin:0;background:var(--sheet);border:1px solid var(--rule);padding:10px}
+.pair img{display:block;width:100%;height:auto;cursor:zoom-in}
+.pair figcaption{font:400 12px/1.5 var(--mono);color:var(--ink-2);padding-top:8px}
+.pair figcaption b{color:var(--ink);font-weight:500}
+
+/* Tabelas */
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15.5px;min-width:560px}
+th{font:500 12px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);text-align:left;padding:8px 14px 8px 0;border-bottom:1px solid var(--ink)}
+td{padding:10px 14px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{font-weight:600;white-space:nowrap}
+td.yr{font:500 13px/1.7 var(--mono);font-variant-numeric:tabular-nums}
+
+/* Exercícios */
+.exs{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--ink)}
+.ex{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.ex input{width:20px;height:20px;margin:3px 0 0;accent-color:var(--sun)}
+.ex>div{display:grid;gap:6px}
+.ex label{font:700 18px/1.3 var(--body);cursor:pointer}
+.ex .meta{font:400 12px/1.5 var(--mono);color:var(--ink-2)}
+.ex .crit{color:var(--ink-2);font-size:15.5px}
+.ex .crit b{color:var(--ink)}
+.ex button{justify-self:start;font:500 12px/1 var(--mono);padding:7px 10px;margin-top:2px}
+.ex:has(input:checked) label{text-decoration:line-through;text-decoration-color:var(--sun);text-decoration-thickness:2px}
+
+/* Alfabeto de marcas */
+.marks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.mark{display:grid;gap:8px;align-content:start;min-width:0}
+.mark button{all:unset;display:block;cursor:pointer;background:var(--sheet);border:1px solid var(--rule)}
+.mark button:focus-visible{outline:2px solid var(--sun);outline-offset:2px}
+.mark canvas{display:block;width:100%}
+.mark h4{font:700 17px/1.2 var(--body)}
+.mark p{font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.mark p b{color:var(--ink);font-weight:600}
+.hint{font:400 12px/1.5 var(--mono);color:var(--ink-2)}
+
+/* Laboratório */
+.lab{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:20px;background:var(--sheet);border:1px solid var(--rule);padding:12px}
+.lab canvas{display:block;width:100%}
+.ctl{display:grid;gap:14px;align-content:start;font-size:14.5px}
+.ctl label{display:grid;gap:4px}
+.ctl output{font:400 12px/1 var(--mono);color:var(--ink-2)}
+.ctl input[type=range]{width:100%;accent-color:var(--sun)}
+.ctl .chk{display:flex;gap:8px;align-items:center}
+.ctl p{color:var(--ink-2);font-size:14px;line-height:1.45}
+
+.frame-fig{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px;align-items:center}
+.frame-fig svg{width:100%;height:auto;color:var(--ink-draw)}
+.rules{counter-reset:r;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px 28px}
+.rules li{counter-increment:r;display:grid;gap:4px;border-top:1px solid var(--rule);padding-top:10px}
+.rules li::before{content:counter(r,upper-roman);font:italic 500 22px/1 var(--display);color:var(--sun-ink)}
+.rules b{font-size:17px}
+.rules span{color:var(--ink-2);font-size:15.5px}
+.score{font:500 13px/1 var(--mono)}
+
+/* Cronômetro */
+.timer{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--ink);color:var(--paper);padding:12px 14px;display:grid;gap:8px;min-width:210px;max-width:calc(100vw - 32px)}
+.timer .t-name{font:400 12px/1.3 var(--mono);opacity:.8}
+.timer .t-time{font:500 34px/1 var(--mono);font-variant-numeric:tabular-nums}
+.timer.done .t-time{color:var(--sun)}
+.timer .btns button{color:var(--paper);border-color:var(--paper);padding:7px 10px;font-size:13px}
+.timer .btns button:hover{background:var(--paper);color:var(--ink)}
+dialog{border:0;padding:0;background:transparent;max-width:96vw;max-height:96vh}
+dialog::backdrop{background:rgba(10,11,12,.86)}
+dialog img{display:block;max-width:96vw;max-height:92vh;cursor:zoom-out}
+footer{margin-top:72px;border-top:1px solid var(--rule);padding-top:16px;font-size:14px;color:var(--ink-2);max-width:70ch}
+
+@media (max-width:920px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:28px}
+  .rail{top:env(safe-area-inset-top,0px);z-index:9;background:var(--paper);padding:8px 0;border-bottom:1px solid var(--rule);gap:6px}
+  .rail ol{display:flex;overflow-x:auto;gap:4px;scrollbar-width:none}
+  .rail a{border-left:0;border-bottom:2px solid transparent;white-space:nowrap;padding:6px 8px}
+  .rail a.on{border-bottom-color:var(--sun)}
+  .rail a span{display:none}
+  .rail .total{display:flex;gap:10px;align-items:center}
+  .rail .bar{flex:1;margin:0}
+  main{gap:64px}
+}
+@media (max-width:700px){
+  .plate,.pair,.lab,.frame-fig{grid-template-columns:minmax(0,1fr)}
+  .hero{padding-block:28px 20px}
+}
+@media (prefers-reduced-motion:reduce){ .bar i{transition:none} html{scroll-behavior:auto} }
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">Curso de desenho · grafite, giz preto e carvão · nível avançado</p>
+  <h1>Van Gogh <em>a lápis</em></h1>
+  <p class="lede">Sete lições em ordem cronológica, <b>13 desenhos originais</b> comentados e <b>31 exercícios</b> cronometrados para aprender a linguagem de marcas dele: hachura, ponto, tracinho, vírgula, chama e redemoinho. Nada de tinta. Só o que ele fazia com a mão seca sobre o papel.</p>
+  <div class="stage">
+    <canvas id="hero-cv" aria-label="Paisagem gerada com o vocabulário de marcas de Van Gogh"></canvas>
+    <div class="stage-bar">
+      <p>Esta paisagem não é dele. Ela é desenhada agora, traço por traço, só com as marcas que você vai treinar na Lição 4.</p>
+      <div class="btns"><button class="solid" id="hero-play">Ver o gesto</button><button id="hero-new">Outra paisagem</button></div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="rail" aria-label="Lições">
+  <div class="total"><span id="total-txt">0 de 37 feitos</span><div class="bar"><i id="total-bar"></i></div></div>
+  <ol id="rail-list">
+    <li><a href="#contexto">Contexto</a></li>
+    <li><a href="#materiais">Materiais</a></li>
+    <li><a href="#haia" data-sec="haia">1 · Haia <span></span></a></li>
+    <li><a href="#nuenen" data-sec="nuenen">2 · Nuenen <span></span></a></li>
+    <li><a href="#paris" data-sec="paris">3 · Paris <span></span></a></li>
+    <li><a href="#arles" data-sec="arles">4 · Arles <span></span></a></li>
+    <li><a href="#retrato" data-sec="retrato">5 · Retrato <span></span></a></li>
+    <li><a href="#saint-remy" data-sec="saint-remy">6 · Saint-Rémy <span></span></a></li>
+    <li><a href="#projeto" data-sec="projeto">7 · Projeto <span></span></a></li>
+    <li><a href="#plano">Plano de 8 semanas</a></li>
+    <li><a href="#fontes">Fontes</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ============ CONTEXTO ============ -->
+<section id="contexto">
+  <div class="sec-head"><p class="eyebrow">Guia de contexto</p><h2>O desenhista <em>antes</em> do pintor</h2></div>
+  <div class="prose">
+    <p>Van Gogh decidiu ser artista em 1880, aos 27 anos, e morreu em 1890. Nesses dez anos fez mais de mil desenhos. Os dois primeiros anos foram quase só desenho, por escolha: ele achava que pintar sem saber desenhar era construir sem fundação.</p>
+    <p>Ele não teve escola longa. Montou a própria. Copiou mais de uma vez a série inteira dos <i>Exercices au fusain</i> de Charles Bargue, estudou os manuais de perspectiva de Armand Cassagne, copiou Millet, e mandou construir uma moldura de perspectiva para levar à rua. É um método que você pode repetir, e este curso segue a mesma ordem.</p>
+    <p>Como você já desenha bem, o curso não ensina proporção nem sombra. Ele ensina um idioma. As quatro ideias abaixo sustentam tudo o que vem depois.</p>
+  </div>
+  <ol class="rules">
+    <li><b>Cada substância tem a sua marca</b><span>Céu, trigo, telhado, barba e casca de árvore nunca recebem o mesmo traço. O desenho é um mapa de texturas com legenda.</span></li>
+    <li><b>A direção do traço é a forma</b><span>O traço acompanha a superfície: contorna a manga, deita com o campo, sobe com o cipreste. Ele nunca preenche por preencher.</span></li>
+    <li><b>O tamanho da marca é a distância</b><span>Marca grande e espaçada está perto. Marca pequena e apertada está longe. A perspectiva dele é feita de escala de marca, quase sem degradê.</span></li>
+    <li><b>O valor vem da densidade</b><span>Na fase madura não há esfumado. Escuro é mais marca por centímetro, claro é papel deixado em paz.</span></li>
+  </ol>
+  <blockquote class="note">Desenhar é abrir caminho através de uma parede de ferro invisível que parece existir entre o que se sente e o que se consegue fazer. Não adianta bater nela com força: é preciso miná-la e atravessá-la com a lima, devagar e com paciência.<cite>Paráfrase de uma carta a Theo, Haia, outubro de 1882</cite></blockquote>
+  <h3>Dez anos em nove endereços</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Anos</th><th>Lugar</th><th>Material principal</th><th>O que muda no traço</th></tr></thead>
+    <tbody>
+      <tr><td class="yr">1880–81</td><td>Borinage, Bruxelas, Etten</td><td>Lápis, carvão</td><td>Cópias de Bargue e Millet. Figuras duras, contorno fechado.</td></tr>
+      <tr><td class="yr">1882–83</td><td>Haia</td><td>Lápis de carpinteiro, giz litográfico</td><td>Contorno com peso, figura que enche a página, vistas com a moldura de perspectiva.</td></tr>
+      <tr><td class="yr">1883–85</td><td>Drenthe, Nuenen</td><td>Giz preto natural, carvão</td><td>Forma construída pela massa. Camponeses em ação, folha grande.</td></tr>
+      <tr><td class="yr">1885–86</td><td>Antuérpia</td><td>Giz, carvão</td><td>Academia por pouco tempo. Briga com o desenho pelo contorno.</td></tr>
+      <tr><td class="yr">1886–88</td><td>Paris</td><td>Lápis, pena</td><td>Gravura japonesa: recorte, área plana, horizonte alto, textura por padrão.</td></tr>
+      <tr><td class="yr">1888–89</td><td>Arles</td><td>Pena de junco sobre grafite</td><td>O alfabeto de marcas completo. Pontos, tracinhos, vírgulas. Sem esfumado.</td></tr>
+      <tr><td class="yr">1889–90</td><td>Saint-Rémy</td><td>Pena de junco, lápis, giz preto</td><td>As marcas se alongam e se ligam. Tudo ondula no mesmo ritmo.</td></tr>
+      <tr><td class="yr">1890</td><td>Auvers-sur-Oise</td><td>Lápis, giz, pincel</td><td>Setenta dias. Traço rápido e solto, cadernos de bolso.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ MATERIAIS ============ -->
+<section id="materiais">
+  <div class="sec-head"><p class="eyebrow">Antes de começar</p><h2>Materiais e a <em>tradução</em> da pena</h2></div>
+  <div class="prose">
+    <p>Boa notícia para quem trabalha com lápis e carvão: metade da obra desenhada dele foi feita exatamente com isso, e quase todo desenho a pena de Arles tem um esboço de grafite por baixo. A tabela mostra o que ele usava e o que comprar hoje.</p>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Ele usava</th><th>Equivalente hoje</th><th>Serve para</th></tr></thead>
+    <tbody>
+      <tr><td>Lápis de carpinteiro</td><td>Lápis de carpinteiro macio ou grafite integral 6B a 9B</td><td>Traço largo de chapa e fino de quina no mesmo lápis. É a ferramenta da Haia.</td></tr>
+      <tr><td>Giz preto natural</td><td>Conté preto, <i>pierre noire</i> ou lápis carvão</td><td>Preto fosco e quente, sem o brilho do grafite. Figuras de Nuenen.</td></tr>
+      <tr><td>Giz litográfico</td><td>Lápis litográfico ou dermatográfico preto</td><td>O preto mais profundo. Não apaga: ele raspava com canivete para abrir luzes.</td></tr>
+      <tr><td>Carvão vegetal</td><td>Carvão de salgueiro ou de vinha, em bastão</td><td>Estrutura e massa. Use a lateral do bastão, não a ponta.</td></tr>
+      <tr><td>Leite</td><td>Fixador em spray</td><td>Ele despejava leite sobre o grafite para fixar e tirar o brilho. Curiosidade histórica: use fixador.</td></tr>
+      <tr><td>Papel de aquarela e papel vergê</td><td>Canson Ingres, Mi-Teintes cinza claro, ou aquarela de grão médio</td><td>O grão quebra o traço e dá a textura. Papel liso mata o efeito. Trabalhe em A3 ou maior.</td></tr>
+      <tr><td>Miolo de pão</td><td>Borracha limpa-tipos</td><td>Levantar luz do carvão. Só nas lições 1 e 2.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Como fazer um lápis se comportar como pena de junco</h3>
+  <div class="prose">
+    <p>A pena de junco é um pedaço de cana cortado em bisel. Ela tem quatro manias, e são elas que dão a cara dos desenhos de Arles. Reproduza as manias e o material deixa de importar.</p>
+    <ul>
+      <li><b>Ponta romba, largura quase constante.</b> Não aponte o lápis. Gaste a ponta num papel de rascunho até ficar chata e mantenha assim.</li>
+      <li><b>A tinta acaba no meio do traço.</b> O traço começa cheio e morre seco. No lápis, solte a pressão no último terço de cada traço.</li>
+      <li><b>Não existe degradê.</b> Cada toque é preto ou não existe. Escolha uma pressão por zona e não mude dentro dela.</li>
+      <li><b>Cada toque é definitivo.</b> Guarde a borracha. Erro se corrige com mais marca por cima.</li>
+    </ul>
+    <p>Tenha três "penas" na mão, como ele tinha junco grosso, junco fino e pena de ave: um bastão de carvão comprimido quebrado em pedaços de 2 cm (grossa), um 6B rombo (média) e um 2B com ponta (fina, só para o longe).</p>
+  </div>
+  <h3>A moldura de perspectiva</h3>
+  <div class="frame-fig">
+    <svg viewBox="0 0 240 200" role="img" aria-label="Moldura de perspectiva com fios vertical, horizontal e diagonais, sobre duas estacas">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <rect x="40" y="20" width="160" height="110" stroke-width="5"/>
+        <g stroke-width="1.2"><line x1="120" y1="20" x2="120" y2="130"/><line x1="40" y1="75" x2="200" y2="75"/><line x1="40" y1="20" x2="200" y2="130"/><line x1="200" y1="20" x2="40" y2="130"/></g>
+        <g stroke-width="4"><line x1="62" y1="130" x2="62" y2="190"/><line x1="178" y1="130" x2="178" y2="190"/></g>
+        <path d="M20 190 Q60 184 100 190 T180 189 T226 190" stroke-width="1.5"/>
+      </g>
+    </svg>
+    <div class="prose">
+      <p>Em 1882 ele encomendou a um carpinteiro e a um ferreiro uma moldura de madeira com fios esticados (um vertical, um horizontal e duas diagonais), montada sobre duas estacas com ponta de ferro para cravar no chão irregular das dunas. Olhando através dela, o motivo já vem dividido, e basta repetir as mesmas divisões a lápis no papel.</p>
+      <p><b>Faça a sua:</b> um passe-partout de papelão com janela de 20 × 30 cm e quatro pedaços de linha preta presos com fita. Segure sempre à mesma distância do olho. Você vai usá-la na Lição 1 e abandoná-la na Lição 4, como ele fez.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIÇÃO 1 ============ -->
+<section id="haia">
+  <div class="sec-head"><p class="eyebrow">Lição 1 · Haia, 1882–83</p><h2>Contorno <em>com peso</em></h2></div>
+  <div class="prose">
+    <p>Na Haia ele teve algumas aulas com o pintor Anton Mauve, colecionou gravuras de ilustradores ingleses da revista <i>The Graphic</i> e desenhou quem aceitava posar por pouco: Sien Hoornik, com quem vivia, e os velhos do asilo, os "homens órfãos". É a fase do preto e branco duro, do lápis de carpinteiro e da figura que ocupa a folha inteira.</p>
+    <p>O que aprender aqui: uma linha de contorno que carrega peso e emoção sozinha, sem depender de sombra.</p>
+  </div>
+  <div class="plate">
+    <figure><img src="img/sorrow.jpg" alt="Sorrow: mulher nua sentada, de perfil, com a cabeça sobre os braços" loading="lazy"><figcaption><b>Prancha 1 · Sorrow</b><br>Haia, abril de 1882. Lápis, pena e tinta. The New Art Gallery Walsall.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>Uma linha só.</b> O contorno é contínuo e anguloso, quase sem modelado por dentro. As costas são três retas quebradas, não uma curva.</li>
+      <li><b>O peso muda de lado.</b> A linha engrossa embaixo da coxa, no pé e onde o corpo encosta na pedra. Em cima, onde bate luz, ela afina.</li>
+      <li><b>O rosto escondido.</b> A emoção toda está na pose dobrada. Ele repete o recurso em <i>Worn Out</i>.</li>
+      <li><b>O entorno é ralo.</b> Poucos traços de relva e galhos, para a figura pesar mais.</li>
+    </ol></div>
+  </div>
+  <div class="pair">
+    <figure><img src="img/wornout.jpg" alt="Worn Out: velho sentado numa cadeira com o rosto nas mãos" loading="lazy"><figcaption><b>Prancha 2 · Worn Out</b><br>Haia, novembro de 1882. Lápis sobre papel de aquarela. Van Gogh Museum.<br>A hachura das calças e das mangas dá a volta na forma, como aros de um barril.</figcaption></figure>
+    <figure><img src="img/orphan.jpg" alt="Homem órfão de blusa, com vassoura e cachimbo, em pé" loading="lazy"><figcaption><b>Prancha 3 · Homem órfão com vassoura e cachimbo</b><br>Haia, 1882. Lápis.<br>A silhueta resolve tudo. Roupa pesada, pés grandes, nenhum cenário.</figcaption></figure>
+  </div>
+  <div class="plate wide">
+    <figure><img src="img/yard.jpg" alt="Vista de cima de um pátio de carpinteiro com roupa no varal" loading="lazy"><figcaption><b>Prancha 4 · Pátio de carpinteiro e lavanderia</b><br>Haia, maio de 1882. Lápis, giz preto, pena e pincel, com realces em branco. Kröller-Müller Museum.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>A moldura trabalhando.</b> As cercas e os telhados correm para um ponto de fuga preciso. Este desenho saiu da janela do ateliê.</li>
+      <li><b>Texturas já separadas.</b> Telha, tábua, terra e roupa branca têm tratamentos diferentes. É o embrião do alfabeto de Arles, seis anos antes.</li>
+      <li><b>Figuras pequenas.</b> Elas existem para dar escala e fazer o olho andar para o fundo.</li>
+    </ol></div>
+  </div>
+  <h3>Exercícios</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-1-1"><div><label for="ex-1-1">1.1 Contorno cego de um sapato velho</label><p class="meta">3 × 10 min · grafite 4B · A4</p><p>Olho no sapato, nunca no papel, lápis sem levantar. Ande na velocidade de uma formiga. Ele desenhou e pintou botas gastas várias vezes: um objeto com história rende mais que um objeto bonito.</p><p class="crit"><b>Pronto quando:</b> o terceiro desenho tem dobras e costuras que você não tinha notado no primeiro.</p><button data-min="10" data-name="1.1 Contorno cego">Cronômetro 10:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-1-2"><div><label for="ex-1-2">1.2 Figura sentada em três pesos de linha</label><p class="meta">25 min · lápis de carpinteiro · A3</p><p>Modelo ou foto sua. Só linha, sem sombra. Use três pesos: fina de quina onde bate luz, média no geral, grossa de chapa embaixo das formas e em todo ponto onde o corpo apoia em alguma coisa.</p><p class="crit"><b>Pronto quando:</b> dá para saber de onde vem a luz sem nenhuma hachura.</p><button data-min="25" data-name="1.2 Três pesos de linha">Cronômetro 25:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-1-3"><div><label for="ex-1-3">1.3 Estudo de mestre: Worn Out</label><p class="meta">45 min · lápis de carpinteiro · papel de grão, A3</p><p>Copie a Prancha 2. Regra única: toda hachura dá a volta na forma. Na perna ela é curva como elástico de meia, no encosto da cadeira ela é reta.</p><p class="crit"><b>Pronto quando:</b> a perna parece cilíndrica mesmo com valor quase uniforme.</p><button data-min="45" data-name="1.3 Worn Out">Cronômetro 45:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-1-4"><div><label for="ex-1-4">1.4 A moldura na janela</label><p class="meta">60 min · grafite 2B e 6B · A3</p><p>Monte a moldura de perspectiva e desenhe a vista de uma janela alta: quintal, telhados, rua. Marque primeiro onde cada fio cruza um canto de telhado ou muro. Só depois separe as texturas.</p><p class="crit"><b>Pronto quando:</b> há pelo menos quatro texturas diferentes e uma figura pequena dando escala.</p><button data-min="60" data-name="1.4 Moldura na janela">Cronômetro 60:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-1-5"><div><label for="ex-1-5">1.5 Tipos de rua</label><p class="meta">6 × 5 min · grafite 6B · A4</p><p>Seis pessoas de corpo inteiro, de preferência de costas ou de perfil, cada uma com um objeto: guarda-chuva, sacola, vassoura. Silhueta primeiro, roupa como um bloco, pés maiores do que você acha certo.</p><p class="crit"><b>Pronto quando:</b> cada figura se reconhece pela silhueta preenchida de preto.</p><button data-min="5" data-name="1.5 Tipos de rua">Cronômetro 5:00</button></div></li>
+  </ol>
+</section>
+
+<!-- ============ LIÇÃO 2 ============ -->
+<section id="nuenen">
+  <div class="sec-head"><p class="eyebrow">Lição 2 · Nuenen, 1884–85</p><h2>A forma <em>pela massa</em></h2></div>
+  <div class="prose">
+    <p>No Brabante ele desenhou tecelões e camponeses. No verão de 1885 fez uma série de figuras grandes em giz preto: gente cavando, ceifando, respigando. Uma ideia mudou tudo nessa época. Ele leu que Delacroix dizia que os antigos não pegavam a forma pela linha e sim pelos meios, pelas massas ovais, e passou a construir a figura de dentro para fora.</p>
+    <p>Ele também escreveu ao irmão que ficaria desesperado se as figuras dele fossem "corretas" no sentido acadêmico. Queria os desvios e os exageros que deixam a figura mais verdadeira do que a medida exata. Guarde isso: nesta lição, mão grande e costas largas estão certas.</p>
+  </div>
+  <div class="plate">
+    <figure><img src="img/peasant.jpg" alt="Camponesa curvada até o chão, vista de frente, em giz preto" loading="lazy"><figcaption><b>Prancha 5 · Camponesa curvada, respigando</b><br>Nuenen, verão de 1885. Giz preto.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>Dois ovos.</b> As costas e o quadril são duas massas ovais enormes. Tudo o mais se pendura nelas.</li>
+      <li><b>Hachura em feixes.</b> Os traços correm em grupos que abraçam o volume, mudando de direção a cada plano da saia.</li>
+      <li><b>Contorno por último.</b> A linha grossa só aparece onde a forma vira: no ombro, embaixo do braço, no tamanco.</li>
+      <li><b>Peso embaixo.</b> Mãos e tamancos são grandes e escuros. A figura está plantada no chão.</li>
+      <li><b>Chão em meia dúzia de riscos.</b> O fundo vazio é uma decisão.</li>
+    </ol></div>
+  </div>
+  <h3>Exercícios</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-2-1"><div><label for="ex-2-1">2.1 Dez poses de trabalho em ovais</label><p class="meta">10 × 3 min · lateral do carvão · A3</p><p>Varrer, cavar, levantar uma caixa, torcer um pano. Peça a alguém ou use o temporizador da câmera. Só massas ovais feitas com a lateral do bastão. Contorno é proibido.</p><p class="crit"><b>Pronto quando:</b> a ação se entende em três manchas.</p><button data-min="3" data-name="2.1 Poses em ovais">Cronômetro 3:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-2-2"><div><label for="ex-2-2">2.2 Massa, hachura, contorno</label><p class="meta">30 min em três tempos · carvão e conté · A2</p><p>Uma pose de esforço. Dez minutos de massa com a lateral do carvão. Dez de hachura em feixes com conté, abraçando o volume. Dez de contorno pesado, só onde a forma vira ou apoia.</p><p class="crit"><b>Pronto quando:</b> menos da metade do perímetro da figura tem linha de contorno.</p><button data-min="10" data-name="2.2 Cada tempo">Cronômetro 10:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-2-3"><div><label for="ex-2-3">2.3 Folha de mãos</label><p class="meta">12 × 5 min · conté preto · A3</p><p>A sua mão livre segurando colher, martelo, caneca, corda. Doze numa folha só, como as folhas de estudo que ele fez para <i>Os Comedores de Batata</i>. Construa cada mão como uma caixa e cinco cilindros antes de qualquer unha.</p><p class="crit"><b>Pronto quando:</b> as mãos parecem capazes de apertar.</p><button data-min="5" data-name="2.3 Mãos">Cronômetro 5:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-2-4"><div><label for="ex-2-4">2.4 Cabeça em três valores</label><p class="meta">20 min · carvão e limpa-tipos · A3</p><p>Perfil ou três quartos com luz lateral forte. Cubra a folha de cinza, levante as luzes com a borracha, carregue as sombras. Olhos, nariz e boca só entram nos cinco minutos finais.</p><p class="crit"><b>Pronto quando:</b> a três metros a cabeça já tem volume e caráter.</p><button data-min="20" data-name="2.4 Cabeça">Cronômetro 20:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-2-5"><div><label for="ex-2-5">2.5 Estudo de mestre: a camponesa</label><p class="meta">60 min · conté preto · A2</p><p>Copie a Prancha 5 em folha grande, em pé, movendo o braço a partir do ombro. Os originais têm cerca de meio metro de altura, e o gesto largo faz parte do resultado.</p><p class="crit"><b>Pronto quando:</b> a hachura muda de direção em pelo menos seis planos da saia.</p><button data-min="60" data-name="2.5 A camponesa">Cronômetro 60:00</button></div></li>
+  </ol>
+</section>
+
+<!-- ============ LIÇÃO 3 ============ -->
+<section id="paris">
+  <div class="sec-head"><p class="eyebrow">Lição 3 · Paris, 1886–88</p><h2>A lição <em>japonesa</em></h2></div>
+  <div class="prose">
+    <p>Em Paris ele passou alguns meses no ateliê de Fernand Cormon desenhando gessos, conheceu Émile Bernard e Toulouse-Lautrec e, com o irmão Theo, juntou centenas de gravuras japonesas baratas. Chegou a decalcar Hiroshige com papel quadriculado para estudar como aquilo era montado.</p>
+    <p>As gravuras ensinaram duas coisas. A primeira é composição: horizonte alto, primeiro plano cortado pela borda, diagonais fortes, vazio deixado vazio. A segunda é a que mais interessa aqui: nas gravuras, cada superfície tem um padrão gráfico próprio. Chuva é risco, água é onda repetida, relva é ponto. Em Arles ele vai fazer exatamente isso com a pena de junco, e vai escrever que quer desenhar depressa como os japoneses, "como um relâmpago".</p>
+    <p>Esta lição não tem prancha dele. A referência são as gravuras: procure <i>Ameixeira em flor</i> e <i>Ponte sob a chuva</i>, de Hiroshige, as duas que ele copiou a óleo em 1887.</p>
+  </div>
+  <h3>Exercícios</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-3-1"><div><label for="ex-3-1">3.1 Seis miniaturas de horizonte alto</label><p class="meta">6 × 5 min · grafite 6B · quadros de 8 × 10 cm</p><p>A mesma vista seis vezes. Em todas o horizonte fica no terço de cima ou acima dele. Mude só o que entra no primeiro plano e onde a borda corta.</p><p class="crit"><b>Pronto quando:</b> você tem uma favorita e sabe dizer por quê.</p><button data-min="5" data-name="3.1 Miniaturas">Cronômetro 5:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-3-2"><div><label for="ex-3-2">3.2 O galho que corta a página</label><p class="meta">30 min · conté · A3</p><p>Um tronco ou galho em primeiríssimo plano, escuro, atravessando a folha em diagonal e saindo por duas bordas. Atrás dele, a paisagem pequena e clara.</p><p class="crit"><b>Pronto quando:</b> o galho ocupa pelo menos um quarto da área e o desenho ainda tem profundidade.</p><button data-min="30" data-name="3.2 O galho">Cronômetro 30:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-3-3"><div><label for="ex-3-3">3.3 Nove superfícies, nove padrões</label><p class="meta">40 min · grafite 6B rombo · 9 quadrados de 5 cm</p><p>Telhado, água, relva, casca, pedra, céu, parede, folhagem, terra arada. Cada quadrado usa um único tipo de marca repetida. Nada de sombra.</p><p class="crit"><b>Pronto quando:</b> outra pessoa acerta pelo menos seis das nove sem legenda.</p><button data-min="40" data-name="3.3 Nove padrões">Cronômetro 40:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-3-4"><div><label for="ex-3-4">3.4 Objeto em três valores planos</label><p class="meta">25 min · lápis de carpinteiro · A4</p><p>Uma jarra, um gesso, uma bota. Só três valores, cada um chapado: papel branco, um cinza de hachura única, preto. Transição suave não vale.</p><p class="crit"><b>Pronto quando:</b> as três zonas têm bordas nítidas como numa gravura.</p><button data-min="25" data-name="3.4 Três valores">Cronômetro 25:00</button></div></li>
+  </ol>
+</section>
+
+<!-- ============ LIÇÃO 4 ============ -->
+<section id="arles">
+  <div class="sec-head"><p class="eyebrow">Lição 4 · Arles, 1888</p><h2>O alfabeto <em>de marcas</em></h2></div>
+  <div class="prose">
+    <p>Ele chegou a Arles em fevereiro de 1888 e logo começou a cortar penas dos juncos que cresciam à beira dos canais. Em maio e julho subiu a colina de Montmajour, debaixo de mistral e mosquitos, e fez as grandes vistas da planície de La Crau, que considerava as melhores coisas que já tinha feito a pena. Em junho passou uns dias em Saintes-Maries-de-la-Mer e desenhou os barcos na praia em uma hora, sem moldura e sem medir, "deixando a pena correr".</p>
+    <p>No verão ele fez algo que vale como aula: redesenhou as próprias pinturas a pena para mandar a Bernard, a John Russell e a Theo. Para cada cor da tela ele precisou inventar uma marca. É o melhor exercício deste curso (4.4).</p>
+  </div>
+
+  <h3>As doze marcas</h3>
+  <p class="hint">Toque em qualquer quadro para ver a marca ser feita.</p>
+  <div class="marks" id="marks"></div>
+
+  <div class="plate wide">
+    <figure><img src="img/lacrau.jpg" alt="Vista ampla da planície de La Crau, com campos em faixas até o horizonte" loading="lazy"><figcaption><b>Prancha 6 · La Crau vista de Montmajour</b><br>Arles, julho de 1888. Pena de junco e pena fina, tinta sobre grafite.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>Horizonte lá em cima.</b> O céu é uma tira vazia. Quase toda a folha é chão.</li>
+      <li><b>Faixas.</b> A planície é uma pilha de faixas horizontais, cada campo com a sua marca: pontos, tracinhos, hachura curta.</li>
+      <li><b>Marcas que encolhem.</b> Embaixo os traços têm um centímetro. No horizonte são pontos de agulha.</li>
+      <li><b>Sebes como pontuação.</b> As fileiras de árvores escuras separam as faixas e dão ritmo.</li>
+    </ol></div>
+  </div>
+
+  <h3>Laboratório de profundidade</h3>
+  <div class="prose"><p>Mexa nos controles e veja o princípio funcionar. Leve o primeiro controle para 1 e o espaço morre: todas as marcas do mesmo tamanho viram papel de parede.</p></div>
+  <div class="lab">
+    <canvas id="lab-cv" aria-label="Campo em faixas desenhado com marcas que diminuem até o horizonte"></canvas>
+    <div class="ctl">
+      <label for="lab-ratio">Marca de perto ÷ marca de longe <output id="lab-ratio-o">6×</output><input type="range" id="lab-ratio" min="1" max="9" step="0.5" value="6"></label>
+      <label for="lab-dens">Densidade <output id="lab-dens-o">100%</output><input type="range" id="lab-dens" min="50" max="170" step="10" value="100"></label>
+      <label for="lab-dir">Direção do vento <output id="lab-dir-o">20°</output><input type="range" id="lab-dir" min="-45" max="45" step="5" value="20"></label>
+      <label class="chk" for="lab-sky"><input type="checkbox" id="lab-sky"> Pontilhar o céu</label>
+      <p>Em La Crau a razão passa de 8×. No <i>Jardim com flores</i> fica perto de 4×, porque a distância é curta.</p>
+    </div>
+  </div>
+
+  <div class="pair">
+    <figure><img src="img/boats.jpg" alt="Quatro barcos de pesca na praia, com mastros em diagonal" loading="lazy"><figcaption><b>Prancha 7 · Barcos de pesca na praia de Saintes-Maries</b><br>Junho de 1888. Pena de junco e tinta sobre grafite.<br>Contorno firme nos cascos, areia em pontos, mar em tracinhos deitados. Três substâncias, três marcas.</figcaption></figure>
+    <figure><img src="img/street.jpg" alt="Rua de vila com cabanas de colmo e vegetação em redemoinho" loading="lazy"><figcaption><b>Prancha 8 · Rua em Saintes-Maries-de-la-Mer</b><br>Verão de 1888. Pena de junco e tinta sobre grafite. Metropolitan Museum of Art.<br>Colmo pontilhado, caminho quase vazio, mato em laços. O céu fica em branco.</figcaption></figure>
+  </div>
+  <div class="pair">
+    <figure><img src="img/garden.jpg" alt="Jardim coberto de flores, todo preenchido de pontos e traços" loading="lazy"><figcaption><b>Prancha 9 · Jardim com flores</b><br>Arles, verão de 1888. Pena de junco e tinta.<br>A folha inteira está coberta e nada se confunde, porque cada canteiro tem um tamanho e um tipo de marca.</figcaption></figure>
+    <figure><img src="img/harvest.jpg" alt="A colheita: planície com campos, cercas e carroça" loading="lazy"><figcaption><b>Prancha 10 · A colheita, desenho para Émile Bernard</b><br>Arles, julho de 1888. Pena e tinta sobre grafite.<br>Feito a partir da pintura. O amarelo do trigo virou tracinho, o verde virou vírgula, a cerca virou pente.</figcaption></figure>
+  </div>
+
+  <h3>As seis regras da folha de Arles</h3>
+  <ol class="rules">
+    <li><b>Grafite primeiro, bem leve</b><span>Só as grandes divisões: horizonte, faixas, silhuetas. Nenhum detalhe.</span></li>
+    <li><b>Legenda antes do desenho</b><span>Decida no canto da folha qual marca vai para qual superfície.</span></li>
+    <li><b>Do longe para o perto</b><span>Comece pelo horizonte com a ponta fina e vá engrossando a ferramenta ao descer.</span></li>
+    <li><b>Uma zona, uma pressão</b><span>O escuro se faz apertando as marcas umas contra as outras.</span></li>
+    <li><b>Papel reservado</b><span>Céu, caminho ou água ficam quase em branco. O vazio é o que deixa o resto vibrar.</span></li>
+    <li><b>Acentos no fim</b><span>Meia dúzia de pretos máximos, no primeiro plano e nas sebes. Depois pare.</span></li>
+  </ol>
+
+  <h3>Exercícios</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-4-1"><div><label for="ex-4-1">4.1 Folha de alfabeto</label><p class="meta">45 min · as três "penas" · A3 em 12 células</p><p>As doze marcas acima, uma por célula. Em cada célula faça três faixas: grande, média, pequena. Cuide do ritmo. As marcas dele são regulares como escrita, não aleatórias.</p><p class="crit"><b>Pronto quando:</b> a folha parece uma página de caligrafia.</p><button data-min="45" data-name="4.1 Alfabeto">Cronômetro 45:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-4-2"><div><label for="ex-4-2">4.2 Escala de valor por densidade</label><p class="meta">30 min · 6B rombo · 3 tiras de 5 casas</p><p>Três tiras: pontos, tracinhos, hachura. Cinco casas do claro ao escuro em cada uma. A pressão fica idêntica nas cinco. Só muda a distância entre as marcas.</p><p class="crit"><b>Pronto quando:</b> de olhos semicerrados as três tiras mostram os mesmos cinco cinzas.</p><button data-min="30" data-name="4.2 Escala por densidade">Cronômetro 30:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-4-3"><div><label for="ex-4-3">4.3 Planície em cinco faixas</label><p class="meta">40 min · as três "penas" · A3</p><p>Uma planície inventada, como no laboratório: horizonte no quinto superior, cinco faixas, uma marca por faixa, razão de escala de pelo menos 6×. Duas sebes escuras. Céu vazio.</p><p class="crit"><b>Pronto quando:</b> virando a folha de cabeça para baixo, o chão ainda afunda.</p><button data-min="40" data-name="4.3 Cinco faixas">Cronômetro 40:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-4-4"><div><label for="ex-4-4">4.4 Tradução de cor em marca</label><p class="meta">60 min · as três "penas" · A3</p><p>Escolha uma pintura dele de Arles (<i>A Colheita</i>, <i>O Semeador</i>, <i>Barcos em Saintes-Maries</i>) ou uma foto colorida sua. Liste as cores, dê uma marca a cada uma e redesenhe tudo em preto. Depois compare com a versão a pena que ele fez.</p><p class="crit"><b>Pronto quando:</b> dá para apontar no desenho onde estava cada cor.</p><button data-min="60" data-name="4.4 Tradução">Cronômetro 60:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-4-5"><div><label for="ex-4-5">4.5 Estudo de mestre: La Crau</label><p class="meta">90 min · as três "penas" · A3 ou maior</p><p>Copie a Prancha 6 seguindo as seis regras na ordem. Conte as faixas antes de começar. Resista a desenhar árvores: as sebes são fileiras de laços escuros.</p><p class="crit"><b>Pronto quando:</b> a sua cópia tem tantos tipos de marca quanto o original.</p><button data-min="90" data-name="4.5 La Crau">Cronômetro 90:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-4-6"><div><label for="ex-4-6">4.6 Uma hora ao ar livre, sem medir</label><p class="meta">60 min · as três "penas" · A3 em prancheta</p><p>Um lugar com vista aberta: praça, estacionamento, beira de estrada, laje. Sem moldura, sem borracha, sem medir com o lápis. Quando o relógio apitar, acabou.</p><p class="crit"><b>Pronto quando:</b> você terminou no tempo. A qualidade vem com a repetição: faça este exercício toda semana até o fim do curso.</p><button data-min="60" data-name="4.6 Ao ar livre">Cronômetro 60:00</button></div></li>
+  </ol>
+</section>
+
+<!-- ============ LIÇÃO 5 ============ -->
+<section id="retrato">
+  <div class="sec-head"><p class="eyebrow">Lição 5 · Arles, agosto de 1888</p><h2>Um rosto <em>em marcas</em></h2></div>
+  <div class="prose">
+    <p>Joseph Roulin trabalhava no correio da estação de Arles e virou amigo e modelo. Van Gogh o pintou no fim de julho de 1888 e em seguida refez o retrato a pena. O desenho mostra que o alfabeto da paisagem serve para gente: o rosto é tratado como um terreno, com planos e direções.</p>
+  </div>
+  <div class="plate">
+    <figure><img src="img/roulin.jpg" alt="Retrato de Joseph Roulin de boné e barba, todo em traços de pena" loading="lazy"><figcaption><b>Prancha 11 · Retrato de Joseph Roulin</b><br>Arles, agosto de 1888. Pena de junco e pena de ave, tinta e giz preto. J. Paul Getty Museum.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>Quatro substâncias, quatro marcas.</b> Barba em curvas enroscadas, casaco em hachura grossa cruzada, pele em pontos e tracinhos, fundo em treliça.</li>
+      <li><b>A pele tem direção.</b> Os tracinhos da testa são horizontais, os da lateral do nariz descem, os da maçã do rosto giram.</li>
+      <li><b>Olhos com contorno pesado.</b> São o ponto mais escuro e mais nítido do rosto. O olhar segura a folha.</li>
+      <li><b>O fundo trabalha.</b> A treliça é mais clara e mais regular que tudo, e empurra a cabeça para a frente.</li>
+      <li><b>O boné é quase só contorno.</b> Uma zona calma no meio de tanta textura.</li>
+    </ol></div>
+  </div>
+  <h3>Exercícios</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-5-1"><div><label for="ex-5-1">5.1 Mapa de planos do próprio rosto</label><p class="meta">20 min · grafite 2B · A4</p><p>No espelho, com luz lateral. Desenhe o rosto como um mapa de regiões fechadas: testa, lateral do nariz, maçã, queixo, pálpebra. Dentro de cada região, uma seta indicando para onde a superfície corre.</p><p class="crit"><b>Pronto quando:</b> há entre 15 e 25 planos, cada um com a sua seta.</p><button data-min="20" data-name="5.1 Mapa de planos">Cronômetro 20:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-5-2"><div><label for="ex-5-2">5.2 Tracinhos que seguem as setas</label><p class="meta">30 min · 6B rombo · A3</p><p>Refaça o autorretrato maior. Agora cada plano recebe tracinhos curtos na direção da seta. Planos de sombra recebem tracinhos mais juntos, com a mesma pressão.</p><p class="crit"><b>Pronto quando:</b> o rosto tem volume sem nenhuma área esfumada.</p><button data-min="30" data-name="5.2 Tracinhos">Cronômetro 30:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-5-3"><div><label for="ex-5-3">5.3 Retrato em quatro substâncias</label><p class="meta">60 min · as três "penas" · A3</p><p>Alguém com cabelo ou barba marcantes e roupa de textura clara: tricô, jeans, casaco pesado. Escreva a legenda no canto antes de começar: pele, pelo, tecido, fundo.</p><p class="crit"><b>Pronto quando:</b> cobrindo o rosto com a mão, ainda dá para dizer de que é feita cada parte.</p><button data-min="60" data-name="5.3 Quatro substâncias">Cronômetro 60:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-5-4"><div><label for="ex-5-4">5.4 Estudo de mestre: Roulin</label><p class="meta">90 min · conté e grafite · A3</p><p>Copie a Prancha 11. Comece pelos olhos e pelo contorno do boné, depois a barba, depois o casaco. O fundo vem por último e precisa ficar mais claro que o casaco.</p><p class="crit"><b>Pronto quando:</b> a barba e o casaco não se confundem, mesmo tendo o mesmo valor.</p><button data-min="90" data-name="5.4 Roulin">Cronômetro 90:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-5-5"><div><label for="ex-5-5">5.5 Três fundos para a mesma cabeça</label><p class="meta">3 × 10 min · 6B · quadros de 10 × 13 cm</p><p>A mesma cabeça simplificada três vezes, com três fundos: treliça, pontilhado, vazio. Veja como a cabeça avança ou recua em cada um.</p><p class="crit"><b>Pronto quando:</b> você sabe qual fundo usaria para uma pessoa calma e qual para uma inquieta.</p><button data-min="10" data-name="5.5 Três fundos">Cronômetro 10:00</button></div></li>
+  </ol>
+</section>
+
+<!-- ============ LIÇÃO 6 ============ -->
+<section id="saint-remy">
+  <div class="sec-head"><p class="eyebrow">Lição 6 · Saint-Rémy, 1889–90</p><h2>Ritmo: tudo <em>ondula</em></h2></div>
+  <div class="prose">
+    <p>Em maio de 1889 ele se internou no asilo de Saint-Paul-de-Mausole. Desenhou o jardim, os campos atrás do muro, as oliveiras. Em junho escreveu que os ciprestes não saíam da cabeça dele, que eram belos em linha e proporção como um obelisco egípcio, e que ninguém ainda os tinha feito como ele os via.</p>
+    <p>O traço muda. As marcas curtas de Arles se alongam, se curvam e se ligam umas às outras. Terra, árvore e céu passam a obedecer ao mesmo movimento. O risco é virar maneirismo, redemoinho por redemoinho. O antídoto está nos próprios desenhos: por baixo das curvas há sempre uma estrutura firme e algum elemento reto para contrastar.</p>
+    <p>Um detalhe útil para você: em 1890, doente e sem poder sair, ele encheu folhas pequenas a lápis e giz preto com camponeses e paisagens do Norte, desenhados de memória.</p>
+  </div>
+  <div class="plate">
+    <figure><img src="img/cypress.jpg" alt="Dois ciprestes feitos de curvas em forma de chama" loading="lazy"><figcaption><b>Prancha 12 · Ciprestes</b><br>Saint-Rémy, junho de 1889. Pena de junco e tinta sobre grafite.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>A árvore não tem contorno.</b> A silhueta aparece pela soma de centenas de cachos.</li>
+      <li><b>Anatomia do cacho.</b> Cada um é um C ou um S feito de dois a quatro traços paralelos, sempre subindo.</li>
+      <li><b>Escuro no miolo.</b> Os cachos se apertam no centro e na base. Nas bordas eles se soltam e deixam o papel respirar.</li>
+      <li><b>O chão acompanha.</b> A relva embaixo é feita de ondas longas que repetem o movimento da copa em outra escala.</li>
+    </ol></div>
+  </div>
+  <div class="plate wide">
+    <figure><img src="img/starry.jpg" alt="Desenho da Noite Estrelada: céu em redemoinhos, cipreste e vila" loading="lazy"><figcaption><b>Prancha 13 · A Noite Estrelada, desenho a partir da pintura</b><br>Saint-Rémy, junho de 1889. Pena e tinta. Esteve na Kunsthalle de Bremen até a Segunda Guerra.</figcaption></figure>
+    <div class="look"><h4>Olhe para</h4><ol>
+      <li><b>Linhas de fluxo.</b> Os tracinhos do céu seguem correntes, como limalha de ferro em volta de ímãs. Cada astro é um centro.</li>
+      <li><b>Curva contra reta.</b> A vila é feita de tracinhos retos e curtos. Sem ela o céu não teria com o que contrastar.</li>
+      <li><b>Uma âncora escura.</b> O cipreste é o único preto denso. Ele liga o chão ao céu.</li>
+    </ol></div>
+  </div>
+  <h3>Exercícios</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-6-1"><div><label for="ex-6-1">6.1 Mapa de vento</label><p class="meta">20 min · 2B e 6B · A4</p><p>Marque três centros na folha. Com o 2B bem leve, trace as linhas de corrente em volta deles, como num mapa meteorológico. Depois, com o 6B, cubra tudo de tracinhos alinhados às correntes.</p><p class="crit"><b>Pronto quando:</b> nenhum tracinho cruza outro.</p><button data-min="20" data-name="6.1 Mapa de vento">Cronômetro 20:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-6-2"><div><label for="ex-6-2">6.2 Vinte cachos e um cipreste</label><p class="meta">30 min · carvão comprimido de quina · A3</p><p>Primeiro vinte cachos soltos: dez em C, dez em S, cada um com três traços paralelos. Depois monte um cipreste inteiro só com eles, apertando no miolo e soltando na borda.</p><p class="crit"><b>Pronto quando:</b> a árvore se lê como silhueta sem nenhuma linha em volta.</p><button data-min="30" data-name="6.2 Cipreste">Cronômetro 30:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-6-3"><div><label for="ex-6-3">6.3 Uma árvore torta, do natural</label><p class="meta">45 min · conté e grafite · A3</p><p>Procure a árvore mais retorcida do bairro. O tronco se desenha com linhas que acompanham a torção, como cordas. A copa vai em laços, o chão em ondas.</p><p class="crit"><b>Pronto quando:</b> tronco, copa e chão têm marcas diferentes e parecem soprados pelo mesmo vento.</p><button data-min="45" data-name="6.3 Árvore torta">Cronômetro 45:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-6-4"><div><label for="ex-6-4">6.4 Curva contra reta</label><p class="meta">40 min · as três "penas" · A3</p><p>Uma paisagem toda em curvas com um único elemento reto: casa, torre, poste, muro. Desenhe o elemento reto primeiro, com régua mental, e deixe o resto ondular em volta.</p><p class="crit"><b>Pronto quando:</b> tapando o elemento reto com o dedo, o desenho perde força.</p><button data-min="40" data-name="6.4 Curva contra reta">Cronômetro 40:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-6-5"><div><label for="ex-6-5">6.5 Estudo de mestre: Ciprestes</label><p class="meta">90 min · carvão comprimido e 6B · A2 em pé</p><p>Copie a Prancha 12. Esboce só o eixo e a largura máxima das duas árvores. Construa de baixo para cima, cacho por cacho. Chão por último.</p><p class="crit"><b>Pronto quando:</b> o miolo está pelo menos três vezes mais denso que as bordas.</p><button data-min="90" data-name="6.5 Ciprestes">Cronômetro 90:00</button></div></li>
+    <li class="ex"><input type="checkbox" id="ex-6-6"><div><label for="ex-6-6">6.6 De memória</label><p class="meta">5 min olhando + 15 min desenhando · lápis · A4</p><p>Observe uma cena por cinco minutos sem desenhar. Vire as costas e desenhe o que ficou. A memória descarta o detalhe e guarda o ritmo, que é o que esta lição pede.</p><p class="crit"><b>Pronto quando:</b> o desenho tem menos coisas e mais movimento do que a cena.</p><button data-min="15" data-name="6.6 De memória">Cronômetro 15:00</button></div></li>
+  </ol>
+</section>
+
+<!-- ============ LIÇÃO 7 ============ -->
+<section id="projeto">
+  <div class="sec-head"><p class="eyebrow">Lição 7 · Auvers, 1890, e depois</p><h2>O seu <em>Arles</em></h2></div>
+  <div class="prose">
+    <p>Em Auvers-sur-Oise ele viveu setenta dias, de maio a julho de 1890, e desenhou depressa em cadernos e folhas soltas, a lápis e giz. É o ponto em que o vocabulário já estava tão assimilado que ele não pensava mais nele.</p>
+    <p>Copiar ensina o idioma. Falar o idioma é outra etapa: usar as marcas dele no seu lugar e nas suas pessoas. Ele não desenhou Arles como se fosse o Japão, desenhou Arles com o que aprendeu do Japão. O projeto final é uma série de seis desenhos do seu mundo.</p>
+  </div>
+  <h3>A série de seis</h3>
+  <ol class="exs">
+    <li class="ex"><input type="checkbox" id="ex-7-1"><div><label for="ex-7-1">Vista aberta do seu bairro</label><p class="meta">90 min · do natural · A3</p><p>Horizonte alto, cinco faixas ou mais, céu reservado.</p></div></li>
+    <li class="ex"><input type="checkbox" id="ex-7-2"><div><label for="ex-7-2">Um canto fechado: quintal, jardim, feira</label><p class="meta">90 min · do natural · A3</p><p>Folha saturada como o <i>Jardim com flores</i>. Nada se confunde.</p></div></li>
+    <li class="ex"><input type="checkbox" id="ex-7-3"><div><label for="ex-7-3">Uma árvore com personalidade</label><p class="meta">60 min · do natural · A3 vertical</p><p>Sem contorno. Só cachos, laços e cordas.</p></div></li>
+    <li class="ex"><input type="checkbox" id="ex-7-4"><div><label for="ex-7-4">Alguém trabalhando</label><p class="meta">45 min · modelo ou memória · A2</p><p>Massa primeiro, à maneira de Nuenen. Mãos e pés pesados.</p></div></li>
+    <li class="ex"><input type="checkbox" id="ex-7-5"><div><label for="ex-7-5">Retrato de alguém que você conhece bem</label><p class="meta">90 min · do natural · A3</p><p>Quatro substâncias, fundo ativo, olhos como ponto mais escuro.</p></div></li>
+    <li class="ex"><input type="checkbox" id="ex-7-6"><div><label for="ex-7-6">Tema livre, de noite ou de memória</label><p class="meta">60 min · A3</p><p>Linhas de fluxo, um elemento reto, uma âncora escura.</p></div></li>
+  </ol>
+  <h3>Autoavaliação <span class="score" id="rub-score">0 de 8</span></h3>
+  <div class="prose"><p>Pendure os seis lado a lado e marque só o que vale para todos.</p></div>
+  <ol class="exs" id="rubric">
+    <li class="ex"><input type="checkbox" id="rub-1"><div><label for="rub-1">Cada superfície tem a sua marca</label><p class="crit">Dá para escrever a legenda de cada desenho depois de pronto.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-2"><div><label for="rub-2">A direção do traço descreve a forma</label><p class="crit">Nenhuma área foi preenchida com hachura neutra.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-3"><div><label for="rub-3">As marcas diminuem com a distância</label><p class="crit">A razão entre a maior e a menor marca passa de 5×.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-4"><div><label for="rub-4">O valor vem da densidade</label><p class="crit">Não há esfumado nem degradê nos desenhos de linguagem madura.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-5"><div><label for="rub-5">Há papel reservado</label><p class="crit">Pelo menos uma zona grande ficou quase em branco, de propósito.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-6"><div><label for="rub-6">O contorno pesado é econômico</label><p class="crit">Ele aparece onde a forma vira ou apoia, não em volta de tudo.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-7"><div><label for="rub-7">Um ritmo domina</label><p class="crit">O desenho inteiro parece feito na mesma velocidade e pelo mesmo vento.</p></div></li>
+    <li class="ex"><input type="checkbox" id="rub-8"><div><label for="rub-8">Funciona a três metros e a trinta centímetros</label><p class="crit">De longe, massas claras e escuras. De perto, caligrafia.</p></div></li>
+  </ol>
+  <h3>Cinco tropeços comuns</h3>
+  <div class="prose"><ul>
+    <li><b>Esfumar com o dedo.</b> Apaga a marca, que é o assunto. Depois da Lição 2, dedo fora do papel.</li>
+    <li><b>Papel de parede.</b> Marcas todas do mesmo tamanho. Volte ao laboratório de profundidade.</li>
+    <li><b>Contornar tudo.</b> Vira livro de colorir. Tire metade das linhas de borda.</li>
+    <li><b>Redemoinho sem estrutura.</b> Curvas bonitas sobre um desenho mole. Faça o esboço de grafite mais rígido do que parece necessário.</li>
+    <li><b>Folha pequena.</b> Em A4 a mão desenha com os dedos. Estes desenhos pedem cotovelo e ombro.</li>
+  </ul></div>
+</section>
+
+<!-- ============ PLANO ============ -->
+<section id="plano">
+  <div class="sec-head"><p class="eyebrow">Ritmo sugerido</p><h2>Plano de <em>8 semanas</em></h2></div>
+  <div class="prose"><p>Cinco sessões por semana, de 45 a 90 minutos. A partir da semana 4, uma das sessões é sempre o exercício 4.6, uma hora ao ar livre sem medir.</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Semana</th><th>Lição</th><th>Exercícios</th><th>Foco</th></tr></thead>
+    <tbody>
+      <tr><td class="yr">1</td><td>Haia</td><td>1.1 a 1.5</td><td>Peso de linha. Montar a moldura.</td></tr>
+      <tr><td class="yr">2</td><td>Nuenen</td><td>2.1 a 2.5</td><td>Massa antes do contorno. Folha grande.</td></tr>
+      <tr><td class="yr">3</td><td>Paris</td><td>3.1 a 3.4 e repetir 2.1</td><td>Composição japonesa. Textura por padrão.</td></tr>
+      <tr><td class="yr">4</td><td>Arles</td><td>4.1, 4.2, 4.3, 4.6</td><td>Alfabeto e escala de marca.</td></tr>
+      <tr><td class="yr">5</td><td>Arles</td><td>4.4, 4.5, 4.6</td><td>Tradução de cor. Estudo de La Crau.</td></tr>
+      <tr><td class="yr">6</td><td>Retrato</td><td>5.1 a 5.5, 4.6</td><td>O rosto como terreno.</td></tr>
+      <tr><td class="yr">7</td><td>Saint-Rémy</td><td>6.1 a 6.6</td><td>Fluxo, cacho, curva contra reta.</td></tr>
+      <tr><td class="yr">8</td><td>Projeto</td><td>A série de seis</td><td>O seu lugar na linguagem dele.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ FONTES ============ -->
+<section id="fontes">
+  <div class="sec-head"><p class="eyebrow">Para ir mais fundo</p><h2>Fontes e <em>referências</em></h2></div>
+  <div class="prose">
+    <ul>
+      <li><b>As cartas.</b> <a href="https://vangoghletters.org" target="_blank" rel="noopener">Vincent van Gogh: The Letters</a>, edição completa e anotada do Van Gogh Museum e do Huygens Institute. Muitas cartas trazem croquis. Leia as de Haia (1882) sobre a moldura e os materiais, e as de Arles (maio a agosto de 1888) sobre os desenhos a pena.</li>
+      <li><b>Os desenhos em alta resolução.</b> A coleção online do <a href="https://www.vangoghmuseum.nl/en/collection" target="_blank" rel="noopener">Van Gogh Museum</a>, a do <a href="https://www.metmuseum.org/art/collection" target="_blank" rel="noopener">Metropolitan Museum</a> e a do <a href="https://krollermuller.nl/en" target="_blank" rel="noopener">Kröller-Müller</a> permitem dar zoom até o grão do papel.</li>
+      <li><b>O catálogo de referência.</b> <i>Vincent van Gogh: The Drawings</i> (Colta Ives, Susan Alyson Stein, Sjraar van Heugten e Marije Vellekoop, Metropolitan Museum of Art, 2005).</li>
+      <li><b>O método que ele seguiu.</b> <i>Charles Bargue: Drawing Course</i>, edição de Gerald Ackerman (2003), reproduz as pranchas que ele copiou.</li>
+      <li><b>As gravuras.</b> Hiroshige, <i>Cem Vistas Famosas de Edo</i>, e os volumes do <i>Manga</i> de Hokusai, para o vocabulário de padrões.</li>
+    </ul>
+    <p>As citações das cartas neste curso são paráfrases em português, não traduções literais. As 13 reproduções são de obras em domínio público, obtidas no Wikimedia Commons.</p>
+  </div>
+</section>
+
+</main>
+</div>
+<footer>O progresso marcado fica salvo só neste navegador. As demonstrações animadas são geradas por código para mostrar o gesto e não reproduzem nenhuma obra específica.</footer>
+</div>
+
+<div class="timer" id="timer" hidden>
+  <span class="t-name" id="t-name"></span>
+  <span class="t-time" id="t-time" role="timer" aria-live="off">00:00</span>
+  <div class="btns"><button id="t-pause">Pausar</button><button id="t-reset">Reiniciar</button><button id="t-close">Fechar</button></div>
+</div>
+<dialog id="zoom"><img alt=""></dialog>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const lerp=(a,b,t)=>a+(b-a)*t, TAU=Math.PI*2;
+
+/* ---------- traços ---------- */
+function seg(x,y,ang,len,w,a,bend){bend=bend||0;const n=Math.max(1,Math.ceil(len/5)),p=[];
+  for(let i=0;i<=n;i++){const t=i/n,o=Math.sin(t*Math.PI)*bend*len;p.push([x+Math.cos(ang)*len*t-Math.sin(ang)*o,y+Math.sin(ang)*len*t+Math.cos(ang)*o])}
+  return {pts:p,w:w,a:a}}
+const dot=(x,y,w,a)=>({pts:[[x,y],[x+.4,y+.3]],w:w,a:a});
+function curl(x,y,r,dir,rot,w,a,sweep){const p=[],n=10;sweep=sweep||2.7;
+  for(let i=0;i<=n;i++){const u=i/n,th=rot+dir*u*sweep,rr=r*(.3+u*.7);p.push([x+Math.cos(th)*rr,y+Math.sin(th)*rr])}
+  return {pts:p,w:w,a:a}}
+function path(fn,t0,t1,n,w,a){const p=[];for(let i=0;i<=n;i++){p.push(fn(lerp(t0,t1,i/n)))}return {pts:p,w:w,a:a}}
+function broken(fn,w,a,R,pieces){const out=[];let t=0;const step=1/pieces;
+  while(t<1){const len=step*(.7+R()*.5),e=Math.min(1,t+len);out.push(path(fn,t,e,Math.max(3,Math.ceil((e-t)*40)),w*(.8+R()*.4),a));t=e+step*.12*R()}
+  return out}
+function paint(ctx,s,ink,R){
+  ctx.lineCap='round';ctx.lineJoin='round';
+  if(s.erase){ctx.globalCompositeOperation='destination-out';ctx.strokeStyle='#000'}else{ctx.globalCompositeOperation='source-over';ctx.strokeStyle=ink}
+  const P=s.pts,n=P.length;
+  for(let k=0;k<2;k++){const jx=(R()-.5)*.9,jy=(R()-.5)*.9;
+    for(let i=1;i<n;i++){const fade=s.soft?1:(i/n>.7?1-(i/n-.7)*1.6:1);
+      ctx.globalAlpha=Math.max(.04,s.a*(.38+R()*.42)*fade);ctx.lineWidth=s.w*(.55+R()*.6);
+      ctx.beginPath();ctx.moveTo(P[i-1][0]+jx,P[i-1][1]+jy);ctx.lineTo(P[i][0]+jx,P[i][1]+jy);ctx.stroke()}}
+  ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}
+
+/* ---------- quadro que se desenha ---------- */
+const sketches=[];
+function Sketch(cv,W,H,build,dur){this.cv=cv;this.W=W;this.H=H;this.build=build;this.dur=dur||1800;this.seed=7;this.raf=0;sketches.push(this)}
+Sketch.prototype.draw=function(animate){
+  cancelAnimationFrame(this.raf);
+  const cv=this.cv,cssW=cv.clientWidth||cv.parentElement.clientWidth||300,dpr=Math.min(2,window.devicePixelRatio||1);
+  const cssH=cssW*this.H/this.W;cv.style.height=cssH+'px';cv.width=Math.round(cssW*dpr);cv.height=Math.round(cssH*dpr);
+  const ctx=cv.getContext('2d'),k=cv.width/this.W;ctx.setTransform(k,0,0,k,0,0);ctx.clearRect(0,0,this.W,this.H);
+  const ink=getComputedStyle(document.documentElement).getPropertyValue('--ink-draw').trim()||'#222';
+  const strokes=this.build(rng(this.seed*9973+11)),R=rng(this.seed+101);
+  if(!animate||reduce){for(const s of strokes)paint(ctx,s,ink,R);return}
+  let i=0;const t0=performance.now(),self=this;
+  (function frame(now){const target=Math.min(strokes.length,Math.ceil((now-t0)/self.dur*strokes.length));
+    for(;i<target;i++)paint(ctx,strokes[i],ink,R);
+    if(i<strokes.length)self.raf=requestAnimationFrame(frame)})(t0)};
+
+/* ---------- as doze marcas ---------- */
+const MW=300,MH=190;
+const MARKS=[
+ {n:'Hachura paralela',w:'Roupas e sombras da Haia, céus de Nuenen.',h:'Lápis de carpinteiro de quina. Traços do mesmo tamanho, do mesmo lado, sem ir e voltar.',
+  f:R=>{const o=[];for(let i=0;i<40;i++)o.push(seg(14+i*5.6+R()*2,165+R()*8,-1.05+R()*.06,95+R()*40,1.7,.85,.02));return o}},
+ {n:'Hachura cruzada',w:'Casaco de Roulin, fundos em treliça.',h:'Três camadas com ângulos bem diferentes. A terceira só entra no escuro máximo.',
+  f:R=>{const o=[];for(let i=0;i<30;i++)o.push(seg(16+i*7.4+R()*2,168,-1.2,150+R()*10,1.5,.75,.01));
+   for(let i=0;i<18;i++)o.push(seg(110+i*7.4+R()*2,26,1.25,150+R()*10,1.5,.75,.01));
+   for(let i=0;i<16;i++)o.push(seg(196,30+i*9+R()*2,0,92,1.6,.8,.01));return o}},
+ {n:'Ponto',w:'Areia de Saintes-Maries, céus e campos distantes de Arles.',h:'Toque e levante, sem girar. Carvão comprimido para os grandes, 2B para os de longe.',
+  f:R=>{const o=[];let y=178;while(y>12){const t=1-(y-12)/166,sp=lerp(15,4.5,t),w=lerp(5,1.3,t);
+   for(let x=10+R()*sp;x<292;x+=sp*(.8+R()*.4))o.push(dot(x,y+(R()-.5)*sp*.4,w,.9));y-=sp*.85}return o}},
+ {n:'Tracinho deitado',w:'Mar, campos ceifados, telhados.',h:'Fileiras desencontradas, como tijolos. Largura constante, ponta romba.',
+  f:R=>{const o=[];let y=176,row=0;while(y>14){const t=1-(y-14)/162,L=lerp(17,4,t),w=lerp(3,1.2,t);
+   for(let x=8+(row%2)*L*.8+R()*3;x<288;x+=L*1.7*(.9+R()*.2))o.push(seg(x,y+(R()-.5)*2,(R()-.5)*.12,L,w,.88));y-=L*.62+2;row++}return o}},
+ {n:'Vírgula',w:'Relva e trigo em primeiro plano.',h:'Um gancho curto que sobe e cai. Faça em tufos, nunca isoladas.',
+  f:R=>{const o=[];for(let c=0;c<26;c++){const cx=20+R()*260,cy=40+R()*135,s=.6+cy/175;
+   for(let i=0;i<5;i++)o.push(seg(cx+(i-2)*5*s+R()*2,cy+R()*4,-1.57+(i-2)*.22+(R()-.5)*.2,(14+R()*8)*s,2.2*s,.88,.3*(i<2?-1:1)))}
+   return o.sort((a,b)=>a.pts[0][1]-b.pts[0][1])}},
+ {n:'Chama',w:'Ciprestes de Saint-Rémy.',h:'Um C ou S de três traços paralelos, sempre subindo. Aperte no miolo, solte na borda.',
+  f:R=>cypress(R,150,174,162,36,[])},
+ {n:'Redemoinho',w:'Céus de 1889, folhagem das oliveiras.',h:'Trace a espiral bem leve e cubra com tracinhos que nunca se cruzam.',
+  f:R=>{const o=[];for(let r=8;r<92;r+=8.5){const n=Math.floor(r*.62)+4,ph=R()*TAU;
+   for(let i=0;i<n;i++){const th=ph+i/n*TAU,rr=r+i/n*8.5,x=150+Math.cos(th)*rr*1.45,y=95+Math.sin(th)*rr*.95;
+    if(x<6||x>294||y<6||y>184)continue;o.push(seg(x,y,Math.atan2(Math.cos(th)*.95,-Math.sin(th)*1.45),7+r*.07,1.5+r*.012,.86,.12))}}return o}},
+ {n:'Contorno quebrado',w:'Cascos de barco, troncos, figuras da Haia.',h:'Linha grossa em pedaços, com pequenas falhas. Mais pesada embaixo da forma.',
+  f:R=>{const q=(a,b,c)=>t=>[(1-t)*(1-t)*a[0]+2*t*(1-t)*b[0]+t*t*c[0],(1-t)*(1-t)*a[1]+2*t*(1-t)*b[1]+t*t*c[1]];
+   const L=(a,b)=>t=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t)];let o=[];
+   o=o.concat(broken(q([34,78],[70,165],[150,160]),4,.95,R,3),broken(q([150,160],[235,158],[270,92]),4,.95,R,3),
+    broken(q([34,78],[150,112],[270,92]),2.4,.9,R,4),broken(L([150,104],[158,12]),3,.92,R,2),broken(L([92,44],[246,20]),2,.88,R,3),
+    broken(q([60,96],[150,128],[252,108]),1.4,.7,R,5));
+   for(let i=0;i<9;i++)o.push(seg(80+i*19,118+Math.sin(i*.4)*5,1.45,24-Math.abs(i-4)*2,1.3,.7));return o}},
+ {n:'Onda longa',w:'Trigo ao vento, chão sob os ciprestes, colinas.',h:'Punho solto, braço inteiro. Linhas vizinhas quase paralelas, com falhas.',
+  f:R=>{const o=[];for(let y=24;y<178;y+=8.5){const ph=R()*2+y*.03;let x=10;
+   while(x<280){const L=50+R()*80,x0=x,x1=Math.min(290,x+L);
+    o.push(path(t=>[t,y+Math.sin(t/24+ph)*5+Math.sin(t/61+ph)*4],x0,x1,Math.ceil((x1-x0)/5),1.7+y*.006,.82));x=x1+5+R()*10}}return o}},
+ {n:'Raios',w:'Sol de O Semeador, astros de 1889.',h:'Disco em contorno e coroas de tracinhos que crescem ao se afastar.',
+  f:R=>{let o=broken(t=>[150+Math.cos(t*TAU)*20,95+Math.sin(t*TAU)*20],2.6,.9,R,5);
+   [[30,16,7],[44,24,9],[60,32,11],[78,40,13],[98,50,14]].forEach(([r,n,L],k)=>{for(let i=0;i<n;i++){const th=i/n*TAU+k*.13+(R()-.5)*.05,x=150+Math.cos(th)*r,y=95+Math.sin(th)*r*.92;
+    if(y>8&&y+Math.sin(th)*L<184&&y+Math.sin(th)*L>6)o.push(seg(x,y,th,L,1.9,.86))}});return o}},
+ {n:'Laço',w:'Arbustos, sebes de La Crau, mato de Saintes-Maries.',h:'Uma letra "e" cursiva repetida sem levantar o lápis. Mais apertada na sombra.',
+  f:R=>{const o=[];for(let row=0;row<8;row++){const y=30+row*19,inset=Math.abs(row-4)*14,x0=22+inset+R()*8,x1=278-inset-R()*8,r=6.5+R()*2,ph=R()*TAU;
+   o.push(path(t=>[t+Math.cos(t*.42+ph)*r,y-Math.sin(t*.42+ph)*r+Math.sin(t*.05)*4],x0,x1,Math.ceil((x1-x0)/1.8),1.5+row*.12,.84))}return o}},
+ {n:'Mancha e luz levantada',w:'Só nas fases de Haia e Nuenen: cabeças, interiores.',h:'Lateral do carvão, limpa-tipos para abrir a luz, acento preto no fim.',
+  f:R=>{const o=[];for(let i=0;i<90;i++){const s=seg(40+R()*190,30+R()*130,-.5+R()*.4,40+R()*40,16,.11);s.soft=1;o.push(s)}
+   for(let i=0;i<5;i++){const s=seg(120+i*9,48+i*5,1.2,60,5,.9);s.erase=1;s.soft=1;o.push(s)}
+   for(let i=0;i<14;i++)o.push(seg(188+R()*10,60+i*7,2.2+R()*.2,34,3.2,.9));
+   for(let i=0;i<6;i++)o.push(seg(70+i*7,150+R()*3,-.3,30,2.4,.85));return o}}
+];
+function cypress(R,cx,base,height,hw,o,skipGround){
+  const N=Math.round(height*hw/42);
+  for(let i=0;i<N;i++){const t=Math.pow(R(),.8),y=base-t*height,half=hw*Math.pow(Math.sin(Math.PI*Math.min(1,.12+t*.9)),.75)*(1-t*.25);
+   const off=(R()*1.3+R()*.7-1)*half,x=cx+off,edge=Math.abs(off)/(half+.01),r=(5+R()*7)*(hw/34),dir=off>0?1:-1,rot=-1.57-dir*(1.5+R()*.6);
+   const dark=edge<.5?.92:.72,n=edge<.5?3:2;
+   for(let k=0;k<n;k++)o.push(curl(x,y,r*(1-k*.2),dir,rot,(2.1-k*.3)*(hw/34+.4)/1.4,dark,2.3+R()*.7))}
+  o.sort((a,b)=>b.pts[0][1]-a.pts[0][1]);
+  if(!skipGround)for(let i=0;i<10;i++)o.push(seg(cx-hw*1.6+i*hw*.34,base+2+R()*4,-.15+R()*.3,hw*.5,1.8,.8,.2));
+  return o}
+
+const marksEl=$('#marks');
+MARKS.forEach((m,i)=>{const d=document.createElement('article');d.className='mark';
+  d.innerHTML='<button type="button" aria-label="Ver a marca '+m.n+' ser desenhada"><canvas></canvas></button><h4>'+m.n+'</h4><p><b>Onde:</b> '+m.w+'</p><p><b>No lápis:</b> '+m.h+'</p>';
+  marksEl.appendChild(d);const sk=new Sketch($('canvas',d),MW,MH,m.f,1500);sk.seed=i+3;$('button',d).addEventListener('click',()=>sk.draw(true))});
+
+/* ---------- campo em faixas (laboratório e abertura) ---------- */
+function fields(o,R,c){ // c: x0,x1,hor,bot,ratio,dens,dir,n,mask
+  const n=c.n||6,ok=c.mask||(()=>true);
+  for(let b=0;b<n;b++){const y0=c.hor+(c.bot-c.hor)*Math.pow(b/n,1.6),y1=c.hor+(c.bot-c.hor)*Math.pow((b+1)/n,1.6),t=(b+.5)/n,f=lerp(1/c.ratio,1,Math.pow(t,1.2)),type=b%6;
+    const edge=x=>y0+Math.sin(x/(90*f+30)+b*1.7)*3*f;
+    let x=c.x0;while(x<c.x1){const L=30+R()*90,xe=Math.min(c.x1,x+L);if(b>0)o.push(path(u=>[u,edge(u)],x,xe,Math.ceil((xe-x)/6),.8+2*f,.85));x=xe+3+R()*8}
+    if(b>0&&b<n-1)for(let h=0;h<3;h++){const hx=c.x0+R()*(c.x1-c.x0),hl=(50+R()*90)*f+12,r=5.5*f+1;if(hx+hl<c.x1)o.push(path(u=>[u+Math.cos(u*.5/f)*r,edge(u)-r*.9-Math.sin(u*.5/f)*r],hx,hx+hl,Math.ceil(hl/1.6),1+1.6*f,.92))}
+    const sp=(type===0?15:type===1?17:type===2?11:type===3?14:type===4?18:13)*f/c.dens+1.6;
+    for(let y=y0+sp*.7;y<y1-1;y+=sp*.8){for(let xx=c.x0+R()*sp;xx<c.x1;xx+=sp*(.85+R()*.5)){const yy=y+(R()-.5)*sp*.5;if(yy<edge(xx)+1||!ok(xx,yy))continue;
+      if(type===0||type===3)o.push(dot(xx,yy,(type===0?4.2:5.4)*f+.9,.9));
+      else if(type===1)o.push(seg(xx,yy,(R()-.5)*.1,19*f+2,2.8*f+.8,.86));
+      else if(type===2)o.push(seg(xx,yy,-1.57+c.dir+(R()-.5)*.12,24*f+3,2*f+.8,.84,.03));
+      else if(type===4)o.push(seg(xx,yy,-1.57+c.dir*1.3+(R()-.5)*.3,30*f+3,2.8*f+.8,.88,.28));
+      else o.push(seg(xx,yy,-1.57+c.dir*1.5+(R()-.5)*.25,40*f+4,3.2*f+.8,.9,.2))}}}
+  return o}
+
+const lab={ratio:6,dens:1,dir:20,sky:false};
+const labSk=new Sketch($('#lab-cv'),640,420,R=>{const o=[];
+  if(lab.sky)for(let y=10;y<92;y+=13)for(let x=8+R()*8;x<634;x+=15+R()*6)o.push(dot(x,y+(R()-.5)*7,1.5,.75));
+  let x=0;while(x<640){const xe=Math.min(640,x+40+R()*110);o.push(path(u=>[u,100+Math.sin(u/70)*4+Math.sin(u/23)*1.5],x,xe,Math.ceil((xe-x)/6),1.3,.85));x=xe+4+R()*6}
+  return fields(o,R,{x0:4,x1:636,hor:104,bot:418,ratio:lab.ratio,dens:lab.dens,dir:lab.dir*Math.PI/180})},1600);
+labSk.seed=21;
+[['ratio',v=>v+'×',v=>lab.ratio=+v],['dens',v=>v+'%',v=>lab.dens=v/100],['dir',v=>v+'°',v=>lab.dir=+v]].forEach(([k,fmt,set])=>{
+  const el=$('#lab-'+k),out=$('#lab-'+k+'-o');const up=()=>{out.textContent=fmt(el.value);set(el.value)};up();el.addEventListener('input',()=>{up();labSk.draw(false)})});
+$('#lab-sky').addEventListener('change',e=>{lab.sky=e.target.checked;labSk.draw(false)});
+
+/* ---------- paisagem de abertura ---------- */
+const heroSk=new Sketch($('#hero-cv'),1200,430,function(R){const o=[],hor=150+R()*14,sx=780+R()*220,sy=58+R()*24;
+  const cyx=120+R()*120,cyh=330+R()*40,cyw=60+R()*14,base=404;
+  const inCy=(x,y)=>{const t=(base-y)/cyh;if(t<0||t>1)return false;return Math.abs(x-cyx)<cyw*Math.pow(Math.sin(Math.PI*Math.min(1,.12+t*.9)),.75)*(1-t*.25)+5};
+  const cs=[[260+R()*160,50+R()*40,1],[540+R()*120,84+R()*30,-1]];
+  for(let y=10;y<hor-8;y+=11)for(let x=6+R()*10;x<1196;x+=15+R()*7){const yy=y+(R()-.5)*7;if(Math.hypot(x-sx,(yy-sy)*1.1)<86||inCy(x,yy))continue;
+    let vx=.75,vy=0;for(const c of cs){const dx=x-c[0],dy=yy-c[1],d=Math.hypot(dx,dy)+1,w=Math.exp(-d/150)*2.4*c[2];vx+=-dy/d*w;vy+=dx/d*w}
+    o.push(seg(x,yy,Math.atan2(vy,vx),11+R()*4,1.7,.8,.13))}
+  broken(t=>[sx+Math.cos(t*TAU)*20,sy+Math.sin(t*TAU)*20],2.6,.9,R,5).forEach(s=>o.push(s));
+  [[31,16,8],[46,24,10],[63,32,12]].forEach(([r,n,L],k)=>{for(let i=0;i<n;i++){const th=i/n*TAU+k*.13;o.push(seg(sx+Math.cos(th)*r,sy+Math.sin(th)*r,th,L,1.9,.86))}});
+  const hill=u=>hor-10-Math.sin(u/190+1)*9-Math.sin(u/67)*4;let x=0;
+  while(x<1200){const xe=Math.min(1200,x+50+R()*120);o.push(path(u=>[u,hill(u)],x,xe,Math.ceil((xe-x)/6),1.6,.86));x=xe+4+R()*8}
+  for(let u=6;u<1196;u+=7+R()*4){if(!inCy(u,hor-6))o.push(seg(u,hill(u)+2,1.2,5+R()*5,1.1,.7))}
+  const hx=660+R()*60,hy=hor+2;
+  [[hx,hy,hx,hy-22],[hx+46,hy,hx+46,hy-22],[hx,hy,hx+46,hy],[hx-5,hy-22,hx+23,hy-40],[hx+23,hy-40,hx+51,hy-22],[hx+28,hy,hx+28,hy-13],[hx+36,hy-13,hx+28,hy-13],[hx+36,hy,hx+36,hy-13]].forEach(l=>o.push(seg(l[0],l[1],Math.atan2(l[3]-l[1],l[2]-l[0]),Math.hypot(l[2]-l[0],l[3]-l[1]),2,.92)));
+  for(let i=0;i<7;i++)o.push(seg(hx+3+i*6,hy-21,-.95,9,1.1,.7));
+  fields(o,R,{x0:2,x1:1198,hor:hor,bot:428,ratio:7,dens:1,dir:.3,mask:(x,y)=>!inCy(x,y)&&!(x>hx-6&&x<hx+52&&y<hy+3)});
+  cypress(R,cyx,base,cyh,cyw,[],true).forEach(s=>o.push(s));
+  cypress(R,cyx+cyw*1.7,base-6,cyh*.42,cyw*.5,[],true).forEach(s=>o.push(s));
+  return o},4200);
+heroSk.seed=4;
+$('#hero-play').addEventListener('click',()=>heroSk.draw(true));
+$('#hero-new').addEventListener('click',()=>{heroSk.seed=(heroSk.seed%97)+1+Math.floor(Math.random()*5);heroSk.draw(true)});
+
+/* ---------- redesenhar em resize e troca de tema ---------- */
+function drawAll(){sketches.forEach(s=>s.draw(false))}
+let rz=0,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(drawAll,160)});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll);
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+drawAll();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(sketches.some(s=>Math.abs(s.cv.clientWidth*Math.min(2,devicePixelRatio||1)-s.cv.width)>2))drawAll()});
+
+/* ---------- progresso ---------- */
+const KEY='vg-lapis-progresso';let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
+const boxes=$$('.exs input[type=checkbox]');
+function refresh(){
+  const ex=boxes.filter(b=>b.id.startsWith('ex-')),done=ex.filter(b=>b.checked).length;
+  $('#total-txt').textContent=done+' de '+ex.length+' feitos';$('#total-bar').style.width=(done/ex.length*100)+'%';
+  $$('#rail-list a[data-sec]').forEach(a=>{const bs=$$('#'+a.dataset.sec+' input[id^="ex-"]');$('span',a).textContent=bs.filter(b=>b.checked).length+'/'+bs.length});
+  const rb=boxes.filter(b=>b.id.startsWith('rub-'));$('#rub-score').textContent=rb.filter(b=>b.checked).length+' de '+rb.length}
+boxes.forEach(b=>{if(saved[b.id])b.checked=true;b.addEventListener('change',()=>{saved[b.id]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}refresh()})});
+refresh();
+
+/* ---------- cronômetro ---------- */
+const T={el:$('#timer'),left:0,total:0,run:false,id:0,end:0};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+function tick(){if(!T.run)return;T.left=Math.max(0,(T.end-Date.now())/1000);$('#t-time').textContent=fmt(Math.ceil(T.left));
+  if(T.left<=0){T.run=false;clearInterval(T.id);T.el.classList.add('done');$('#t-pause').textContent='Acabou';}}
+function startTimer(min,name){clearInterval(T.id);T.total=min*60;T.left=T.total;T.end=Date.now()+T.total*1000;T.run=true;T.el.classList.remove('done');
+  $('#t-name').textContent=name;$('#t-time').textContent=fmt(T.total);$('#t-pause').textContent='Pausar';T.el.hidden=false;T.id=setInterval(tick,250)}
+$$('.ex button[data-min]').forEach(b=>b.addEventListener('click',()=>startTimer(+b.dataset.min,b.dataset.name)));
+$('#t-pause').addEventListener('click',()=>{if(T.left<=0)return;if(T.run){T.run=false;clearInterval(T.id);$('#t-pause').textContent='Continuar'}else{T.end=Date.now()+T.left*1000;T.run=true;T.id=setInterval(tick,250);$('#t-pause').textContent='Pausar'}});
+$('#t-reset').addEventListener('click',()=>startTimer(T.total/60,$('#t-name').textContent));
+$('#t-close').addEventListener('click',()=>{T.run=false;clearInterval(T.id);T.el.hidden=true});
+
+/* ---------- ampliar pranchas ---------- */
+const dlg=$('#zoom'),dimg=$('img',dlg);
+$$('.plate img,.pair img').forEach(im=>{im.tabIndex=0;const open=()=>{dimg.src=im.src;dimg.alt=im.alt;if(dlg.showModal)dlg.showModal()};
+  im.addEventListener('click',open);im.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})});
+dlg.addEventListener('click',()=>dlg.close());
+
+/* ---------- trilho: seção atual ---------- */
+const links=$$('#rail-list a');
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-20% 0px -70% 0px'});
+  $$('main section').forEach(s=>io.observe(s))}
+})();
+</script>
