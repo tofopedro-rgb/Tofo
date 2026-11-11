@@ -25,12 +25,12 @@ p{text-align:justify;margin-bottom:.55em}
 i,em{font-style:italic}
 
 /* sistema de página */
-.lab{font-family:Sans;font-size:6.4pt;letter-spacing:.09em;text-transform:uppercase;line-height:1.35}
+.lab{font-family:Sans;font-weight:500;font-size:7pt;line-height:1.35}
 .disp{font-family:Disp;line-height:.92;letter-spacing:-.01em}
 .circ{position:absolute;top:.42in;width:.24in;height:.24in;border:.6pt solid currentColor;border-radius:50%;
       font-family:Sans;font-size:6.2pt;font-weight:500;text-align:center;line-height:.225in}
 .L .circ{left:.5in}.R .circ{right:.5in}
-.foot{position:absolute;bottom:.42in;left:.5in;right:.5in;font-family:Sans;font-size:6.6pt;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.foot{position:absolute;bottom:.42in;left:.5in;right:.5in;font-family:Sans;font-size:7pt;color:var(--mute)}
 .foot b{font-weight:700;color:var(--ink);letter-spacing:0;margin-right:.14in}
 .R .foot{text-align:right}.R .foot b{margin:0 0 0 .14in}
 .full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -60,8 +60,8 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
 .toc .it li:before{content:"· ";color:var(--soft)}
 
 /* prefácio */
-.pref h1{position:absolute;top:.95in;left:0;right:0;text-align:center;font-size:17pt}
-.pref .sub{position:absolute;top:1.32in;left:0;right:0;text-align:center;color:var(--mute)}
+.pref h1{position:absolute;top:.8in;left:0;right:0;text-align:center;font-family:Serif;font-weight:400;font-size:30pt;letter-spacing:-.01em}
+.pref .sub{font-family:Serif !important;font-style:italic;font-size:10pt !important;font-weight:400 !important;position:absolute;top:1.38in;left:0;right:0;text-align:center;color:var(--mute)}
 .pref .body{position:absolute;top:1.85in;left:.95in;right:.95in;font-size:9.4pt}
 .pref .body .ini{font-family:Disp;font-size:30pt;float:left;line-height:.85;margin:.03in .06in 0 0}
 .sign{font-style:italic;text-align:right !important;margin-top:.8em}
@@ -94,41 +94,37 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
 /* prancha */
 .plate .ptop{position:absolute;left:.85in;right:.5in;top:.55in;display:flex;justify-content:space-between;border-bottom:.6pt solid var(--ink);padding-bottom:.06in}
 .plate .disc{position:absolute;left:.85in;top:1.05in;width:2.25in;height:2.25in;border-radius:50%;
-             background:url("img/starry-kraft.jpg") 83% 14%/520% auto no-repeat}
+             background:url("../img/starry.jpg") 83% 14%/520% auto no-repeat}
 .plate .k{position:absolute;left:.85in;top:3.6in;width:3.6in}
 .plate .k .no{font-family:Disp;font-size:30pt;line-height:1}
 .plate .k h3{font-family:Serif;font-weight:500;font-size:13pt;line-height:1.2;margin:.08in 0 .12in}
 .plate .k p{font-size:9pt}
 .plate table{border-collapse:collapse;width:100%;margin-top:.15in;font-family:Sans;font-size:6.6pt}
 .plate td{border-top:.6pt solid var(--soft);padding:.045in 0;vertical-align:top}
-.plate td:first-child{width:.95in;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+.plate td:first-child{width:.95in;color:var(--mute)}
 
-/* exercício */
-.ex .code{position:absolute;left:.5in;top:.85in;font-size:44pt}
-.ex .lvl{position:absolute;left:.5in;top:1.62in}
-.ex h1{position:absolute;left:.5in;top:1.95in;width:3.6in;font-size:16pt}
-.ex .meta{position:absolute;left:.5in;right:.5in;top:2.7in;display:flex;border-top:.6pt solid var(--ink);border-bottom:.6pt solid var(--ink)}
-.ex .meta div{flex:1;padding:.06in 0}
+/* exercício, uma página */
+.ex .code{position:absolute;left:.5in;top:.78in;font-size:30pt}
+.ex .lvl{position:absolute;left:1.68in;top:.86in}
+.ex h1{position:absolute;left:.5in;right:.5in;top:1.3in;font-size:13pt;line-height:1.08}
+.ex .meta{position:absolute;left:.5in;right:.5in;top:1.9in;display:flex;border-top:.6pt solid var(--ink);border-bottom:.6pt solid var(--ink)}
+.ex .meta div{flex:1;padding:.05in 0}
 .ex .meta div+div{border-left:.6pt solid var(--ink);padding-left:.08in}
-.ex .meta b{display:block;font-family:Sans;font-weight:700;font-size:8pt;text-transform:none;letter-spacing:0;margin-top:.02in}
-.ex .desc{position:absolute;left:.5in;width:3.1in;top:3.25in;font-size:9.6pt}
-.ex .done{position:absolute;right:.5in;width:1.45in;top:3.25in;border-left:.6pt solid var(--ink);padding-left:.1in}
-.ex .done p{text-transform:none;letter-spacing:0;font-family:Sans;font-size:7.6pt;line-height:1.4;text-align:left}
-.ex .steps{position:absolute;left:.5in;right:.5in;top:5.05in;display:flex;gap:.12in}
-.ex .steps figure{flex:1}
-.ex .steps img{width:100%;display:block}
-.ex .steps .dot{display:inline-block;width:.17in;height:.17in;border:.6pt solid var(--ink);border-radius:50%;text-align:center;line-height:.155in;font-family:Sans;font-size:6pt;margin-right:.04in}
-.ex .steps figcaption{font-family:Sans;font-size:6.6pt;margin-top:.06in}
-.ex .ref{position:absolute;left:.5in;width:3.1in;top:6.95in;font-size:8.4pt;color:var(--mute)}
-.model .frame{position:absolute;left:.6in;right:.6in;top:.95in;bottom:1.45in;background:#E3D7BE;padding:.18in}
-.model .frame img{width:100%;height:100%;object-fit:contain;display:block}
-.model .cap{position:absolute;left:.6in;right:.6in;bottom:1.1in}
-
+.ex .meta b{display:block;font-family:Sans;font-weight:700;font-size:7.6pt;margin-top:.02in}
+.ex .model{position:absolute;left:.5in;top:2.4in;width:3.38in;height:4.35in;object-fit:cover;display:block}
+.ex .steps{position:absolute;left:4.0in;right:.5in;top:2.4in}
+.ex .steps figure{margin-bottom:.1in}
+.ex .steps img{width:100%;height:1.19in;object-fit:cover;display:block}
+.ex .steps figcaption{font-family:Sans;font-size:6.6pt;margin-top:.04in}
+.ex .desc{position:absolute;left:.5in;width:3.38in;top:6.95in;font-size:9.2pt}
+.ex .done{position:absolute;left:4.0in;right:.5in;top:6.95in;border-left:1.2pt solid var(--clay);padding-left:.08in}
+.ex .done p{font-family:Sans;font-size:7.4pt;line-height:1.4;text-align:left;margin:0}
+.ex .done span{font-weight:700}
 /* abertura de capítulo */
 .quote .q{position:absolute;left:.55in;right:.75in;top:1.35in;font-family:Serif;font-size:21pt;font-style:italic;line-height:1.22;text-align:left}
 .quote .src{position:absolute;left:.55in;right:.75in;top:2.5in;border-top:.6pt solid var(--ink);padding-top:.07in}
 .quote .disc{position:absolute;left:.55in;bottom:1.05in;width:1.7in;height:1.7in;border-radius:50%;
-             background:url("img/roulin-kraft.jpg") 52% 40%/300% auto no-repeat}
+             background:url("../img/roulin.jpg") 52% 40%/300% auto no-repeat}
 .quote .dcap{position:absolute;left:.55in;bottom:.6in;width:2.2in}
 .chap .num{position:absolute;right:.45in;top:.55in;font-size:150pt;color:var(--clay)}
 .chap .sec{position:absolute;left:.5in;top:1.0in}
@@ -168,7 +164,7 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
 <!-- 3 · PREFÁCIO -->
 <section class="pg R pref">
   <div class="circ">iii</div>
-  <h1 class="disp">Prefácio</h1>
+  <h1>Prefácio</h1>
   <div class="sub lab">Por que aprender a desenhar com Van Gogh</div>
   <div class="body">
     <p><span class="ini">P</span>oucos artistas atravessaram o tempo como Vincent van Gogh. Ele vendeu pouquíssimo em vida, morreu aos 37 anos sem ter visto o próprio nome reconhecido e hoje está entre os pintores mais vistos e mais estudados do mundo.</p>
@@ -193,7 +189,7 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
 
 <!-- 5 · IMAGEM PLENA -->
 <section class="pg kraft R">
-  <img class="full" src="img/cypress-kraft.jpg" alt="">
+  <img class="full" src="../img/cypress.jpg" alt="">
 </section>
 
 <!-- 6 · LINHA DO TEMPO -->
@@ -207,7 +203,7 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
     <div><div class="dot">3</div><h4>Paris<br>1886 a 1888</h4><p>As gravuras japonesas: cada superfície ganha um padrão gráfico próprio. É a semente do alfabeto de marcas.</p></div>
     <div><div class="dot">4</div><h4>Arles e Saint-Rémy<br>1888 a 1890</h4><p>A pena de junco. O traço curto de Arles se alonga em curvas que ligam terra, árvore e céu.</p></div>
   </div>
-  <div class="wide"><img src="img/lacrau-kraft.jpg" alt=""><div class="cap"><b><i>La Crau vista de Montmajour</i></b>, Arles, julho de 1888. Pena de junco e pena de ave sobre grafite. Van Gogh Museum, Amsterdã.</div></div>
+  <div class="wide"><img src="../img/lacrau.jpg" alt=""><div class="cap"><b><i>La Crau vista de Montmajour</i></b>, Arles, julho de 1888. Pena de junco e pena de ave sobre grafite. Van Gogh Museum, Amsterdã.</div></div>
   <div class="foot"><b>14</b>Dez anos de desenho</div>
 </section>
 
@@ -215,7 +211,7 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
 <section class="pg R txt">
   <div class="circ">01</div>
   <h2 class="disp">Haia, 1881 a 1883</h2>
-  <div class="fig"><img src="img/sorrow-kraft.jpg" alt=""><div class="cap"><b><i>Sorrow</i></b><br>Haia, abril de 1882. Lápis, pena e tinta. The New Art Gallery Walsall.</div></div>
+  <div class="fig"><img src="../img/sorrow.jpg" alt=""><div class="cap"><b><i>Sorrow</i></b><br>Haia, abril de 1882. Lápis, pena e tinta. The New Art Gallery Walsall.</div></div>
   <div class="col">
     <p class="pull">Haia foi a escola do preto e branco.</p>
     <p>No fim de 1881 mudou-se para Haia e teve algumas aulas com Anton Mauve, pintor importante da Escola de Haia e parente da família por casamento. A relação durou pouco. Vincent passou a viver com Sien Hoornik, uma mulher grávida e com uma filha, que posou para muitos desenhos, entre eles <i>Sorrow</i>.</p>
@@ -226,7 +222,7 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
 
 <!-- 8 · PRANCHA, IMAGEM -->
 <section class="pg kraft L">
-  <img class="full" src="img/starry-kraft.jpg" alt="" style="object-position:30% 50%">
+  <img class="full" src="../img/starry.jpg" alt="" style="object-position:30% 50%">
 </section>
 
 <!-- 9 · PRANCHA, LEITURA -->
@@ -248,28 +244,28 @@ h4{font-family:Sans;font-weight:700;font-size:7.4pt;line-height:1.25;margin-bott
   <div class="foot">Catálogo das obras<b>231</b></div>
 </section>
 
-<!-- 10 · EXERCÍCIO -->
+<!-- 10 e 11 · EXERCÍCIOS, UM POR PÁGINA -->
 <section class="pg L ex">
-  <div class="circ">N2</div>
   <div class="code disp">C11</div>
-  <div class="lvl lab">Nível 2 · Essenciais · Capítulo 4</div>
+  <div class="lvl lab">Nível 2 · Essenciais<br>Capítulo 4</div>
   <h1 class="disp">Rosto de frente, sem barba</h1>
   <div class="meta lab"><div>Tempo<b>35 min</b></div><div>Material<b>Junco fino e médio</b></div><div>Teoria<b>O rosto como terreno</b></div></div>
-  <div class="desc"><p>Cinco zonas: cabelo, testa, bochechas, pescoço, casaco. O fundo fica vazio.</p><p>Antes de preencher, marque de leve a cruz do rosto e a linha dos olhos. Depois trabalhe zona por zona, sempre na direção do mapa: arcos na testa, anéis em volta dos olhos, chama no cabelo.</p></div>
-  <div class="done lab"><span>Pronto quando</span><p>cobrindo os olhos, a cabeça ainda tem volume.</p></div>
-  <div class="steps">
-    <figure><img src="img/st-c11-1.jpg" alt=""><figcaption><span class="dot">1</span>Esboço</figcaption></figure>
-    <figure><img src="img/st-c11-2.jpg" alt=""><figcaption><span class="dot">2</span>Primeiras tintas</figcaption></figure>
-    <figure><img src="img/st-c11-3.jpg" alt=""><figcaption><span class="dot">3</span>Quase pronto</figcaption></figure>
-  </div>
+  <img class="model" src="../img/c11.jpg" alt="">
+  <div class="steps"><figure><img src="../img/st-c11-1.jpg" alt=""><figcaption>1 · Esboço</figcaption></figure><figure><img src="../img/st-c11-2.jpg" alt=""><figcaption>2 · Primeiras tintas</figcaption></figure><figure><img src="../img/st-c11-3.jpg" alt=""><figcaption>3 · Quase pronto</figcaption></figure></div>
+  <div class="desc"><p>Cinco zonas: cabelo, testa, bochechas, pescoço, casaco. O fundo fica vazio. Trabalhe zona por zona, sempre na direção do mapa: arcos na testa, anéis em volta dos olhos, chama no cabelo.</p></div>
+  <div class="done"><p><span>Pronto quando</span> cobrindo os olhos, a cabeça ainda tem volume.</p></div>
   <div class="foot"><b>148</b>Exercícios · Nível 2</div>
 </section>
 
-<!-- 11 · MODELO -->
-<section class="pg kraft R model">
-  <div class="circ">N2</div>
-  <div class="frame"><img src="img/c11.jpg" alt=""></div>
-  <div class="cap"><b>C11 · Desenho-modelo acabado.</b> Etapa 4 de 4. Para desenhar por cima, use a folha de exercício com o modelo em azul claro.</div>
+<section class="pg R ex">
+  <div class="code disp">C12</div>
+  <div class="lvl lab">Nível 2 · Essenciais<br>Capítulo 4</div>
+  <h1 class="disp">Três quartos com barba, olhando para a esquerda</h1>
+  <div class="meta lab"><div>Tempo<b>40 min</b></div><div>Material<b>Junco fino e médio</b></div><div>Teoria<b>O rosto como terreno</b></div></div>
+  <img class="model" src="../img/c12.jpg" alt="">
+  <div class="steps"><figure><img src="../img/st-c12-1.jpg" alt=""><figcaption>1 · Esboço</figcaption></figure><figure><img src="../img/st-c12-2.jpg" alt=""><figcaption>2 · Primeiras tintas</figcaption></figure><figure><img src="../img/st-c12-3.jpg" alt=""><figcaption>3 · Quase pronto</figcaption></figure></div>
+  <div class="desc"><p>Seis zonas. A barba em vírgulas contra a pele em tracinhos: é essa troca de marca que separa as duas.</p></div>
+  <div class="done"><p><span>Pronto quando</span> barba e pele não se confundem, mesmo com o mesmo valor.</p></div>
   <div class="foot">Exercícios · Nível 2<b>149</b></div>
 </section>
 
