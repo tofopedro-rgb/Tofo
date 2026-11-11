@@ -807,7 +807,7 @@ if __name__ == '__main__':
     S = build_sections()
     S += [catalogue(), ex_index(), CREDITS]
     os.makedirs('out', exist_ok=True)
-    args = sys.argv[1:] or ['cover', 'pdf', 'epub']
+    args = sys.argv[1:] or ['cover', 'pdf']  # EPUB só com: python3 build.py epub
     make_details()
     if 'cover' in args:
         make_cover(); print('capa ok')
