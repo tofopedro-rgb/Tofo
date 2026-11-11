@@ -14,7 +14,8 @@ Panel.prototype.draw=function(animate){cancelAnimationFrame(this.raf);const cv=t
   const cssW=Math.min(box,this.maxH*v[2]/v[3]),dpr=Math.min(2,window.devicePixelRatio||1),k=cssW*dpr/v[2];
   cv.style.width=cssW+'px';cv.style.height=(cssW*v[3]/v[2])+'px';cv.width=Math.round(cssW*dpr);cv.height=Math.round(cssW*dpr*v[3]/v[2]);
   const ctx=cv.getContext('2d');ctx.setTransform(k,0,0,k,-v[0]*k,-v[1]*k);ctx.clearRect(v[0],v[1],v[2],v[3]);
-  const C=colors(),B=VG.build(S,this.level,this.seed),R=rng(this.seed+101);if(this.guides)B.guides=S.guides;VG.paintGuides(ctx,B,S,C);
+  const C=colors();if(S.drawLevel){S.drawLevel(ctx,this.level,C);return}
+  const B=VG.build(S,this.level,this.seed),R=rng(this.seed+101);if(this.guides)B.guides=S.guides;VG.paintGuides(ctx,B,S,C);
   const st=B.strokes,self=this,fin=()=>{if(self.after)self.after(ctx,C)};
   if(!animate||reduce||!st.length){for(const s of st)paint(ctx,s,C.ink,R);fin();return}
   let i=0;const t0=performance.now();
@@ -27,11 +28,6 @@ let rz=0,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)r
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
 new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 const inkScene=(W,H,fn,seed)=>({W:W,H:H,zones:[],guides:[],ink:fn(rng(seed*9973+11)),sample:()=>true});
-
-/* ---------- abertura ---------- */
-let heroSeed=4;const heroP=new Panel($('#hero-cv'),VG.scene(['hero',{seed:heroSeed}]),{dur:4200,maxH:900});watch(heroP);
-$('#hero-play').addEventListener('click',()=>heroP.draw(true));
-$('#hero-new').addEventListener('click',()=>{heroSeed=heroSeed%97+1+Math.floor(Math.random()*5);heroP.S=VG.scene(['hero',{seed:heroSeed}]);heroP.seed=heroSeed;heroP.draw(true)});
 
 /* ---------- as doze marcas ---------- */
 const MARKS=[
@@ -105,25 +101,18 @@ $('#fl-p2').addEventListener('click',preset([[320,200,1,260]],0,false));
 $('#fl-p3').addEventListener('click',preset([[320,520,1,300]],1,true));
 
 /* ---------- certo e errado ---------- */
-const hash=(x,y)=>{const s=Math.sin(x*12.9898+y*78.233)*43758.5453;return s-Math.floor(s)};
-const PAIRS=[
- {bad:['head',{yaw:-.7,bg:'none'}],spoil:S=>S.zones.forEach(z=>{if(z.dir)z.dir=(x,y)=>hash(Math.round(x/7),Math.round(y/7))*TAU}),good:['head',{yaw:-.7,bg:'none'}],
-  tb:'Traços em qualquer direção. O rosto vira uma mancha de textura e perde o volume.',tg:'Cada zona tem a sua corrente: anéis nos olhos, arcos na testa, leque na barba.'},
- {bad:['flow',{cs:[{x:190,y:160,s:1,r:130},{x:450,y:270,s:-1,r:130}]}],spoil:S=>S.zones.forEach(z=>{if(z.mark){z.mark=Object.assign({},z.mark,{jit:1.6})}}),good:['flow',{cs:[{x:190,y:160,s:1,r:130},{x:450,y:270,s:-1,r:130}]}],
-  tb:'A corrente geral está certa, mas os tracinhos se cruzam. Vira palha.',tg:'Vizinhos quase paralelos. A direção muda aos poucos e nenhum traço cruza outro.'},
- {bad:['fields',{ratio:1,n:5}],good:['fields',{ratio:7,n:5}],tb:'Todas as marcas do mesmo tamanho. A planície vira papel de parede.',tg:'As marcas encolhem até o horizonte. O chão afunda.'},
- {bad:['fields',{ratio:6,n:5,sky:1,dens:1.5}],good:['fields',{ratio:6,n:5,sun:[470,48,20,64]}],tb:'Tudo coberto com a mesma densidade. O olho não tem onde descansar.',tg:'O céu fica reservado. O vazio é o que deixa o resto vibrar.'}
-];
-const pairsEl=$('#pairs');
-PAIRS.forEach((p,i)=>{const row=document.createElement('div');row.className='pairrow';
-  row.innerHTML='<figure><div class="cvbox"><canvas></canvas></div><figcaption><b>Errado</b>'+p.tb+'</figcaption></figure><figure><div class="cvbox"><canvas></canvas></div><figcaption><b>Certo</b>'+p.tg+'</figcaption></figure>';
-  pairsEl.appendChild(row);const cs=$$('canvas',row),Sb=VG.scene(p.bad);if(p.spoil)p.spoil(Sb);watch(new Panel(cs[0],Sb,{seed:9+i,maxH:420}));watch(new Panel(cs[1],VG.scene(p.good),{seed:9+i,maxH:420}))});
+[['bad-head','c12','Traços em qualquer direção, cruzando uns aos outros. A semelhança até existe, mas o rosto fica chapado e sujo.','Cada zona tem a sua corrente: anéis nos olhos, arcos na testa, leque na barba. O volume aparece sem sombra.'],
+ ['bad-flow','f04','A ideia dos dois redemoinhos está lá, mas os tracinhos se cruzam. Vira palha.','Vizinhos quase paralelos. A direção muda aos poucos e nenhum traço cruza outro.'],
+ ['bad-plain','r13','Todas as marcas do mesmo tamanho e o céu coberto. A planície vira papel de parede.','As marcas encolhem até o horizonte e o céu fica reservado. O chão afunda.']
+].forEach(p=>{const row=document.createElement('div');row.className='pairrow';
+  row.innerHTML='<figure><div class="cvbox"><img loading="lazy" alt="Exemplo errado"></div><figcaption><b>Errado</b></figcaption></figure><figure><div class="cvbox"><img loading="lazy" alt="Exemplo certo"></div><figcaption><b>Certo</b></figcaption></figure>';
+  const im=$$('img',row),fc=$$('figcaption',row);im[0].src='ex/'+p[0]+'.jpg';im[1].src='ex/'+p[1]+'.jpg';fc[0].append(p[2]);fc[1].append(p[3]);$('#pairs').appendChild(row)});
 
 /* ---------- galerias ---------- */
 const dlg=$('#zoom'),dimg=$('img',dlg),dtxt=$('#zoom-txt');
 function zoom(src,txt){dimg.src=src;dtxt.textContent=txt||'';if(dlg.open)dlg.close();if(dlg.showModal)dlg.showModal()}
 window.VGApp={zoom:zoom};
-function xray(k){const pl=PL[k];VGAnalyze.load('img/'+k+'.jpg').then(im=>VGStudio.open(VGAnalyze.analyze(im),'Raio-X · '+pl.t,{level:2,under:.55,seed:5})).catch(()=>{})}
+function xray(k){const pl=PL[k];VGAnalyze.load('img/'+k+'.jpg').then(im=>VGStudio.open(VGModel.make(im,{ghost:false,sep:34}),'Raio-X · '+pl.t,{level:2,under:.6,seed:5})).catch(()=>{})}
 $('#zoom-close').addEventListener('click',()=>dlg.close());dimg.addEventListener('click',()=>dlg.close());
 function overlay(pic,img,pl){const ar=img.naturalHeight/img.naturalWidth*100,ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 100 '+ar);
   (pl.flow||[]).forEach(L=>{const P=L.map(q=>[q[0],q[1]*ar/100]),pa=document.createElementNS(ns,'path');let d='M'+P[0][0]+' '+P[0][1];
@@ -145,20 +134,22 @@ $('#n-pl').textContent=nPl;$('#n-ex').textContent=EX.length;
 /* ---------- exercícios ---------- */
 const KEY='vg-lapis-v2';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}};
-const LV=[[1,'1 Estrutura'],[2,'2 Direção'],[3,'3 Amostra'],[4,'Pronto']];
+const LV=[[4,'Modelo'],[1,'1 Estrutura'],[2,'2 Direção'],[3,'3 Amostra']],LVN={1:'1 Estrutura',2:'2 Direção',3:'3 Amostra',4:'Modelo'};
 EX.forEach((x,i)=>{const host=$('.exlist[data-ch="'+x.ch+'"]');if(!host)return;const a=document.createElement('article');a.className='xc';a.id='x-'+x.id;
-  const ref=x.ref&&PL[x.ref]?'<p class="ref"><img loading="lazy" src="img/'+x.ref+'.jpg" alt=""><span>Compare com: '+PL[x.ref].t+'</span></p>':'';
-  a.innerHTML='<div class="xg"><div class="cvbox"><canvas aria-label="Rascunho-guia do exercício"></canvas></div><div class="lv" role="group" aria-label="Estado do rascunho">'+LV.map(l=>'<button type="button" data-l="'+l[0]+'" aria-pressed="'+(l[0]===3)+'">'+l[1]+'</button>').join('')+
-    '</div><div class="xa"><button type="button" data-a="draw" class="solid">Desenhar aqui</button><button type="button" data-a="play">Ver o gesto</button><button type="button" data-a="img">Abrir como imagem</button></div></div>'+
+  const ref=x.ref&&PL[x.ref]?'<p class="ref"><img loading="lazy" src="img/'+x.ref+'.jpg" alt=""><span>Obra dele para comparar: '+PL[x.ref].t+'</span></p>':'';
+  a.innerHTML='<div class="xg"><div class="cvbox"><img class="model" loading="lazy" alt=""><canvas hidden aria-label="Rascunho-guia do exercício"></canvas></div><div class="lv" role="group" aria-label="Estado do rascunho">'+LV.map(l=>'<button type="button" data-l="'+l[0]+'" aria-pressed="'+(l[0]===4)+'">'+l[1]+'</button>').join('')+
+    '</div><div class="xa"><button type="button" data-a="draw" class="solid">Desenhar aqui</button><button type="button" data-a="img">Abrir como imagem</button></div></div>'+
     '<div class="xt"><p class="num">'+x.id.toUpperCase()+'</p><h4></h4><p class="meta"></p><p class="d"></p><p class="crit"><b>Pronto quando:</b> <span></span></p>'+ref+
     '<div class="done"><label><input type="checkbox" id="ex-'+x.id+'"> Feito</label><button type="button" data-a="timer">Cronômetro '+x.min+':00</button></div></div>';
   $('h4',a).textContent=x.t;$('.meta',a).textContent=x.m;$('.d',a).textContent=x.d;$('.crit span',a).textContent=x.c;host.appendChild(a);
-  const S=VG.scene(x.s),p=new Panel($('canvas',a),S,{level:3,seed:i+2,dur:3200});watch(p);
-  $$('.lv button',a).forEach(b=>b.addEventListener('click',()=>{p.level=+b.dataset.l;$$('.lv button',a).forEach(o=>o.setAttribute('aria-pressed',o===b));p.draw(false)}));
-  $('[data-a=play]',a).addEventListener('click',()=>{if(p.level<3){p.level=4;$$('.lv button',a).forEach(o=>o.setAttribute('aria-pressed',o.dataset.l==='4'))}p.draw(true)});
-  $('[data-a=img]',a).addEventListener('click',()=>{const c=document.createElement('canvas');VG.render(c,S,p.level,EXPORT,p.seed,1800);
-    zoom(c.toDataURL('image/png'),x.id.toUpperCase()+' · '+LV[p.level-1][1]+'. Segure o dedo sobre a imagem e escolha Copiar ou Salvar. No Procreate: Ações › Adicionar › Colar. O fundo é transparente.')});
-  $('[data-a=draw]',a).addEventListener('click',()=>VGStudio.open(S,x.id.toUpperCase()+' · '+x.t,{level:p.level<4?p.level:3,seed:p.seed}));
+  const img=$('img.model',a),cv=$('canvas',a),src='ex/'+x.id+'.jpg';img.src=src;img.alt='Desenho-modelo: '+x.t;let S=null,P=null,level=4,pend=null;
+  const need=()=>S?Promise.resolve(S):(pend||(pend=VGAnalyze.load(src).then(im=>{S=VGModel.make(im);P=new Panel(cv,S,{level:1,seed:i+2});return S})));
+  $$('.lv button',a).forEach(b=>b.addEventListener('click',()=>{level=+b.dataset.l;$$('.lv button',a).forEach(o=>o.setAttribute('aria-pressed',o===b));
+    if(level===4){img.hidden=false;cv.hidden=true}else need().then(()=>{img.hidden=true;cv.hidden=false;P.level=level;P.draw(false)})}));
+  $('[data-a=draw]',a).addEventListener('click',()=>need().then(S=>VGStudio.open(S,x.id.toUpperCase()+' · '+x.t,{level:level===4?2:level,seed:i+2})));
+  $('[data-a=img]',a).addEventListener('click',()=>{if(level===4){zoom(src,x.id.toUpperCase()+' · Modelo. Segure o dedo sobre a imagem e escolha Copiar ou Salvar.');return}
+    need().then(S=>{const c=document.createElement('canvas');VG.render(c,S,level,EXPORT,i+2,1600);zoom(c.toDataURL('image/png'),x.id.toUpperCase()+' · '+LVN[level]+'. Segure o dedo sobre a imagem e escolha Copiar ou Salvar. No Procreate: Ações › Adicionar › Colar. O fundo é transparente.')})});
+  img.addEventListener('click',()=>zoom(src,x.id.toUpperCase()+' · '+x.t));
   $('[data-a=timer]',a).addEventListener('click',()=>startTimer(x.min,x.id.toUpperCase()+' '+x.t));
   const r=$('.ref img',a);if(r)r.addEventListener('click',()=>zoom(r.src,PL[x.ref].t+'. '+PL[x.ref].c));
   const cb=$('#ex-'+x.id,a);cb.checked=!!saved[cb.id];cb.addEventListener('change',()=>{saved[cb.id]=cb.checked;save();refresh()})});
@@ -170,14 +161,14 @@ refresh();
 
 /* ---------- ateliê: foto e raio-x ---------- */
 const ph={img:null,k:1,dens:1,panel:null,S:null};
-function phBuild(){if(!ph.img)return;ph.S=VGAnalyze.analyze(ph.img,{k:ph.k,dens:ph.dens});if(!ph.panel){ph.panel=new Panel($('#ph-cv'),ph.S,{level:4,seed:7,dur:3600});watch(ph.panel);if($('#ph-cv').offsetParent)ph.panel.draw(false)}else{ph.panel.S=ph.S;ph.panel.draw(false)}}
+function phBuild(){if(!ph.img)return;const Sa=VGAnalyze.analyze(ph.img,{k:ph.k,dens:ph.dens});ph.S=VGModel.make(ph.img,{sep:34});const base=ph.S.drawLevel;
+  ph.S.drawLevel=(ctx,l,C)=>{if(l===3){const B=VG.build(Sa,4,7),R=rng(108);for(const st of B.strokes)paint(ctx,st,C.ink,R)}else base(ctx,l,C)};if(!ph.panel){ph.panel=new Panel($('#ph-cv'),ph.S,{level:3,seed:7,dur:3600});watch(ph.panel);if($('#ph-cv').offsetParent)ph.panel.draw(false)}else{ph.panel.S=ph.S;ph.panel.draw(false)}}
 VGAnalyze.load('img/sp_felt.jpg').then(im=>{ph.img=im;phBuild()}).catch(()=>{});
 $('#ph-file').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>VGAnalyze.load(rd.result).then(im=>{ph.img=im;$('#ph-tag').textContent='SUA FOTO';$('#ph-title').textContent='Sua imagem, lida pelo curso';phBuild()}).catch(()=>{$('#ph-title').textContent='Não consegui abrir esse arquivo. Tente uma foto em JPG ou PNG.'});rd.readAsDataURL(f)});
 let phT=0;const phRe=()=>{clearTimeout(phT);phT=setTimeout(phBuild,120)};
 $('#ph-k').addEventListener('input',e=>{ph.k=e.target.value/100;phRe()});$('#ph-d').addEventListener('input',e=>{ph.dens=e.target.value/100;phRe()});
 $$('#ph-lv button').forEach(b=>b.addEventListener('click',()=>{if(!ph.panel)return;ph.panel.level=+b.dataset.l;$$('#ph-lv button').forEach(o=>o.setAttribute('aria-pressed',o===b));ph.panel.draw(false)}));
-$('#ph-play').addEventListener('click',()=>{if(ph.panel)ph.panel.draw(true)});
-$('#ph-draw').addEventListener('click',()=>{if(ph.S)VGStudio.open(ph.S,$('#ph-title').textContent,{level:ph.panel.level<4?ph.panel.level:2,under:.35,seed:7})});
+$('#ph-draw').addEventListener('click',()=>{if(ph.S)VGStudio.open(ph.S,$('#ph-title').textContent,{level:ph.panel.level<3?ph.panel.level:2,seed:7})});
 $('#ph-img').addEventListener('click',()=>{if(!ph.S)return;const c=document.createElement('canvas');VG.render(c,ph.S,ph.panel.level,EXPORT,7,1800);zoom(c.toDataURL('image/png'),'Rascunho da sua imagem. Segure o dedo sobre ele e escolha Copiar ou Salvar. No Procreate: Ações › Adicionar › Colar.')});
 const xr=$('#xray');Object.keys(PL).forEach(k=>{const b=document.createElement('button');b.type='button';b.innerHTML='<img loading="lazy" alt=""><span></span>';$('img',b).src='img/'+k+'.jpg';$('span',b).textContent=PL[k].t;b.setAttribute('aria-label','Raio-X de '+PL[k].t);b.addEventListener('click',()=>xray(k));xr.appendChild(b)});
 

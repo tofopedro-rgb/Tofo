@@ -19,6 +19,7 @@ function fit(){const r=stage.getBoundingClientRect(),sc=Math.min(r.width/V[2],r.
   $('#st-wrap').style.width=w+'px';$('#st-wrap').style.height=h+'px'}
 function drawBase(){const ctx=cvB.getContext('2d'),C=colors();ctx.globalAlpha=1;ctx.fillStyle=C.paper;ctx.fillRect(V[0],V[1],V[2],V[3]);
   if(S.img&&under>0){ctx.globalAlpha=under;ctx.drawImage(S.img,0,0,S.W,S.H);ctx.globalAlpha=1}
+  if(S.drawLevel){S.drawLevel(ctx,level,C);return}
   if(level>0){const B=VG.build(S,level,seed),R=VG.rng(seed+101);VG.paintGuides(ctx,B,S,C);for(const s of B.strokes)VG.paint(ctx,s,C.ink,R)}}
 function strokeColor(s,C){if(!evalOn)return C.ink;if(s.res)return COL.bad;if(s.dev==null)return C.ink;return s.dev<.38?COL.good:s.dev<.7?COL.mid:COL.bad}
 function paintStroke(ctx,s,color){const P=s.pts,n=P.length;ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineCap='round';ctx.lineJoin='round';

@@ -85,6 +85,7 @@ function paintGuides(ctx,B,S,C){const v=bounds(S),u=v[2]/600;ctx.lineCap='round'
 function render(cv,S,level,C,seed,pxW){const v=bounds(S),k=pxW/v[2];cv.width=Math.round(pxW);cv.height=Math.round(pxW*v[3]/v[2]);
   const ctx=cv.getContext('2d');ctx.setTransform(k,0,0,k,-v[0]*k,-v[1]*k);ctx.clearRect(v[0],v[1],v[2],v[3]);
   if(C.bg){ctx.fillStyle=C.bg;ctx.fillRect(v[0],v[1],v[2],v[3])}
+  if(S.drawLevel){S.drawLevel(ctx,level,C);return {ctx:ctx}}
   const B=build(S,level,seed),R=rng((seed||1)+101);paintGuides(ctx,B,S,C);for(const s of B.strokes)paint(ctx,s,C.ink,R);return {ctx:ctx,B:B}}
 
 /* =====================================================================

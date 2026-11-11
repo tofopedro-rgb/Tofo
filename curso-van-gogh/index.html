@@ -60,7 +60,7 @@ h3{font:700 23px/1.2 var(--body);margin-top:22px}
 .note{border-left:3px solid var(--sun);padding:2px 0 2px 16px;max-width:62ch;font-size:18px;margin:0}
 .note cite{display:block;font:400 12px/1.5 var(--mono);color:var(--ink-2);font-style:normal;margin-top:6px}
 .stage{background:var(--sheet);border:1px solid var(--rule);padding:10px}
-.stage canvas{display:block;width:100%}
+.stage img{display:block;width:100%;height:auto}
 .stage-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:10px 4px 2px}
 .stage-bar p{font-size:14px;color:var(--ink-2);min-width:0;flex:1 1 260px}
 .next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:18px;margin-top:20px}
@@ -93,7 +93,8 @@ td.yr{font:500 13px/1.7 var(--mono);font-variant-numeric:tabular-nums}
 .xc{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;padding:22px 0;border-bottom:1px solid var(--rule);align-items:start}
 .xg{display:grid;gap:8px;min-width:0}
 .xg .cvbox{background:var(--sheet);border:1px solid var(--rule);line-height:0;display:flex;justify-content:center}
-.xg canvas{display:block;max-width:100%;max-height:600px}
+.xg canvas,.xg img.model{display:block;max-width:100%;max-height:600px;width:auto;height:auto}
+.xg img.model{cursor:zoom-in}
 .lv{display:flex;flex-wrap:wrap;gap:0}
 .lv button{flex:1 1 auto;font:500 12px/1 var(--mono);padding:8px 6px;border-color:var(--rule);margin-left:-1px;color:var(--ink-2)}
 .lv button:first-child{margin-left:0}
@@ -137,7 +138,7 @@ td.yr{font:500 13px/1.7 var(--mono);font-variant-numeric:tabular-nums}
 .pairrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .pairrow figure{margin:0;display:grid;gap:6px;align-content:start}
 .pairrow .cvbox{background:var(--sheet);border:1px solid var(--rule);display:flex;justify-content:center}
-.pairrow canvas{display:block}
+.pairrow img{display:block;width:100%;height:auto}
 .pairrow figcaption{font-size:14.5px;line-height:1.4;color:var(--ink-2)}
 .pairrow figcaption b{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--ink)}
 .pairrow figure:last-child figcaption b{color:var(--sun-ink)}
@@ -237,25 +238,24 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 
 <!-- ===================== INÍCIO ===================== -->
 <section class="view" id="v-inicio">
-  <p class="lede">Um curso sobre a parte seca de Van Gogh: as <b>ranhuras</b>, a <b>direção</b> de cada traço e o <b>fluxo</b> que liga tudo. São <b><span id="n-ex">91</span> exercícios</b>, cada um com um rascunho-guia para desenhar por cima, e <b><span id="n-pl">40</span> obras originais</b> comentadas.</p>
+  <p class="lede">Um curso sobre a parte seca de Van Gogh: as <b>ranhuras</b>, a <b>direção</b> de cada traço e o <b>fluxo</b> que liga tudo. São <b><span id="n-ex">91</span> exercícios</b>, cada um com um desenho-modelo no estilo dele e três guias para desenhar por cima, e <b><span id="n-pl">47</span> obras originais</b> comentadas.</p>
   <div class="stage">
-    <canvas id="hero-cv" aria-label="Paisagem gerada com o vocabulário de marcas de Van Gogh"></canvas>
+    <img src="ex/hero.jpg" alt="Paisagem provençal a pena: cipreste, trigal, casa de fazenda e céu em redemoinho">
     <div class="stage-bar">
-      <p>Esta paisagem não é dele. Ela é desenhada agora, traço por traço, só com as marcas do Capítulo 1.</p>
-      <div class="btns"><button class="solid" id="hero-play">Ver o gesto</button><button id="hero-new">Outra paisagem</button></div>
+      <p>Esta paisagem não é dele. É um desenho-modelo feito para o curso no estilo da pena de junco, como todos os 91 modelos dos exercícios. As obras dele aparecem nas galerias de cada capítulo, sempre identificadas.</p>
     </div>
   </div>
 
   <h3>Como cada exercício funciona</h3>
   <div class="prose">
-    <p>Todo exercício tem um rascunho em quatro estados. Troque de estado nos botões embaixo do desenho.</p>
+    <p>Todo exercício parte de um desenho-modelo feito no estilo dele, como um professor que domina a pena de junco desenharia na sua frente. Embaixo do modelo há três guias tirados dele, do mais aberto ao mais resolvido.</p>
     <ul>
-      <li><b>1 Estrutura.</b> Só os contornos, eixos e divisões, em azul. Para quando você já sabe a direção de cor.</li>
-      <li><b>2 Direção.</b> A estrutura com setas mostrando para onde o traço corre em cada zona.</li>
-      <li><b>3 Amostra.</b> Estrutura, setas e um trecho já resolvido. Você continua a partir dele.</li>
-      <li><b>Pronto.</b> Uma solução completa, para conferir no fim. Não é a única possível.</li>
+      <li><b>Modelo.</b> O desenho completo. Estude antes de começar e compare no fim.</li>
+      <li><b>1 Estrutura.</b> Só os contornos e acentos mais pesados do modelo, em azul. Para quando você já sabe a direção de cor.</li>
+      <li><b>2 Direção.</b> O modelo bem apagado, com poucas linhas de corrente em laranja mostrando para onde o traço corre.</li>
+      <li><b>3 Amostra.</b> O mesmo guia, com o lado esquerdo do modelo já resolvido em tinta. Você continua o lado direito.</li>
     </ul>
-    <p class="legend"><span><i style="border-color:var(--guide)"></i>estrutura</span><span><i style="border-color:var(--arrow)"></i>direção do traço</span><span><i style="border-color:var(--ink-draw)"></i>marca final</span></p>
+    <p class="legend"><span><i style="border-color:var(--guide)"></i>estrutura</span><span><i style="border-color:var(--arrow)"></i>direção do traço</span><span><i style="border-color:var(--ink-draw)"></i>trecho resolvido</span></p>
     <p><b>No Procreate:</b> toque em "Abrir como imagem", segure o dedo sobre ela e escolha Copiar. No Procreate, Ações › Adicionar › Colar. Baixe a opacidade da camada do guia para 40% e desenhe numa camada nova por cima. O pacote com todos os guias em PNG e os pincéis está em <a href="#pinceis">Pincéis e arquivos</a>.</p>
     <p><b>Aqui mesmo:</b> toque em "Desenhar aqui". O exercício abre no <a href="#atelie">Ateliê</a>, com uma bússola que mostra a direção certa embaixo da caneta e uma avaliação dos seus traços.</p>
     <p><b>No papel:</b> imprima o PDF de guias (um exercício por página, em tons claros) e desenhe direto sobre a folha com lápis 6B, giz preto ou carvão.</p>
@@ -394,7 +394,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
   </div>
 
   <h3>Por que parece errado</h3>
-  <div class="prose"><p>O mesmo desenho, feito de dois jeitos. À esquerda, o erro. À direita, a correção.</p></div>
+  <div class="prose"><p>Os três erros mais comuns de quem tenta imitar esses desenhos, lado a lado com a correção. Os exemplos errados foram feitos de propósito.</p></div>
   <div class="pairs" id="pairs"></div>
 
   <h3>Obras com a direção marcada</h3>
@@ -519,8 +519,8 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
   <div class="xc" id="ph-card">
     <div class="xg">
       <div class="cvbox"><canvas id="ph-cv" aria-label="Rascunho gerado a partir da imagem"></canvas></div>
-      <div class="lv" role="group" aria-label="Estado do rascunho" id="ph-lv"><button type="button" data-l="1" aria-pressed="false">1 Estrutura</button><button type="button" data-l="2" aria-pressed="false">2 Direção</button><button type="button" data-l="3" aria-pressed="false">3 Amostra</button><button type="button" data-l="4" aria-pressed="true">Pronto</button></div>
-      <div class="xa"><button type="button" id="ph-draw" class="solid">Desenhar aqui</button><button type="button" id="ph-play">Ver o gesto</button><button type="button" id="ph-img">Abrir como imagem</button></div>
+      <div class="lv" role="group" aria-label="Estado do rascunho" id="ph-lv"><button type="button" data-l="1" aria-pressed="false">1 Estrutura</button><button type="button" data-l="2" aria-pressed="false">2 Direção</button><button type="button" data-l="3" aria-pressed="true">3 Ranhuras</button><button type="button" data-l="4" aria-pressed="false">Original</button></div>
+      <div class="xa"><button type="button" id="ph-draw" class="solid">Desenhar aqui</button><button type="button" id="ph-img">Abrir como imagem</button></div>
     </div>
     <div class="xt up">
       <p class="num" id="ph-tag">EXEMPLO</p>
@@ -529,12 +529,12 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
       <input type="file" id="ph-file" accept="image/*" aria-label="Escolher foto">
       <label for="ph-k">Tamanho da marca <input type="range" id="ph-k" min="60" max="180" step="10" value="100"></label>
       <label for="ph-d">Densidade <input type="range" id="ph-d" min="50" max="180" step="10" value="100"></label>
-      <p class="crit"><b>Como ler:</b> no nível 1, as linhas azuis são as fronteiras entre claro, médio e escuro. No nível 2, as setas seguem os contornos e as texturas da foto. O estado "Pronto" é a foto inteira traduzida em ranhuras.</p>
+      <p class="crit"><b>Como ler:</b> no estado 1 ficam só os contornos e escuros mais fortes da foto, em azul. No 2, linhas de corrente laranja mostram a direção dos traços. No 3, a foto inteira traduzida em ranhuras, para servir de modelo. "Original" mostra a foto.</p>
     </div>
   </div>
 
   <h3>Raio-X das obras</h3>
-  <div class="prose"><p>Toque numa obra. Ela abre no Ateliê com as setas de direção calculadas a partir da própria pintura ou desenho, e com a obra aparecendo por baixo. Mova o controle "Obra por baixo" para comparar. Em pinturas a leitura segue a pincelada, e em desenhos segue o traço.</p></div>
+  <div class="prose"><p>Toque numa obra. Ela abre no Ateliê com as setas de direção calculadas a partir da própria pintura ou desenho, e com a obra aparecendo por baixo. Mova o controle "Modelo por baixo" para comparar. Em pinturas a leitura segue a pincelada, e em desenhos segue o traço.</p></div>
   <div class="xr" id="xray"></div>
   <div class="next"><a href="#projeto">← Capítulo 6</a><a href="#pinceis">Pincéis e arquivos →</a></div>
 </section>
@@ -547,8 +547,8 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <ul>
       <li><b>VanGogh-Lapis.brushset</b>: seis pincéis para o Procreate. Na pasta <code>pinceis</code> há também cada um como arquivo .brush separado.</li>
       <li><b>pinceis-manual</b>: a forma da ponta e o grão de cada pincel em PNG, para montar à mão no Estúdio de Pincéis (Forma › Importar, Grão › Importar).</li>
-      <li><b>guias-procreate.zip</b>: todos os rascunhos em PNG transparente, nos três níveis, para importar como camada.</li>
-      <li><b>guias-para-imprimir.pdf</b>: um exercício por página, em tons claros, para desenhar por cima com lápis ou carvão.</li>
+      <li><b>guias-procreate.zip</b>: para cada exercício, o desenho-modelo em JPG e os três guias em PNG transparente, para importar como camada.</li>
+      <li><b>guias-para-imprimir.pdf</b>: um exercício por página, com o modelo pequeno no topo e o guia de direção em tons claros, grande, para desenhar por cima com lápis ou carvão.</li>
     </ul>
     <p><b>Para instalar os pincéis:</b> salve o arquivo .brushset no app Arquivos do iPad e toque nele. O Procreate abre e cria o conjunto "Van Gogh a Lápis" no topo da biblioteca.</p>
     <p><b>Aviso:</b> os pincéis foram montados sem um Procreate para testar. Se a importação falhar ou algum pincel se comportar de forma estranha, use a receita manual abaixo: leva dois minutos por pincel e o resultado é o mesmo.</p>
@@ -605,7 +605,7 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 
 </main>
 </div>
-<footer>O progresso marcado fica salvo só neste navegador. Os rascunhos-guia e as demonstrações são gerados por código para ensinar o gesto e não reproduzem nenhuma obra específica.</footer>
+<footer>O progresso marcado fica salvo só neste navegador. Os desenhos-modelo dos exercícios foram gerados com inteligência artificial no estilo dos desenhos de Van Gogh e não são obras dele. As obras dele estão nas galerias, com local, data e acervo. Os guias e as demonstrações das marcas são gerados por código.</footer>
 </div>
 
 <div class="timer" id="timer" hidden>
@@ -618,10 +618,10 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 <dialog id="studio" aria-label="Ateliê"><div class="st">
   <div class="st-bar">
     <strong id="st-title"></strong>
-    <div class="seg" id="st-lv" role="group" aria-label="Guia"><button data-v="0">Sem guia</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">Pronto</button></div>
+    <div class="seg" id="st-lv" role="group" aria-label="Guia"><button data-v="0">Sem guia</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">Modelo</button></div>
     <div class="seg" id="st-bw" role="group" aria-label="Ponta"><button data-v="1.4">Fina</button><button data-v="2.4">Média</button><button data-v="3.8">Grossa</button></div>
     <button id="st-comp" aria-pressed="true">Bússola</button><button id="st-eval" aria-pressed="false">Ver avaliação</button>
-    <label id="st-underbox" hidden>Obra por baixo <input type="range" id="st-under" min="0" max="100" value="0"></label>
+    <label id="st-underbox" hidden>Modelo por baixo <input type="range" id="st-under" min="0" max="100" value="0"></label>
     <button id="st-undo">Desfazer</button><button id="st-clear">Limpar</button><button id="st-save">Abrir como imagem</button><button id="st-close" class="solid">Fechar</button>
   </div>
   <div class="st-stage" id="st-stage"><div id="st-wrap"><canvas id="st-base"></canvas><canvas id="st-ink"></canvas><canvas id="st-hud"></canvas></div></div>
@@ -634,5 +634,6 @@ footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:16px;font-si
 <script src="exercises.js"></script>
 <script src="plates.js"></script>
 <script src="analyze.js"></script>
+<script src="imgscene.js"></script>
 <script src="studio.js"></script>
 <script src="app.js"></script>
