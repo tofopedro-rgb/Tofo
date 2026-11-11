@@ -99,8 +99,13 @@ def build_sections():
     S = []
     for s in src:
         h = md2html(s['md'])
+        if s['id'] in ('como-usar', 'cap1'):
+            h = add_icons(h)
+        if s['id'] == 'vida':
+            i = h.index('<h2>')
+            h = h[:i] + timeline_html() + h[i:]
         if s['kind'] == 'chapter':
-            h += practice_list(s['id'])
+            h += details_html(s['id']) if s['id'] in DETAILS else practice_list(s['id'])
         S.append({**s, 'html': h})
         if s['id'] == 'cap8':  # depois da Parte II vem a Parte III
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
@@ -150,6 +155,74 @@ As reproduções de obras de Vincent van Gogh são de domínio público e foram 
 Os desenhos-modelo dos exercícios, as demonstrações em etapas, as amostras de marcas, as ilustrações de abertura das partes e as fotografias de materiais foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele.
 
 Texto composto em EB Garamond e Archivo.""")}
+
+# ---------------------------------------------------------------- detalhes das obras (balões)
+# capítulo: [(imagem, centro x, centro y, lado como fração da largura, título, texto)]
+DETAILS = {
+ 'cap2': [('lacrau', .45, .62, .22, 'Faixas de tracinhos', 'Cada campo da planície é uma faixa de tracinhos deitados. Mais longe, a marca encolhe.'),
+          ('boats', .78, .84, .2, 'Areia em pontos', 'A praia é feita só de pontos. O papel que sobra entre eles vira luz.'),
+          ('garden', .3, .72, .2, 'Uma marca por canteiro', 'Vírgulas num canteiro, pontos no outro. A fronteira aparece só pela troca de marca.')],
+ 'cap3': [('starry', .885, .14, .2, 'A coroa da lua', 'Os tracinhos giram em anéis em volta do astro, como correntes.'),
+          ('cypress', .45, .18, .26, 'O cacho em chama', 'Cada cacho é um C de dois a quatro traços paralelos, sempre subindo.'),
+          ('wheatcyp', .5, .15, .24, 'O céu que se enrola', 'As nuvens correm em curvas que se fecham em redemoinho.')],
+ 'cap4': [('cover-roulin', .39, .385, .15, 'O olho como redemoinho', 'Anéis curtos em volta da órbita. A pálpebra de cima é a linha mais grossa.'),
+          ('cover-roulin', .5, .6, .24, 'A barba em leque', 'Curvas que descem e se abrem, em vez de fios soltos.'),
+          ('escalier2', .86, .16, .2, 'O fundo pontilhado', 'Pontos em fileiras empurram a cabeça para a frente.')],
+ 'cap5': [('sp_felt', .13, .42, .24, 'O halo de tracinhos', 'Pinceladas curtas irradiam da cabeça e formam um halo.'),
+          ('sp_orsay', .14, .2, .26, 'O fundo em redemoinho', 'Em 1889 o fundo inteiro gira em correntes.'),
+          ('sp_chi', .5, .44, .2, 'A pele em tracinhos', 'Cada toque de cor é um tracinho separado, como no desenho.')],
+ 'cap6': [('sorrow', .45, .66, .26, 'O contorno com peso', 'A linha engrossa embaixo da coxa e no pé, e afina onde bate luz.'),
+          ('peasant', .3, .52, .24, 'A hachura em aros', 'No braço, a hachura dá a volta na forma, como aros de barril.'),
+          ('peasant', .55, .3, .3, 'Duas massas ovais', 'Costas e quadril são duas massas. A hachura muda de direção em cada uma.')],
+}
+
+def make_details():
+    from PIL import Image
+    for ch, items in DETAILS.items():
+        for i, (k, cx, cy, sz, *_ ) in enumerate(items, 1):
+            out = f'img/det-{ch}-{i}.jpg'
+            im = Image.open(f'img/{k}.jpg').convert('RGB')
+            side = sz * im.width
+            x0 = max(0, min(im.width - side, cx * im.width - side / 2))
+            y0 = max(0, min(im.height - side, cy * im.height - side / 2))
+            im.crop((round(x0), round(y0), round(x0 + side), round(y0 + side))).resize((600, 600), Image.LANCZOS).save(out, quality=90)
+
+def details_html(chid):
+    items = DETAILS.get(chid)
+    if not items:
+        return ''
+    cells = ''.join(f'<figure class="bal"><img src="img/det-{chid}-{i}.jpg" alt="{esc(t)}"/>'
+                    f'<figcaption><b>{esc(t)}</b> {esc(d)}</figcaption></figure>'
+                    for i, (k, cx, cy, sz, t, d) in enumerate(items, 1))
+    return f'<div class="balloons"><h4>Detalhes para observar</h4><div class="balrow">{cells}</div></div>'
+
+
+# ---------------------------------------------------------------- ícones e linha do tempo
+ICONS_H2 = {'Por onde começar': 'comecar', 'Os desenhos-modelo': 'modelo', 'Material para desenhar por cima': 'imprimir',
+            'As cartas': 'cartas', 'O lápis de carpinteiro': 'lapis', 'O giz preto e o giz litográfico': 'giz', 'O carvão': 'carvao',
+            'A pena de junco': 'junco', 'A tinta': 'tinta', 'O papel': 'papel', 'A moldura de perspectiva': 'moldura', 'No tablet': 'tablet'}
+
+def add_icons(h):
+    return re.sub(r'<h2>([^<]+)</h2>', lambda m: (f'<h2 class="ic"><img class="icon" src="img/icons/{ICONS_H2[m.group(1)]}.svg" alt=""/>{m.group(1)}</h2>'
+                                                  if m.group(1) in ICONS_H2 else m.group(0)), h)
+
+TIMELINE = [('1853–1880', 'Antes da arte', None, 'Zundert, Haia, Londres, Paris, o Borinage. Seis anos entre gravuras na Goupil e, no fim, os primeiros desenhos dos mineiros.'),
+            ('1880–1881', 'Bruxelas e Etten', 'sower2', 'Copia as sessenta pranchas de Bargue e os camponeses de Millet. O traço ainda é duro e correto demais.'),
+            ('1881–1883', 'Haia', 'sorrow', 'A escola do preto e branco: lápis de carpinteiro, giz litográfico e a moldura de perspectiva nas dunas.'),
+            ('1883–1885', 'Drenthe e Nuenen', 'peasant', 'Tecelões e camponeses. Passa a começar a forma pelas massas, de dentro para fora.'),
+            ('1885–1888', 'Antuérpia e Paris', 'sp_straw', 'A paleta clareia e chegam as gravuras japonesas: cada superfície ganha um padrão próprio.'),
+            ('1888–1889', 'Arles', 'harvest', 'A pena de junco e o alfabeto de marcas. Redesenha a pena as próprias pinturas.'),
+            ('1889–1890', 'Saint-Rémy', 'cypress', 'O traço curto se alonga em curvas que ligam terra, árvore e céu.'),
+            ('1890', 'Auvers-sur-Oise', 'gachet', 'Setenta pinturas em dois meses e a única água-forte que fez, o retrato do Dr. Gachet.')]
+
+def timeline_html():
+    rows = []
+    for yrs, place, img, txt in TIMELINE:
+        pic = f'<img src="img/{img}.jpg" alt=""/>' if img else '<span class="noimg"></span>'
+        cap = f'<span class="tlwork"><i>{esc(PL[img]["t"])}</i></span>' if img and img in PL else ''
+        rows.append(f'<div class="tlrow"><div class="tlyear">{yrs}</div><div class="tlpic">{pic}</div>'
+                    f'<div class="tltxt"><p class="tlplace">{place}</p><p>{txt}</p>{cap}</div></div>')
+    return '<div class="timeline"><h2>Linha do tempo</h2>' + ''.join(rows) + '</div>'
 
 # ---------------------------------------------------------------- PDF (edição ilustrada)
 FONTDIR = os.path.join(ROOT, 'fonts')
@@ -233,16 +306,38 @@ dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 .practice .lvl{font:400 6.8pt Sans;color:#6E6253;margin-left:.25em}
 .lead{font-size:11pt;font-style:italic;text-align:left}
 
+
+/* ícones, balões, linha do tempo */
+h2.ic{display:flex;align-items:center;gap:.1in}
+h2.ic .icon{width:.36in;height:.36in;flex:none}
+.balloons{margin-top:1.6em;border-top:.6pt solid #1E1913;padding-top:.12in;break-inside:avoid}
+.balrow{display:flex;gap:.2in}
+.bal{flex:1;margin:0;text-align:left}
+.bal img{width:1.45in;height:1.45in;border-radius:50%;object-fit:cover;display:block;margin:0 0 .1in}
+.bal figcaption{margin:0;font-size:7.2pt;line-height:1.42}
+.bal figcaption b{display:block;font-weight:700;color:#1E1913;margin-bottom:.03in}
+.timeline{margin:1.2em 0 1.6em;break-before:page}
+.timeline h2{margin-top:0}
+.tlrow{display:flex;gap:.16in;padding:.1in 0;border-top:.6pt solid #CFC4B0;break-inside:avoid;position:relative}
+.tlyear{width:.92in;flex:none;font:400 11pt/1.15 Disp}
+.tlpic{width:1.05in;height:1.05in;flex:none}
+.tlpic img{width:1.05in;height:1.05in;object-fit:cover;display:block}
+.tlpic .noimg{display:block;width:1.05in;height:1.05in;background:#E3D9C6}
+.tltxt p{text-align:left;margin:0 0 .15em;font-size:9.2pt;line-height:1.38}
+.tltxt .tlplace{font:700 8.6pt Sans;margin-bottom:.05in}
+.tlwork{font:400 7pt Sans;color:#6E6253}
+.lvhead .lvtag{position:absolute;left:0;bottom:.62in;font:400 30pt/1 Disp;color:#BF8A5A;margin:0}
+
 /* capa */
 .cover{page:full;position:relative;width:6in;height:9in;background:#2A2119;color:#FBF8F1;break-after:page;bookmark-level:1;bookmark-label:"Capa"}
-.cover .art{position:absolute;top:0;bottom:0;left:.13in;right:0;background:url("img/cover-roulin.jpg") 46% 0/118% auto no-repeat}
-.cover .topsh{position:absolute;left:.13in;right:0;top:0;height:1.1in;background:linear-gradient(to bottom,rgba(20,15,10,.32),rgba(20,15,10,0))}
-.cover .shade{position:absolute;left:.13in;right:0;bottom:0;height:5in;background:linear-gradient(to bottom,rgba(20,15,10,0),rgba(20,15,10,.55) 45%,rgba(20,15,10,.66))}
+.cover .art{position:absolute;top:0;bottom:0;left:0;right:0;background:url("img/cover-roulin.jpg") 46% 0/122% auto no-repeat}
+.cover .topsh{position:absolute;left:0;right:0;top:0;height:1.1in;background:linear-gradient(to bottom,rgba(20,15,10,.32),rgba(20,15,10,0))}
+.cover .shade{position:absolute;left:0;right:0;bottom:0;height:5in;background:linear-gradient(to bottom,rgba(20,15,10,0),rgba(20,15,10,.55) 45%,rgba(20,15,10,.66))}
 .cover .spine{position:absolute;top:0;bottom:0;left:0;width:.13in;background:#F7F4EE}
-.cover .ed{position:absolute;top:.38in;left:.13in;right:0;text-align:center;font:500 10.5pt Sans;letter-spacing:.2em}
-.cover .t{position:absolute;left:.13in;right:0;top:5.75in;text-align:center;font:400 50pt/1 Serif;letter-spacing:-.012em;white-space:nowrap}
-.cover .d{position:absolute;left:.13in;right:0;top:6.57in;text-align:center;font:italic 400 15pt Serif}
-.cover .coll{position:absolute;bottom:.42in;left:.13in;right:0;text-align:center;font:italic 400 10.5pt Serif}
+.cover .ed{position:absolute;top:.38in;left:0;right:0;text-align:center;font:500 10.5pt Sans;letter-spacing:.2em}
+.cover .t{position:absolute;left:0;right:0;top:5.75in;text-align:center;font:400 50pt/1 Serif;letter-spacing:-.012em;white-space:nowrap}
+.cover .d{position:absolute;left:0;right:0;top:6.57in;text-align:center;font:italic 400 15pt Serif}
+.cover .coll{position:absolute;bottom:.42in;left:0;right:0;text-align:center;font:italic 400 10.5pt Serif}
 
 /* folha de rosto e créditos */
 .titlepage{page:bare;break-before:page;text-align:center;padding-top:2.3in}
@@ -365,11 +460,11 @@ def chapter_head(s, part):
     title = m.group(1) if m else esc(s['title'])
     body = h[m.end():] if m else h
     n = re.match(r'(\d+)\.\s*(.*)', title)
-    plab = f'{part[1]} · {part[2]}' if part else ''
+    plab = f'{part[1]} · {part[2]}' if part else 'Consulta'
     short = re.sub(r':.*', '', n.group(2) if n else title)
     rh = f'<span class="rh">{short}</span>'
     if n:
-        head = f'<div class="chhead"><p class="chlab">Capítulo {n.group(1)}<br/>{plab}</p><p class="chnum">{n.group(1)}</p><h1>{n.group(2)}</h1></div>'
+        head = f'<div class="chhead"><p class="chlab">{plab}<br/>Capítulo {n.group(1)}</p><p class="chnum">{n.group(1)}</p><h1>{n.group(2)}</h1></div>'
     else:
         head = f'<div class="chhead nonum"><p class="chlab">{plab}</p><h1>{title}</h1></div>'
     return rh + head, body, (n.group(2) if n else title)
@@ -400,7 +495,7 @@ def level_pdf(code, lid, ln, name, intro, chapnames):
     items = [x for x in EX if x['lv'] == code]
     lst = ''.join(f'<p><b><a href="#ex-{x["id"]}">{x["id"].upper()}</a></b>{esc(x["t"])}</p>' for x in items)
     out = [f'<section class="level" id="{lid}"><span class="rh">Exercícios · {ln}</span>'
-           f'<div class="lvhead"><p class="chlab">Parte III · Exercícios</p><p class="chnum">{ln[-1]}</p><h1>{ln}<br/>{name}</h1></div>'
+           f'<div class="lvhead"><p class="chlab">Parte III · Exercícios</p><p class="lvtag">{ln}</p><h1>{name}</h1></div>'
            f'<p class="lead">{intro}</p><div class="lvlist">{lst}</div></section>']
     if code == 'w':
         for i in range(0, len(items), 2):
@@ -423,7 +518,7 @@ def ficha(k):
 def catalogue_pdf():
     num, order = cat_numbers()
     out = ['<section class="chap" id="catalogo"><span class="rh">Catálogo das obras</span>'
-           '<div class="chhead nonum"><p class="chlab">Catálogo</p><h1>Catálogo das obras</h1></div>'
+           '<div class="chhead nonum"><p class="chlab">Consulta</p><h1>Catálogo das obras</h1></div>'
            '<p>As obras de Van Gogh citadas no livro e indicadas nos exercícios, em ordem aproximada de data. Seis delas aparecem primeiro, '
            'em página inteira, para ver de perto. Quando disponíveis, seguem os números de catálogo F (de la Faille) e JH (Hulsker), '
            'as dimensões (altura por largura) e o acervo.</p></section>']
@@ -467,10 +562,10 @@ def pdf_html(S):
     yr = datetime.date.today().year
     P = [f'<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Van Gogh a Lápis</title>'
          f'<meta name="author" content="Pedro Torres"><style>{font_faces()}{PDF_CSS}</style></head><body>']
-    P.append('<div class="cover"><div class="art"></div><div class="topsh"></div><div class="shade"></div><div class="spine"></div>'
+    P.append('<div class="cover"><div class="art"></div><div class="topsh"></div><div class="shade"></div>'
              '<div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Teoria e prática para desenhar como Vincent</div>'
              '<div class="coll">91 exercícios em quatro níveis</div></div>')
-    P.append('<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Teoria e prática para<br/>desenhar como Vincent</p><p class="a">PEDRO TORRES</p></div>')
+    P.append('<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Teoria e prática para desenhar como Vincent</p><p class="a">PEDRO TORRES</p></div>')
     P.append(f'<div class="copy"><p>© {yr} Pedro Torres. Todos os direitos reservados.</p>'
              '<p>Nenhuma parte deste livro pode ser reproduzida sem autorização do autor, exceto as folhas de exercício destinadas ao uso pessoal do leitor.</p>'
              '<p>Capa: <i>Retrato de Joseph Roulin</i>, Arles, agosto de 1888. Pena de junco e pena de ave, tinta e giz preto. J. Paul Getty Museum, Los Angeles (85.GA.299), Open Content Program.</p>'
@@ -572,6 +667,17 @@ dl.gloss dt{font-family:Sans,sans-serif;font-weight:700;font-size:.9em;margin-to
 .parttitle{margin-top:1.2em}.parttitle .pn{font-family:Disp,sans-serif;font-size:3.6em;line-height:1;color:#BF8A5A;margin:0}
 .parttitle h1{page-break-before:avoid;font-family:Sans,sans-serif;font-weight:700;font-size:.8em;margin:.6em 0 .2em}
 .parttitle h2{font-size:1.7em;margin:0 0 .6em}
+h2.ic img.icon{width:1.6em;height:1.6em;vertical-align:middle;margin-right:.4em}
+.balloons{border-top:1px solid #1E1913;margin-top:1.6em;padding-top:.6em}
+.bal{display:inline-block;width:30%;margin:.4em 1.5% .8em 0;vertical-align:top;text-align:left}
+.bal img{width:100%;border-radius:50%}
+.bal figcaption b{display:block;font-weight:700}
+.tlrow{border-top:1px solid #CFC4B0;padding:.6em 0;overflow:hidden;page-break-inside:avoid}
+.tlyear{font-family:Disp,sans-serif;font-size:1.05em}
+.tlpic img{float:left;width:28%;margin:.2em .8em .3em 0}
+.tlpic .noimg{display:none}
+.tltxt p{margin:0 0 .2em}.tltxt .tlplace{font-family:Sans,sans-serif;font-weight:700;font-size:.85em}
+.tlwork{font-family:Sans,sans-serif;font-size:.72em;color:#5F5446}
 .titlepage{text-align:center;margin-top:25%}.titlepage .t{font-size:2.1em;line-height:1.1}.titlepage .s{font-style:italic;color:#5F5446}
 .titlepage .a{font-family:Sans,sans-serif;font-size:.8em;letter-spacing:.2em;margin-top:3em}
 """
@@ -630,7 +736,9 @@ def build_epub(S, out, small=None):
             z.writestr('OEBPS/' + name, page(title, x), compress_type=zipfile.ZIP_DEFLATED)
         imgs.add('img/cover.jpg')
         for im in sorted(imgs):
-            if small:
+            if im.endswith('.svg'):
+                z.write(im, 'OEBPS/' + im, compress_type=zipfile.ZIP_DEFLATED)
+            elif small:
                 from PIL import Image
                 import io
                 pic = Image.open(im).convert('RGB')
@@ -656,7 +764,8 @@ def build_epub(S, out, small=None):
             man.append(f'<item id="f{k}" href="fonts/{f}" media-type="font/ttf"/>')
         for k, im in enumerate(sorted(imgs)):
             props = ' properties="cover-image"' if im == 'img/cover.jpg' else ''
-            man.append(f'<item id="i{k}" href="{im}" media-type="image/jpeg"{props}/>')
+            mt = 'image/svg+xml' if im.endswith('.svg') else 'image/jpeg'
+            man.append(f'<item id="i{k}" href="{im}" media-type="{mt}"{props}/>')
         now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         opf = ('<?xml version="1.0" encoding="utf-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bid" xml:lang="pt-BR">'
                '<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">'
@@ -699,6 +808,7 @@ if __name__ == '__main__':
     S += [catalogue(), ex_index(), CREDITS]
     os.makedirs('out', exist_ok=True)
     args = sys.argv[1:] or ['cover', 'pdf', 'epub']
+    make_details()
     if 'cover' in args:
         make_cover(); print('capa ok')
     if 'pdf' in args:
