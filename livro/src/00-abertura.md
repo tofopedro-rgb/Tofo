@@ -9,7 +9,7 @@ O que mais me interessa nele, porém, está nas folhas de papel. Van Gogh fez ma
 
 Isso faz dele um professor generoso. Quem está começando consegue entrar no universo dele por uma única marca repetida com atenção. Quem já desenha bem encontra nas mesmas folhas um refinamento que leva anos para dominar. Escrevi este livro para percorrer esse caminho inteiro, dos primeiros rabiscos às cópias de mestre.
 
-O livro trata só do desenho: do lápis, do carvão e da pena. Por isso se chama *Van Gogh a Lápis*. A pintura dele fica para outra ocasião.
+O livro trata só do desenho, a lápis e a nanquim. Por isso se chama *Van Gogh a Lápis*. A pintura dele fica para outra ocasião.
 
 A proposta é aprender a rabiscar como Van Gogh, entender por que cada traço está onde está e levar essa linguagem para o caderno ou o tablet, no nosso dia a dia.
 

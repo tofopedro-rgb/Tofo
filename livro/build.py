@@ -98,13 +98,14 @@ def practice_line(chid):
     rev = {v[0]: k for k, v in CHAP.items()}
     if chid not in rev:
         return ''
-    items = [x for x in EX if x['ch'] == rev[chid]]
-    codes = sorted(x['id'] for x in items)
+    items = sorted((x for x in EX if x['ch'] == rev[chid]), key=lambda x: x['id'])
+    first, last = items[0]['id'], items[-1]['id']
     ess = [x['id'] for x in items if x['lv'] == 'e']
-    link = lambda c: f'<a href="#ex-{c}">{c.upper()}</a>'
-    txt = f'<b>Para praticar</b> {link(codes[0])} a {link(codes[-1])}, {len(codes)} exercícios.'
+    lk = lambda c: f'<a href="#ex-{c}">{c.upper()}</a>'
+    pg = lambda c: f'<a class="pg" href="#ex-{c}"></a>'
+    txt = f'<b>Para praticar</b> {lk(first)}–{lk(last)} · p. {pg(first)}–{pg(last)}'
     if ess:
-        txt += ' Comece pelos essenciais: ' + ', '.join(link(c) for c in sorted(ess)) + '.'
+        txt += ' · essenciais ' + ', '.join(lk(c) for c in ess)
     return f'<p class="pline">{txt}</p>'
 
 def build_sections():
@@ -254,8 +255,7 @@ def add_balloons(h):
 
 # ---------------------------------------------------------------- ícones e linha do tempo
 ICONS_H2 = {'Por onde começar': 'comecar', 'Os desenhos-modelo': 'modelo', 'Material para desenhar por cima': 'imprimir',
-            'As cartas': 'cartas', 'O lápis de carpinteiro': 'lapis', 'O giz preto e o giz litográfico': 'giz', 'O carvão': 'carvao',
-            'A pena de junco': 'junco', 'A tinta': 'tinta', 'O papel': 'papel', 'A moldura de perspectiva': 'moldura', 'No tablet': 'tablet'}
+            'As cartas': 'cartas', 'O lápis 6B': 'lapis', 'A caneta nanquim': 'junco', 'O papel': 'papel', 'A moldura de perspectiva': 'moldura', 'No tablet': 'tablet'}
 
 def add_icons(h):
     return re.sub(r'<h2>([^<]+)</h2>', lambda m: (f'<h2 class="ic"><img class="icon" src="img/icons/{ICONS_H2[m.group(1)]}.svg" alt=""/>{m.group(1)}</h2>'
@@ -369,7 +369,7 @@ h4{font:700 7.6pt/1.3 Sans;margin:0 0 .4em;color:#1E1913}
 figure{margin:1em 0;break-inside:avoid;text-align:center}
 figure img{max-width:100%;max-height:4.1in}
 figure.wide img{max-height:3.4in}
-figcaption{font:400 7.4pt/1.42 Sans;color:#6E6253;text-align:left;margin-top:.45em}
+figcaption{font:400 8pt/1.42 Sans;color:#6E6253;text-align:left;margin-top:.45em}
 figcaption i{color:#1E1913;font-weight:500}
 table{border-collapse:collapse;width:100%;font-size:9.2pt;margin:.6em 0 1em}
 th{font:700 7.2pt Sans;text-align:left;border-bottom:.6pt solid #1E1913;padding:.3em .4em .3em 0}
@@ -385,6 +385,10 @@ dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 .sign{text-align:right;font-style:italic;margin-top:1.2em}
 .vida{background:#E3D9C6;padding:.14in .16in .1in;margin:0 0 1.3em}
 .vida h4{margin-bottom:.3em}.vida p{text-align:left;font-size:9.4pt;line-height:1.4;margin:0}
+.kit{background:#E3D9C6;padding:.14in .18in .1in;margin:.4em 0 1.3em}
+.kit ul{margin:0;padding:0 0 0 1.1em}
+.kit li{margin:0 0 .35em;font-size:9.6pt;line-height:1.38;text-align:left}
+.kit li b{font-weight:600}
 .marks{display:grid;grid-template-columns:1fr 1fr;column-gap:.16in;row-gap:.12in;margin:.6em 0 1em}
 .marks figure{margin:0}.marks img{max-height:1.35in;width:100%;object-fit:cover}
 .pair{display:grid;grid-template-columns:1fr 1fr;column-gap:.16in;break-inside:avoid;margin:.8em 0}.pair figure{margin:0}
@@ -401,6 +405,10 @@ dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 /* ícones, balões, linha do tempo */
 h2.ic{display:flex;align-items:center;gap:.1in}
 h2.ic .icon{width:.36in;height:.36in;flex:none}
+figure.flow{break-inside:avoid}
+figure.mat img{max-height:2.5in}
+figure.flow img{max-height:4.2in}
+figure.flow figcaption b{font-weight:700;color:#1E1913}
 .figbal{break-inside:avoid;margin:1em 0 1.3em}
 .figbal > figure{margin:0 0 .16in}
 .figbal > figure img{max-height:3.25in}
@@ -412,7 +420,7 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .figbal.side .bal img{width:.92in;height:.92in}
 .pline{margin-top:1.4em;border-top:.6pt solid #1E1913;padding-top:.08in;font:400 7.8pt/1.5 Sans;text-align:left}
 .pline b{font-weight:700;margin-right:.3em}
-.pline a::after{content:" (p. " target-counter(attr(href), page) ")";font-weight:400;color:#6E6253}
+.pline a.pg{border:0;font-weight:400}.pline a.pg::after{content:target-counter(attr(href), page)}
 h2.newpage{break-before:page}
 .obra{break-before:page;break-inside:avoid}
 .obra > h2:first-child{margin-top:0}
@@ -424,7 +432,7 @@ h2.newpage{break-before:page}
 .balrow{display:flex;gap:.22in;justify-content:center}
 .bal{width:1.45in;flex:none;margin:0;text-align:left}
 .bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
-.bal figcaption{margin:0;font-size:7pt;line-height:1.4}
+.bal figcaption{margin:0;font-size:7.8pt;line-height:1.4}
 .bal figcaption b{display:block;font-weight:700;color:#1E1913;margin-bottom:.02in}
 .mapa{page:full;break-before:page;width:6in;height:9in}
 .mapa svg{display:block;width:6in;height:9in}
@@ -954,6 +962,7 @@ if __name__ == '__main__':
     os.makedirs('out', exist_ok=True)
     args = sys.argv[1:] or ['cover', 'pdf']  # EPUB só com: python3 build.py epub
     make_details(); make_tracos()
+    import subprocess; subprocess.run(['python3', 'tools/flow.py', 'roulin', 'starry'], check=True)
     if 'cover' in args:
         make_cover(); print('capa ok')
     if 'pdf' in args:

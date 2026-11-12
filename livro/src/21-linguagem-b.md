@@ -7,6 +7,8 @@ Nos retratos a pena de Arles, Vincent aplicou ao rosto o mesmo alfabeto da paisa
 
 ## O mapa de direções
 
+<figure class="flow"><img src="img/flow-roulin.jpg" alt="Retrato de Joseph Roulin com as direções dos traços desenhadas por cima"><figcaption><b>O mapa de direções no Roulin.</b> Os olhos são centros, com anéis em volta. O nariz desce reto. Bigode e barba se abrem para baixo e para fora, como um leque. O boné segue a curva da cabeça, o casaco desce com a lapela e o fundo é uma treliça regular.</figcaption></figure>
+
 Os olhos são o centro de dois redemoinhos. Os tracinhos giram em anéis em volta da órbita e se espalham pela maçã do rosto. A pálpebra de cima é a linha mais grossa do rosto, e a íris é o ponto mais escuro da folha inteira.
 
 Na testa, os traços fazem arcos largos, quase horizontais, que caem nas têmporas. Na linha do cabelo a direção muda de repente e o cabelo sobe como chama. A fronteira entre pele e cabelo aparece só por essa troca, sem contorno.
@@ -138,18 +140,18 @@ Em *Sorrow* e em *Worn Out* o rosto está escondido. A emoção inteira está na
 
 <aside class="vida"><h4>Na vida dele</h4><p>Arles, junho de 1888. Vincent volta de Saintes-Maries com o desenho dos barcos e escreve que em Paris jamais o teria feito em uma hora (carta 620). A velocidade vem de uma ordem de trabalho que ele repetia em quase todas as folhas.</p></aside>
 
-Os desenhos a pena de Arles não nasciam direto na tinta. Primeiro vinha um esboço leve de grafite, que ainda aparece por baixo em muitas folhas. Depois a pena entrava pelo fundo e avançava para a frente, e os pretos mais fortes ficavam para o fim. As sequências abaixo mostram essa ordem em três desenhos-modelo, em quatro etapas cada.
+Os desenhos a pena de Arles não nasciam direto na tinta. Primeiro vinha um esboço leve de grafite, que ainda aparece por baixo em muitas folhas. Depois a tinta entrava pelo fundo e avançava para a frente, e os pretos mais fortes ficavam para o fim. As sequências abaixo mostram essa ordem em três desenhos-modelo, em quatro etapas cada.
 
 ## Uma paisagem
 
 <div class="steps4">
 <figure><img src="img/st-r13-1.jpg" alt=""><figcaption>1. Esboço de grafite: horizonte, faixas, a casa.</figcaption></figure>
-<figure><img src="img/st-r13-2.jpg" alt=""><figcaption>2. A tinta começa pelo longe, com a pena mais fina.</figcaption></figure>
+<figure><img src="img/st-r13-2.jpg" alt=""><figcaption>2. A tinta começa pelo longe, com a caneta mais fina.</figcaption></figure>
 <figure><img src="img/st-r13-3.jpg" alt=""><figcaption>3. As faixas do meio, com marcas maiores.</figcaption></figure>
 <figure><img src="img/r13.jpg" alt=""><figcaption>4. O primeiro plano e os acentos.</figcaption></figure>
 </div>
 
-O esboço só marca as grandes divisões e nunca é apagado com cuidado: a tinta passa por cima. A ferramenta engrossa conforme o desenho desce para o primeiro plano. As rochas e a relva da frente, as marcas maiores da folha, ficam para o fim.
+O esboço só marca as grandes divisões e nunca é apagado com cuidado: a tinta passa por cima. A caneta engrossa conforme o desenho desce para o primeiro plano. As rochas e a relva da frente, as marcas maiores da folha, ficam para o fim.
 
 ## Um retrato
 

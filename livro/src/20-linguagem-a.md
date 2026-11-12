@@ -7,59 +7,51 @@
 
 <aside class="vida"><h4>Na vida dele</h4><p>Haia, 1882. Vincent testa tudo o que encontra: lápis de carpinteiro, giz litográfico, tinta de impressor. Escreve a Theo que às vezes precisa riscar o que sente com um lápis de carpinteiro duro em vez de um pincel macio (carta 210).</p></aside>
 
-Van Gogh desenhou com quase tudo o que um desenhista do século XIX tinha à mão. Os materiais mudaram conforme a cidade e o assunto, e cada um deixou uma marca diferente no papel. Entender o que ele usava ajuda a escolher o equivalente moderno e, principalmente, a imitar o comportamento da ferramenta, que é o que dá a cara dos desenhos.
+Van Gogh desenhou com o que tinha à mão: lápis de carpinteiro em Haia, giz preto em Nuenen, penas que ele mesmo cortava dos juncos em Arles. Você não precisa de nada disso. O que faz um desenho parecer dele é a marca, e a marca sai muito bem com um lápis macio e uma caneta nanquim, materiais que se acham em qualquer papelaria.
 
-## O lápis de carpinteiro
+<div class="kit"><h4>Para começar</h4>
+<ul>
+<li><b>Lápis grafite 6B.</b> Para os esboços e para os exercícios de figura, no lugar do lápis de carpinteiro, do giz e do carvão.</li>
+<li><b>Três canetas nanquim descartáveis: 0.1, 0.5 e 0.8.</b> Fina para o fundo e os detalhes, média para a maior parte do desenho, grossa para o primeiro plano e os contornos pesados.</li>
+<li><b>Papel sulfite A4</b> para treinar marcas, e um bloco de papel para desenho de 140 a 180 g/m², em A4 ou A3, para os exercícios maiores.</li>
+<li><b>Uma borracha macia</b> para limpar o esboço depois que a tinta secar.</li>
+</ul></div>
 
-É um lápis chato, com a mina larga e retangular. De chapa ele faz uma faixa grossa. De quina, uma linha fina. Na mesma passada dá para ir de uma à outra girando o pulso. Em Haia era a ferramenta principal dele (cartas 210 e 222), e a variação de peso que você vê no contorno de *Sorrow* e de *Worn Out* vem daí.
+Nos exercícios, o material aparece sempre assim: "Lápis 6B" ou "Nanquim 0.5". Quando o exercício pede duas ou três espessuras, troque de caneta conforme o desenho avança do fundo para a frente.
 
-Hoje há lápis de carpinteiro macios em qualquer loja de ferragens. Um grafite integral 6B a 9B faz um trabalho parecido.
+## O lápis 6B
 
-## O giz preto e o giz litográfico
+Um lápis bem macio faz quase tudo o que os lápis e gizes de Van Gogh faziam. Deitado, cobre áreas grandes. Em pé, faz uma linha firme. Para imitar a linha que engrossa e afina do lápis de carpinteiro, lixe a ponta até ficar chata: de chapa ela dá uma faixa, de quina uma linha fina, e girando o pulso você passa de uma à outra na mesma passada. É assim que nasce a variação de peso que você vê no contorno de *Sorrow* e de *Worn Out*.
 
-O giz preto natural dá um preto fosco e quente, sem o brilho do grafite. Foi o material das figuras de Nuenen. O giz litográfico é gorduroso e dá o preto mais profundo de todos. Vincent gostou dele quando fez as primeiras litografias em Haia (carta 297) e usava a ponta de um canivete para raspar e abrir luzes, porque o giz litográfico não apaga.
+O valor vem da densidade, não da força. Mantenha a mesma pressão e aproxime os traços para escurecer.
 
-Os equivalentes atuais são o Conté preto, a *pierre noire* e o lápis dermatográfico.
+## A caneta nanquim
 
-## O carvão
+É a substituta da pena de junco, a ferramenta dos desenhos de Arles e de Saint-Rémy. Vincent cortava um pedaço de cana seca em bisel, "do mesmo jeito que se corta uma pena de ganso" (carta 600), e usava uma pena de ave para as linhas finas da distância (carta 618).
 
-Carvão de salgueiro ou de vinha, usado de lado para fazer massas grandes. Vincent levantava a luz com miolo de pão. Hoje, uma borracha limpa-tipos faz o mesmo.
+<figure class="mat"><img src="img/g1.jpg" alt="Penas de junco cortadas, canivete e aparas"><figcaption>As penas de junco que ele usava, cortadas a canivete.</figcaption></figure>
 
-## A pena de junco
+A caneta nanquim tem duas vantagens: a largura do traço não muda, como no junco, e a tinta é preta e firme, sem degradê. Cada toque deixa uma marca ou não deixa nada. As três espessuras fazem o papel das penas dele: a 0.1 é a pena de ave do fundo, a 0.5 é o junco médio, a 0.8 é o junco grosso do primeiro plano.
 
-É a ferramenta dos desenhos de Arles e de Saint-Rémy. Um pedaço de cana seca é cortado em bisel com canivete, "do mesmo jeito que se corta uma pena de ganso" (carta 600), e ganha uma pequena fenda na ponta para guardar tinta. Vincent cortava as suas dos juncos que cresciam à beira dos canais.
+Duas coisas o junco fazia sozinho e você precisa fazer de propósito. A tinta dele acabava no meio do traço, que começava cheio e terminava quebrado: com a caneta, faça traços curtos e levante a mão rápido no fim. E não havia borracha: trate cada toque como definitivo.
 
-<figure><img src="img/g1.jpg" alt="Penas de junco cortadas, canivete e aparas"><figcaption>Penas de junco cortadas a canivete.</figcaption></figure>
-
-A pena de junco tem quatro comportamentos, e são eles que você precisa imitar, seja no papel, seja no tablet.
-
-A ponta é romba e a largura do traço quase não muda. A tinta acaba no meio do traço, que começa cheio e termina seco e quebrado. Não existe degradê: cada toque deixa uma marca escura ou não deixa nada. E não há borracha, então cada toque é definitivo.
-
-Para os detalhes miúdos do fundo, ele trocava o junco por uma pena de ave. Numa carta de maio de 1888 conta que fez um desenho "com penas de junco bem grossas sobre papel Whatman fino" e usou uma pena de ave para as linhas finas da distância (carta 618).
-
-## A tinta
-
-Vincent usava tinta ferrogálica, feita de sais de ferro e taninos, que é quase preta quando fresca. Com o tempo, a tinta de muitos desenhos dele desbotou para marrom e cinza, de forma desigual. O marrom que vemos hoje nos museus não é a cor original. Os desenhos-modelo deste livro imitam esse papel envelhecido para ficarem próximos do que você vai ver nas reproduções.
-
-<figure><img src="img/g3.jpg" alt="Tinta ferrogálica fresca e a mesma tinta desbotada"><figcaption>A tinta ferrogálica fresca, à esquerda, e desbotada pelo tempo, à direita.</figcaption></figure>
+<figure class="mat"><img src="img/g3.jpg" alt="Tinta ferrogálica fresca e a mesma tinta desbotada"><figcaption>A tinta ferrogálica que ele usava era quase preta. O marrom que vemos hoje nos museus é o tempo.</figcaption></figure>
 
 ## O papel
 
-O papel vergê é feito numa fôrma de arame que deixa linhas finas e próximas e linhas espaçadas, visíveis contra a luz. A textura quebra o traço da pena. Muitos desenhos de Arles são em vergê. Para os desenhos a lápis e giz, ele usava também papel de aquarela, de grão mais grosso.
-
-Hoje, um papel Canson Ingres ou um Mi-Teintes cinza claro dão uma textura parecida. Trabalhe em A3 ou maior: muitos dos desenhos de Arles têm perto de 50 por 60 centímetros, e o gesto largo faz parte do resultado.
+Para treinar marcas, sulfite comum serve. Para os exercícios maiores, use papel de desenho entre 140 e 180 g/m², que aguenta a tinta sem borrar. Se puder, trabalhe em A3: muitos desenhos de Arles têm perto de 50 por 60 centímetros, e o gesto largo faz parte do resultado.
 
 ## A moldura de perspectiva
 
-Em agosto de 1882 Vincent mandou fazer uma moldura de madeira com fios esticados na vertical, na horizontal e nas diagonais, montada sobre duas estacas com ponta de ferro para cravar na areia das dunas (cartas 253 e 254). Olhando através dela, o motivo já aparece dividido, e basta repetir as divisões no papel. Ele continuou a usá-la anos depois. Em março de 1888, já em Arles, contou que fez os três últimos estudos com a ajuda dela (carta 585).
+Em agosto de 1882 Vincent mandou fazer uma moldura de madeira com fios esticados, montada sobre estacas para cravar na areia das dunas (cartas 253 e 254). Olhando através dela, o motivo já aparece dividido, e basta repetir as divisões no papel.
 
-<figure><img src="img/g5.jpg" alt="Moldura de perspectiva cravada nas dunas"><figcaption>Uma moldura de perspectiva montada sobre estacas.</figcaption></figure>
+<figure class="mat"><img src="img/g5.jpg" alt="Moldura de perspectiva cravada nas dunas"><figcaption>Uma moldura de perspectiva montada sobre estacas.</figcaption></figure>
 
 Para fazer a sua, corte uma janela de 20 por 30 centímetros num papelão e prenda quatro linhas pretas com fita: uma vertical e uma horizontal no centro, e duas diagonais de canto a canto. Segure sempre à mesma distância do olho.
 
 ## No tablet
 
-Se você desenha no Procreate ou num aplicativo parecido, o princípio é o mesmo: escolha um pincel que imite a ferramenta. Para o junco, use um pincel de tinta seca com tamanho fixo (sem variação pela pressão), espaçamento baixo e afilamento só no fim do traço. Num canvas A3 a 300 dpi, a largura fica entre 25 e 35 pixels para o primeiro plano e entre 8 e 12 para o fundo. Desenhe em cima de uma cor de papel clara em vez do branco puro e evite o gesto de desfazer durante um exercício inteiro.
+No Procreate ou num aplicativo parecido, escolha um pincel de caneta técnica com tamanho fixo, sem variação pela pressão. Crie três tamanhos, como as três canetas: num canvas A3 a 300 dpi, perto de 8, 20 e 35 pixels. Desenhe sobre uma cor de papel clara em vez do branco puro e evite o gesto de desfazer durante um exercício inteiro.
 
 <!-- id: cap2 | 2. Ranhuras | chapter -->
 # 2. Ranhuras: o alfabeto de marcas
@@ -68,7 +60,7 @@ Se você desenha no Procreate ou num aplicativo parecido, o princípio é o mesm
 
 Nos desenhos de Arles, cada coisa tem a sua marca. O céu, o trigo, a areia, o telhado e a barba nunca recebem o mesmo tipo de traço. É como se a folha fosse um mapa de texturas com legenda. Chamo essas marcas curtas e repetidas de ranhuras.
 
-A ideia vem das gravuras japonesas que ele colecionou em Paris. Nelas, a chuva é risco, a água é onda repetida e a relva é ponto. Em Arles, Vincent fez o mesmo com a pena de junco.
+A ideia vem das gravuras japonesas que ele colecionou em Paris. Nelas, a chuva é risco, a água é onda repetida e a relva é ponto. Em Arles, Vincent fez o mesmo com a pena de junco, e você vai fazer com a caneta nanquim.
 
 ## As doze marcas
 
@@ -83,10 +75,10 @@ São doze marcas, e quase todos os desenhos dele usam uma parte delas. Cada uma 
 <figure><img src="img/m06.jpg" alt=""><figcaption><b>Chama.</b> Ciprestes, cabelo. Um C de dois a quatro traços paralelos, sempre subindo.</figcaption></figure>
 <figure><img src="img/m07.jpg" alt=""><figcaption><b>Redemoinho.</b> Céus de 1889, fundos de autorretrato, a órbita dos olhos. Tracinhos em volta de um centro, sem nunca se cruzarem.</figcaption></figure>
 <figure><img src="img/m08.jpg" alt=""><figcaption><b>Contorno quebrado.</b> Cascos de barco, troncos, pálpebras. Linha grossa em pedaços, mais pesada embaixo da forma.</figcaption></figure>
-<figure><img src="img/m09.jpg" alt=""><figcaption><b>Onda longa.</b> Trigo ao vento, colinas, o casaco de 1889. Linhas vizinhas quase paralelas, com falhas onde a tinta secou.</figcaption></figure>
+<figure><img src="img/m09.jpg" alt=""><figcaption><b>Onda longa.</b> Trigo ao vento, colinas, o casaco de 1889. Linhas vizinhas quase paralelas, com pequenas falhas.</figcaption></figure>
 <figure><img src="img/m10.jpg" alt=""><figcaption><b>Raios.</b> O sol, as estrelas, o halo. Um disco em contorno e coroas de tracinhos que crescem ao se afastar.</figcaption></figure>
-<figure><img src="img/m11.jpg" alt=""><figcaption><b>Laço.</b> Arbustos, sebes, nuvens. Uma letra "e" cursiva repetida sem levantar a pena.</figcaption></figure>
-<figure><img src="img/m12.jpg" alt=""><figcaption><b>Mancha e luz levantada.</b> Só em Haia e Nuenen. Lateral do carvão, borracha para abrir a luz, acento preto no fim.</figcaption></figure>
+<figure><img src="img/m11.jpg" alt=""><figcaption><b>Laço.</b> Arbustos, sebes, nuvens. Uma letra "e" cursiva repetida sem levantar a caneta.</figcaption></figure>
+<figure><img src="img/m12.jpg" alt=""><figcaption><b>Mancha e luz levantada.</b> Só em Haia e Nuenen. Lápis deitado, borracha para abrir a luz, acento preto no fim.</figcaption></figure>
 </div>
 
 ## O tamanho da marca é a distância
@@ -111,8 +103,8 @@ Quem estuda muitos desenhos dele chega a uma ordem de trabalho parecida em quase
 
 <ol class="laws">
 <li><b>Esboço leve de grafite.</b> Só as grandes divisões, sem detalhe.</li>
-<li><b>Uma marca para cada superfície.</b> Decida antes de pegar a pena. Vale escrever a legenda no canto da folha.</li>
-<li><b>Do horizonte para a frente.</b> Comece com a pena mais fina e engrosse a ferramenta conforme desce para o primeiro plano.</li>
+<li><b>Uma marca para cada superfície.</b> Decida antes de pegar a caneta. Vale escrever a legenda no canto da folha.</li>
+<li><b>Do horizonte para a frente.</b> Comece com a caneta mais fina e passe para as mais grossas conforme desce para o primeiro plano.</li>
 <li><b>Uma pressão por zona.</b> O escuro vem de aproximar as marcas, nunca de apertar mais.</li>
 <li><b>Uma área grande em branco.</b> Escolha qual será e não desenhe nela.</li>
 <li><b>Os pretos no fim.</b> Meia dúzia de acentos no primeiro plano e nas sebes. Então pare.</li>
@@ -144,6 +136,8 @@ Em Saint-Rémy as marcas curtas de Arles se alongaram e passaram a se ligar umas
 <li><b>A marca encurta onde a curva fecha.</b> Perto de um centro o traço é curto. Onde a corrente é reta, ele se alonga.</li>
 <li><b>O movimento precisa de uma reta.</b> Em <i>A Noite Estrelada</i>, a vila é feita de tracinhos retos e verticais, e é contra ela que o céu parece girar.</li>
 </ol>
+
+<figure class="flow"><img src="img/flow-starry.jpg" alt="A Noite Estrelada com as linhas de corrente desenhadas por cima"><figcaption><b>As correntes da <i>Noite Estrelada</i>.</b> Os círculos marcam os centros: a lua e o grande redemoinho. As setas seguem os tracinhos dele. Repare que nenhuma corrente cruza outra, e que a vertical do cipreste corta o céu.</figcaption></figure>
 
 <figure class="wide"><img src="img/fig-fluxo.jpg" alt="Três campos de tracinhos com um, dois e três centros"><figcaption>Um, dois e três centros. Os tracinhos vizinhos continuam paralelos em todos os casos.</figcaption></figure>
 
