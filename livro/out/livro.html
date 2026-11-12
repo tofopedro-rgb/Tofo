@@ -58,8 +58,8 @@ td{border-bottom:.4pt solid #CFC4B0;padding:.35em .5em .35em 0;vertical-align:to
 table.chrono td,table.letters td{vertical-align:baseline;line-height:1.38}
 table.chrono tr,table.letters tr{break-inside:avoid}
 table.chrono td:first-child{font:400 10pt Disp;width:.62in;white-space:nowrap}
-table.letters td:first-child{font:400 9pt Disp;width:.72in;white-space:nowrap}
-table.letters td:nth-child(2){font:400 7.6pt/1.4 Sans;color:#6E6253;width:1.35in}
+table.letters td:first-child{font:400 9pt Disp;width:.82in;white-space:nowrap}
+table.letters td:nth-child(2){font:400 7.6pt/1.4 Sans;color:#6E6253;width:1.4in}
 ol.check li{margin:.35em 0}
 dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 .ref{padding-left:1.2em;text-indent:-1.2em;text-align:left}
@@ -88,11 +88,20 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .figbal.side{display:flex;gap:.22in;align-items:flex-start}
 .figbal.side > figure{flex:none;width:3.05in;margin:0}
 .figbal.side > figure img{max-height:4.1in;width:auto;max-width:3.05in}
-.figbal.side .balrow{flex:1;flex-direction:column;gap:.14in;justify-content:flex-start}
-.figbal.side .bal{width:auto}
+.figbal.side .balrow{display:block;flex:1}
+.figbal.side .bal{width:auto;display:block;margin:0 0 .14in}
 .figbal.side .bal img{width:.92in;height:.92in}
 .pline{margin-top:1.4em;border-top:.6pt solid #1E1913;padding-top:.08in;font:400 7.8pt/1.5 Sans;text-align:left}
-.pline b{font-weight:700;margin-right:.3em}.pline a{font-weight:700;border-bottom:.5pt solid #BF8A5A}
+.pline b{font-weight:700;margin-right:.3em}
+.pline a::after{content:" (p. " target-counter(attr(href), page) ")";font-weight:400;color:#6E6253}
+h2.newpage{break-before:page}
+.obra{break-before:page;break-inside:avoid}
+.obra > h2:first-child{margin-top:0}
+.obra .figbal.side > figure img{max-height:3.55in}
+.obra .figbal > figure img{max-height:2.9in}
+.obra ol.laws ~ .figbal.side > figure img{max-height:2.6in}
+.obra ol.laws ~ .figbal .bal img{width:.8in;height:.8in}
+.obra ol.laws li{padding-top:.06in;padding-bottom:.06in}.pline a{font-weight:700;border-bottom:.5pt solid #BF8A5A}
 .balrow{display:flex;gap:.22in;justify-content:center}
 .bal{width:1.45in;flex:none;margin:0;text-align:left}
 .bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
@@ -403,7 +412,8 @@ section.level{page:chap;break-before:page}
 <p>Nos desenhos maduros ele não esfumava. O escuro se faz com mais marcas por centímetro, todas com a mesma pressão. O claro é papel deixado em paz. Essa regra muda a maneira de pensar a sombra: em vez de apertar o lápis, você aproxima os traços.</p>
 <h2>O papel reservado</h2>
 <p>Em quase todas as folhas de Arles há uma área grande quase vazia: o céu de La Crau, o caminho de Saintes-Maries, a parede caiada das cabanas. Esse vazio dá descanso ao olho e faz as zonas marcadas vibrarem. Escolha essa área antes de começar e não desenhe nela.</p>
-<h2>As seis regras da folha de Arles</h2>
+<h2 class="newpage">As seis regras da folha de Arles</h2>
+
 <p>Quem estuda muitos desenhos dele chega a uma ordem de trabalho parecida em quase todos.</p>
 <ol class="laws">
 <li><b>Esboço leve de grafite.</b> Só as grandes divisões, sem detalhe.</li>
@@ -453,17 +463,21 @@ section.level{page:chap;break-before:page}
 <figure><img src="img/r13.jpg" alt="Planície com marcas que diminuem"><figcaption><b>Certo.</b> Marcas que diminuem, céu reservado.</figcaption></figure>
 </div>
 
+<div class="obra">
 <h2>O cipreste</h2>
 <p>O cipreste é um ótimo exercício de fluxo. Ele não tem contorno. A silhueta aparece pela soma de centenas de cachos em forma de chama, cada um feito de dois a quatro traços paralelos que sobem e enrolam para um lado. No miolo da árvore os cachos se apertam até quase fundirem. Nas bordas se soltam e deixam o papel aparecer. O chão embaixo repete o movimento em ondas longas.</p>
 <div class="figbal side"><figure><img src="img/cypress.jpg" alt="Ciprestes, desenho a pena"><figcaption><i>Ciprestes</i>, Saint-Rémy, junho de 1889. Pena de junco e tinta sobre grafite. Art Institute of Chicago.</figcaption></figure><div class="balrow n3"><figure class="bal"><img src="img/det-cypress-1.jpg" alt="O cacho em chama"/><figcaption><b>O cacho em chama</b> Cada cacho é um C de dois a quatro traços paralelos, sempre subindo.</figcaption></figure><figure class="bal"><img src="img/det-cypress-2.jpg" alt="O miolo apertado"/><figcaption><b>O miolo apertado</b> No miolo os cachos se apertam até quase fundirem.</figcaption></figure><figure class="bal"><img src="img/det-cypress-3.jpg" alt="O chão em ondas"/><figcaption><b>O chão em ondas</b> Embaixo, o chão repete o movimento em ondas longas.</figcaption></figure></div></div>
-
+</div>
+<div class="obra">
 <h2>A Noite Estrelada desenhada</h2>
 <p>Em junho de 1889, Vincent copiou a pena a pintura que tinha acabado de fazer. O desenho mostra o fluxo sem a cor. Os tracinhos do céu seguem correntes em volta dos astros, cada estrela tem a sua coroa, a vila fica parada em traços retos e o cipreste é a única massa densa da folha, ligando o chão ao céu. O desenho esteve na Kunsthalle de Bremen até a Segunda Guerra Mundial e hoje está no Museu Estatal de Arquitetura Shchusev, em Moscou.</p>
 <div class="figbal"><figure><img src="img/starry.jpg" alt="A Noite Estrelada, desenho a pena"><figcaption><i>A Noite Estrelada</i>, desenho a partir da pintura, junho de 1889. F1540, JH1732.</figcaption></figure><div class="balrow n3"><figure class="bal"><img src="img/det-starry-1.jpg" alt="A coroa da lua"/><figcaption><b>A coroa da lua</b> Os tracinhos giram em anéis em volta do astro.</figcaption></figure><figure class="bal"><img src="img/det-starry-2.jpg" alt="As correntes do céu"/><figcaption><b>As correntes do céu</b> O céu corre em faixas que se enrolam.</figcaption></figure><figure class="bal"><img src="img/det-starry-3.jpg" alt="O cipreste"/><figcaption><b>O cipreste</b> A única massa densa da folha, ligando o chão ao céu.</figcaption></figure></div></div>
-
+</div>
+<div class="obra">
 <h2>Como estudar o fluxo numa obra</h2>
 <p>Diante de qualquer reprodução dele, faça três coisas antes de copiar. Encontre os centros e marque-os com um ponto. Trace, bem leve e por cima de uma cópia impressa, cinco ou seis linhas de corrente que passem pelos traços dele. Depois procure o elemento reto que dá contraste. Com esse mapa pronto, a cópia sai muito mais fiel do que copiando traço por traço.</p>
-<div class="figbal"><figure><img src="img/wheatcyp.jpg" alt="Trigal com ciprestes"><figcaption><i>Trigal com ciprestes</i>, Saint-Rémy, 1889. Óleo sobre tela. National Gallery, Londres. Quatro substâncias em fluxo: nuvens em laços, montanha em linhas longas, trigo em ondas curtas e cipreste em chamas.</figcaption></figure><div class="balrow n3"><figure class="bal"><img src="img/det-wheatcyp-1.jpg" alt="O céu que se enrola"/><figcaption><b>O céu que se enrola</b> As nuvens correm em curvas que se fecham em redemoinho.</figcaption></figure><figure class="bal"><img src="img/det-wheatcyp-2.jpg" alt="O cipreste"/><figcaption><b>O cipreste</b> Pinceladas que sobem e se torcem como chamas.</figcaption></figure><figure class="bal"><img src="img/det-wheatcyp-3.jpg" alt="O trigo"/><figcaption><b>O trigo</b> Toques curtos e inclinados, todos na mesma direção.</figcaption></figure></div></div><p class="pline"><b>Para praticar</b> <a href="#ex-f01">F01</a> a <a href="#ex-f19">F19</a>, 19 exercícios. Comece pelos essenciais: <a href="#ex-f09">F09</a>, <a href="#ex-f10">F10</a>, <a href="#ex-f13">F13</a>, <a href="#ex-f14">F14</a>, <a href="#ex-f17">F17</a>.</p></section>
+<div class="figbal"><figure><img src="img/wheatcyp.jpg" alt="Trigal com ciprestes"><figcaption><i>Trigal com ciprestes</i>, Saint-Rémy, 1889. Óleo sobre tela. National Gallery, Londres. Quatro substâncias em fluxo: nuvens em laços, montanha em linhas longas, trigo em ondas curtas e cipreste em chamas.</figcaption></figure><div class="balrow n3"><figure class="bal"><img src="img/det-wheatcyp-1.jpg" alt="O céu que se enrola"/><figcaption><b>O céu que se enrola</b> As nuvens correm em curvas que se fecham em redemoinho.</figcaption></figure><figure class="bal"><img src="img/det-wheatcyp-2.jpg" alt="O cipreste"/><figcaption><b>O cipreste</b> Pinceladas que sobem e se torcem como chamas.</figcaption></figure><figure class="bal"><img src="img/det-wheatcyp-3.jpg" alt="O trigo"/><figcaption><b>O trigo</b> Toques curtos e inclinados, todos na mesma direção.</figcaption></figure></div></div>
+<p class="pline"><b>Para praticar</b> <a href="#ex-f01">F01</a> a <a href="#ex-f19">F19</a>, 19 exercícios. Comece pelos essenciais: <a href="#ex-f09">F09</a>, <a href="#ex-f10">F10</a>, <a href="#ex-f13">F13</a>, <a href="#ex-f14">F14</a>, <a href="#ex-f17">F17</a>.</p></div></section>
 <section class="chap" id="cap4" style="page:pg6;bookmark-level:2;bookmark-label:'4. O rosto como terreno'"><span class="rh">O rosto como terreno</span><div class="chhead"><p class="chlab">Parte II · A linguagem<br/>Capítulo 4</p><p class="chnum">4</p><h1>O rosto como terreno</h1></div>
 <aside class="vida"><h4>Na vida dele</h4><p>Arles, agosto de 1888. Joseph Roulin, funcionário dos correios na estação de Arles, vira amigo e modelo. Vincent o pinta no fim de julho e depois refaz o retrato a pena. No mesmo verão desenha o camponês Patience Escalier, a moça que chama de La Mousmé e um soldado zuavo.</p></aside>
 
@@ -488,31 +502,44 @@ section.level{page:chap;break-before:page}
 
 <h2>A luz de lado</h2>
 <p>Com luz forte de um lado, o lado iluminado recebe metade das marcas, ou menos. O lado da sombra recebe todas, mais juntas, com a mesma pressão. A direção dos traços continua seguindo os planos dos dois lados. É assim que o rosto ganha volume sem nenhuma área esfumada.</p>
+<div class="obra">
 <h2>Por onde começar um rosto</h2>
-<p>Comece pelos olhos e pelo contorno do chapéu ou do cabelo, que são as marcas mais escuras e mais nítidas. Depois a barba ou o cabelo, depois o casaco. A pele fica para o fim e recebe menos marcas do que você imagina. O fundo vem por último e precisa ficar mais claro que o casaco. O Capítulo 7 mostra essa ordem num retrato completo.</p><p class="pline"><b>Para praticar</b> <a href="#ex-c01">C01</a> a <a href="#ex-c24">C24</a>, 24 exercícios. Comece pelos essenciais: <a href="#ex-c09">C09</a>, <a href="#ex-c10">C10</a>, <a href="#ex-c11">C11</a>, <a href="#ex-c12">C12</a>, <a href="#ex-c16">C16</a>.</p></section>
+<ol class="laws">
+<li><b>Olhos e contorno do chapéu ou do cabelo.</b> São as marcas mais escuras e mais nítidas, e fixam a semelhança.</li>
+<li><b>Barba ou cabelo.</b> Na direção do mapa: o cabelo sobe, a barba desce em leque.</li>
+<li><b>O casaco.</b> A zona mais grossa da folha, em hachura que acompanha a lapela.</li>
+<li><b>A pele.</b> Fica para o fim e recebe menos marcas do que você imagina.</li>
+<li><b>O fundo.</b> Por último, sempre mais claro que o casaco.</li>
+</ol>
+<p>O Capítulo 7 mostra essa ordem num retrato completo.</p>
+<div class="figbal side"><figure><img src="img/roulin2.jpg" alt="Joseph Roulin sentado, desenho a pena"><figcaption><i>Joseph Roulin sentado</i>, Arles, agosto de 1888. Pena e tinta. Los Angeles County Museum of Art. A mesma hierarquia no corpo inteiro: rosto e barba firmes, casaco escuro, fundo quase vazio.</figcaption></figure><div class="balrow n2"><figure class="bal"><img src="img/det-roulin2-1.jpg" alt="O rosto"/><figcaption><b>O rosto</b> Barba em curvas e olhos firmes: a zona mais nítida.</figcaption></figure><figure class="bal"><img src="img/det-roulin2-2.jpg" alt="O casaco"/><figcaption><b>O casaco</b> Faixas de hachura que seguem os botões e as mangas.</figcaption></figure></div></div>
+<p class="pline"><b>Para praticar</b> <a href="#ex-c01">C01</a> a <a href="#ex-c24">C24</a>, 24 exercícios. Comece pelos essenciais: <a href="#ex-c09">C09</a>, <a href="#ex-c10">C10</a>, <a href="#ex-c11">C11</a>, <a href="#ex-c12">C12</a>, <a href="#ex-c16">C16</a>.</p></div></section>
 <section class="chap" id="cap5" style="page:pg7;bookmark-level:2;bookmark-label:'5. Os autorretratos'"><span class="rh">Os autorretratos</span><div class="chhead"><p class="chlab">Parte II · A linguagem<br/>Capítulo 5</p><p class="chnum">5</p><h1>Os autorretratos</h1></div>
 <aside class="vida"><h4>Na vida dele</h4><p>Paris, 1886 a 1888. Sem dinheiro para pagar modelos, Vincent pinta a si mesmo dezenas de vezes diante do espelho. É também em Paris que a pincelada dele se divide em tracinhos separados, sob a influência dos neoimpressionistas.</p></aside>
 
 <p>Van Gogh fez mais de 35 autorretratos, quase todos entre 1886 e 1889. São pinturas, e por isso este capítulo é uma exceção num livro de desenho. A razão é prática: nas pinturas dessa época cada pincelada é um tracinho visível, com direção e tamanho. Elas mostram o fluxo no rosto com uma clareza que os poucos autorretratos desenhados não têm, e a tradução para o lápis ou para a pena é direta.</p>
 <p>Vale acompanhar três soluções, em ordem.</p>
+<div class="obra">
 <h2>1887: o halo</h2>
 <p>No <em>Autorretrato com chapéu de feltro cinza</em>, pintado em Paris no inverno de 1887 para 1888, os tracinhos são curtos e separados. No rosto, giram em volta dos olhos e descem pela barba. No fundo, formam anéis em volta da cabeça, um halo de marcas que a destaca. A aba do chapéu tem tracinhos que dão a volta inteira, e a copa tem arcos que acompanham a cúpula.</p>
-<div class="figbal side"><figure><img src="img/sp_felt.jpg" alt="Autorretrato com chapéu de feltro cinza"><figcaption><i>Autorretrato com chapéu de feltro cinza</i>, Paris, 1887 a 1888. Óleo sobre tela. Van Gogh Museum, Amsterdã. F344, JH1353.</figcaption></figure><div class="balrow n2"><figure class="bal"><img src="img/det-sp_felt-1.jpg" alt="A aba do chapéu"/><figcaption><b>A aba do chapéu</b> Tracinhos que dão a volta inteira na aba.</figcaption></figure><figure class="bal"><img src="img/det-sp_felt-2.jpg" alt="O halo de tracinhos"/><figcaption><b>O halo de tracinhos</b> Pinceladas curtas irradiam da cabeça e a destacam.</figcaption></figure></div></div>
-
-<figure><img src="img/sp_felteye.jpg" alt="Detalhe do olho"><figcaption>Detalhe do mesmo autorretrato. Cada pincelada é um tracinho separado. Elas formam anéis em volta do olho, e a pálpebra de cima é a marca mais escura.</figcaption></figure>
-
+<div class="figbal side"><figure><img src="img/sp_felt.jpg" alt="Autorretrato com chapéu de feltro cinza"><figcaption><i>Autorretrato com chapéu de feltro cinza</i>, Paris, 1887 a 1888. Óleo sobre tela. Van Gogh Museum, Amsterdã. F344, JH1353.</figcaption></figure><div class="balrow n3"><figure class="bal"><img src="img/det-sp_felt-1.jpg" alt="O olho"/><figcaption><b>O olho</b> Cada pincelada é um tracinho separado. Elas formam anéis em volta do olho.</figcaption></figure><figure class="bal"><img src="img/det-sp_felt-2.jpg" alt="A aba do chapéu"/><figcaption><b>A aba do chapéu</b> Tracinhos que dão a volta inteira na aba.</figcaption></figure><figure class="bal"><img src="img/det-sp_felt-3.jpg" alt="O halo de tracinhos"/><figcaption><b>O halo de tracinhos</b> Pinceladas curtas irradiam da cabeça e a destacam.</figcaption></figure></div></div>
+</div>
+<div class="obra">
 <p>No autorretrato de Chicago, da primavera de 1887, a solução é outra: os tracinhos do rosto saem do nariz como raios, e o fundo é pontilhado, com pontos maiores que as marcas do rosto.</p>
 <div class="figbal side"><figure><img src="img/sp_chi.jpg" alt="Autorretrato de 1887, Art Institute of Chicago"><figcaption><i>Autorretrato</i>, Paris, primavera de 1887. Óleo sobre madeira. Art Institute of Chicago. F345, JH1249.</figcaption></figure><div class="balrow n2"><figure class="bal"><img src="img/det-sp_chi-1.jpg" alt="Raios a partir do nariz"/><figcaption><b>Raios a partir do nariz</b> Os tracinhos do rosto saem do nariz como raios.</figcaption></figure><figure class="bal"><img src="img/det-sp_chi-2.jpg" alt="O fundo pontilhado"/><figcaption><b>O fundo pontilhado</b> Pontos maiores que as marcas do rosto.</figcaption></figure></div></div>
-
+</div>
+<div class="obra">
 <h2>1888: o fundo calmo</h2>
 <p>Em Arles, no autorretrato dedicado a Paul Gauguin, o fundo fica quase liso. O rosto, de cabeça raspada, ganha planos firmes e contorno pesado. Toda a energia do quadro está no rosto.</p>
 <div class="figbal side"><figure><img src="img/sp_gauguin.jpg" alt="Autorretrato dedicado a Paul Gauguin"><figcaption><i>Autorretrato dedicado a Paul Gauguin</i>, Arles, setembro de 1888. Óleo sobre tela. Harvard Art Museums. F476, JH1581.</figcaption></figure><div class="balrow n2"><figure class="bal"><img src="img/det-sp_gauguin-1.jpg" alt="Planos firmes"/><figcaption><b>Planos firmes</b> Cabeça raspada, planos firmes e contorno pesado.</figcaption></figure><figure class="bal"><img src="img/det-sp_gauguin-2.jpg" alt="O fundo calmo"/><figcaption><b>O fundo calmo</b> Quase liso. Toda a energia fica no rosto.</figcaption></figure></div></div>
-
+</div>
+<div class="obra">
 <h2>1889: o redemoinho</h2>
 <p>No autorretrato de setembro de 1889, pintado em Saint-Rémy e hoje no Musée d'Orsay, o fundo vira água em movimento. O casaco entra na mesma corrente, em linhas onduladas iguais às do fundo, e figura e fundo quase se fundem. Só o rosto fica parado, com marcas mais curtas e mais firmes. É o caso mais claro, na obra dele, da quinta lei do fluxo: o movimento precisa de algo parado para aparecer, e aqui o elemento parado é o próprio rosto.</p>
 <div class="figbal side"><figure><img src="img/sp_orsay.jpg" alt="Autorretrato de 1889, Musée d'Orsay"><figcaption><i>Autorretrato</i>, Saint-Rémy, setembro de 1889. Óleo sobre tela. Musée d'Orsay, Paris. F627, JH1772.</figcaption></figure><div class="balrow n3"><figure class="bal"><img src="img/det-sp_orsay-1.jpg" alt="O fundo em redemoinho"/><figcaption><b>O fundo em redemoinho</b> O fundo inteiro gira em correntes, como água.</figcaption></figure><figure class="bal"><img src="img/det-sp_orsay-2.jpg" alt="O rosto parado"/><figcaption><b>O rosto parado</b> Marcas mais curtas e mais firmes que as do fundo.</figcaption></figure><figure class="bal"><img src="img/det-sp_orsay-3.jpg" alt="O casaco na corrente"/><figcaption><b>O casaco na corrente</b> Linhas onduladas iguais às do fundo.</figcaption></figure></div></div>
+</div>
+<h2 class="newpage">O que vale para todos</h2>
 
-<h2>O que vale para todos</h2>
 <p>Os olhos são o ponto mais escuro e mais nítido. Em volta deles tudo pode se mexer. Cabelo e barba costumam ser a mesma marca, a chama, em direções opostas: o cabelo sobe e se afasta do rosto, a barba desce e se afasta da boca.</p>
 <p>Ele também se pintou ora virado para a esquerda, ora para a direita. Faça o mesmo. A mão estranha o lado contrário, e é exatamente por isso que vale treinar os dois.</p><p class="pline"><b>Para praticar</b> <a href="#ex-a01">A01</a> a <a href="#ex-a15">A15</a>, 15 exercícios. Comece pelos essenciais: <a href="#ex-a01">A01</a>, <a href="#ex-a05">A05</a>, <a href="#ex-a06">A06</a>.</p></section>
 <section class="chap" id="cap6" style="page:pg8;bookmark-level:2;bookmark-label:'6. O corpo em aros'"><span class="rh">O corpo em aros</span><div class="chhead"><p class="chlab">Parte II · A linguagem<br/>Capítulo 6</p><p class="chnum">6</p><h1>O corpo em aros</h1></div>
@@ -619,25 +646,25 @@ section.level{page:chap;break-before:page}
 <section class="chap" id="cartas" style="page:pg16;bookmark-level:1;bookmark-label:'Cartas citadas'"><span class="rh">Cartas citadas</span><div class="chhead nonum"><p class="chlab">Consulta</p><h1>Cartas citadas</h1></div>
 <p>Os números seguem a edição completa e anotada das cartas, publicada pelo Van Gogh Museum e pelo Huygens Institute em vangoghletters.org. As datas e os lugares são os da edição.</p>
 <table class="letters">
-<tr><td>156</td><td>Cuesmes, 20 de agosto de 1880</td><td>Pede a Theo os <i>Exercices au fusain</i> de Bargue.</td></tr>
-<tr><td>171</td><td>Etten, 26 de agosto de 1881</td><td>Conta que refez toda a série de Bargue.</td></tr>
-<tr><td>210</td><td>Haia, 11 de março de 1882</td><td>Riscar o que sente com um lápis de carpinteiro duro.</td></tr>
-<tr><td>217</td><td>Haia, 14 de abril de 1882</td><td>Fixar o grafite com leite.</td></tr>
-<tr><td>222</td><td>Haia, 1º de maio de 1882</td><td>O lápis de carpinteiro.</td></tr>
-<tr><td>253 e 254</td><td>Haia, 5 de agosto de 1882</td><td>A moldura de perspectiva sobre duas estacas.</td></tr>
-<tr><td>274</td><td>Haia, 22 de outubro de 1882</td><td>Desenhar é abrir caminho através de uma parede de ferro invisível.</td></tr>
-<tr><td>297</td><td>Haia</td><td>O giz litográfico e o leite para tirar o brilho.</td></tr>
-<tr><td>494</td><td>Nuenen, 18 de abril de 1885</td><td>Os antigos começavam pelos centros, e não pela linha.</td></tr>
-<tr><td>515</td><td>Nuenen, 14 de julho de 1885</td><td>Ficaria desesperado se as figuras fossem acadêmicas.</td></tr>
-<tr><td>585</td><td>Arles, 16 de março de 1888</td><td>Três estudos feitos com a moldura de perspectiva.</td></tr>
-<tr><td>600</td><td>Arles, 20 de abril de 1888</td><td>O junco cortado como uma pena de ganso.</td></tr>
-<tr><td>618</td><td>Arles, 29 de maio de 1888</td><td>Junco grosso sobre Whatman fino e pena de ave para o fundo.</td></tr>
-<tr><td>620</td><td>Arles, 5 de junho de 1888</td><td>O desenho dos barcos em uma hora. O japonês desenha depressa, como um relâmpago.</td></tr>
-<tr><td>639</td><td>Arles, 13 de julho de 1888</td><td>Cinco grandes desenhos a pena de Montmajour.</td></tr>
-<tr><td>783</td><td>Saint-Rémy, 25 de junho de 1889</td><td>Os ciprestes, belos como um obelisco egípcio.</td></tr>
-<tr><td>805</td><td>Saint-Rémy, 20 de setembro de 1889</td><td>As cópias como a interpretação de um músico.</td></tr>
-<tr><td>816</td><td>Saint-Rémy, 3 de novembro de 1889</td><td>Pintar a partir de Millet é traduzir.</td></tr>
-<tr><td>874</td><td>Auvers, 21 de maio de 1890</td><td>Pede de novo as pranchas de Bargue.</td></tr>
+<tr><td>Nº 156</td><td>Cuesmes, 20.08.1880</td><td>Pede a Theo os <i>Exercices au fusain</i> de Bargue.</td></tr>
+<tr><td>Nº 171</td><td>Etten, 26.08.1881</td><td>Conta que refez toda a série de Bargue.</td></tr>
+<tr><td>Nº 210</td><td>Haia, 11.03.1882</td><td>Riscar o que sente com um lápis de carpinteiro duro.</td></tr>
+<tr><td>Nº 217</td><td>Haia, 14.04.1882</td><td>Fixar o grafite com leite.</td></tr>
+<tr><td>Nº 222</td><td>Haia, 01.05.1882</td><td>O lápis de carpinteiro.</td></tr>
+<tr><td>Nº 253 e 254</td><td>Haia, 05.08.1882</td><td>A moldura de perspectiva sobre duas estacas.</td></tr>
+<tr><td>Nº 274</td><td>Haia, 22.10.1882</td><td>Desenhar é abrir caminho através de uma parede de ferro invisível.</td></tr>
+<tr><td>Nº 297</td><td>Haia</td><td>O giz litográfico e o leite para tirar o brilho.</td></tr>
+<tr><td>Nº 494</td><td>Nuenen, 18.04.1885</td><td>Os antigos começavam pelos centros, e não pela linha.</td></tr>
+<tr><td>Nº 515</td><td>Nuenen, 14.07.1885</td><td>Ficaria desesperado se as figuras fossem acadêmicas.</td></tr>
+<tr><td>Nº 585</td><td>Arles, 16.03.1888</td><td>Três estudos feitos com a moldura de perspectiva.</td></tr>
+<tr><td>Nº 600</td><td>Arles, 20.04.1888</td><td>O junco cortado como uma pena de ganso.</td></tr>
+<tr><td>Nº 618</td><td>Arles, 29.05.1888</td><td>Junco grosso sobre Whatman fino e pena de ave para o fundo.</td></tr>
+<tr><td>Nº 620</td><td>Arles, 05.06.1888</td><td>O desenho dos barcos em uma hora. O japonês desenha depressa, como um relâmpago.</td></tr>
+<tr><td>Nº 639</td><td>Arles, 13.07.1888</td><td>Cinco grandes desenhos a pena de Montmajour.</td></tr>
+<tr><td>Nº 783</td><td>Saint-Rémy, 25.06.1889</td><td>Os ciprestes, belos como um obelisco egípcio.</td></tr>
+<tr><td>Nº 805</td><td>Saint-Rémy, 20.09.1889</td><td>As cópias como a interpretação de um músico.</td></tr>
+<tr><td>Nº 816</td><td>Saint-Rémy, 03.11.1889</td><td>Pintar a partir de Millet é traduzir.</td></tr>
+<tr><td>Nº 874</td><td>Auvers, 21.05.1890</td><td>Pede de novo as pranchas de Bargue.</td></tr>
 </table></section>
 <section class="chap" id="fontes" style="page:pg17;bookmark-level:1;bookmark-label:'Fontes e leituras'"><span class="rh">Fontes e leituras</span><div class="chhead nonum"><p class="chlab">Consulta</p><h1>Fontes e leituras</h1></div>
 <p>A fonte principal sobre Van Gogh é ele mesmo. A edição completa das cartas, com tradução inglesa, notas e as imagens dos croquis que ele desenhava nas margens, está em vangoghletters.org. Os números das cartas citadas neste livro seguem essa edição.</p>

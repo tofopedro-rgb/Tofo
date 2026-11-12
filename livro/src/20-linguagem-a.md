@@ -105,7 +105,7 @@ Nos desenhos maduros ele não esfumava. O escuro se faz com mais marcas por cent
 
 Em quase todas as folhas de Arles há uma área grande quase vazia: o céu de La Crau, o caminho de Saintes-Maries, a parede caiada das cabanas. Esse vazio dá descanso ao olho e faz as zonas marcadas vibrarem. Escolha essa área antes de começar e não desenhe nela.
 
-## As seis regras da folha de Arles
+<h2 class="newpage">As seis regras da folha de Arles</h2>
 
 Quem estuda muitos desenhos dele chega a uma ordem de trabalho parecida em quase todos.
 
@@ -166,11 +166,17 @@ Três erros aparecem em quase todas as tentativas de imitar esses desenhos. O pr
 <figure><img src="img/r13.jpg" alt="Planície com marcas que diminuem"><figcaption><b>Certo.</b> Marcas que diminuem, céu reservado.</figcaption></figure>
 </div>
 
+<div class="obra" markdown="1">
+
 ## O cipreste
 
 O cipreste é um ótimo exercício de fluxo. Ele não tem contorno. A silhueta aparece pela soma de centenas de cachos em forma de chama, cada um feito de dois a quatro traços paralelos que sobem e enrolam para um lado. No miolo da árvore os cachos se apertam até quase fundirem. Nas bordas se soltam e deixam o papel aparecer. O chão embaixo repete o movimento em ondas longas.
 
 <figure><img src="img/cypress.jpg" alt="Ciprestes, desenho a pena"><figcaption><i>Ciprestes</i>, Saint-Rémy, junho de 1889. Pena de junco e tinta sobre grafite. Art Institute of Chicago.</figcaption></figure>
+
+</div>
+
+<div class="obra" markdown="1">
 
 ## A Noite Estrelada desenhada
 
@@ -178,8 +184,14 @@ Em junho de 1889, Vincent copiou a pena a pintura que tinha acabado de fazer. O 
 
 <figure><img src="img/starry.jpg" alt="A Noite Estrelada, desenho a pena"><figcaption><i>A Noite Estrelada</i>, desenho a partir da pintura, junho de 1889. F1540, JH1732.</figcaption></figure>
 
+</div>
+
+<div class="obra" markdown="1">
+
 ## Como estudar o fluxo numa obra
 
 Diante de qualquer reprodução dele, faça três coisas antes de copiar. Encontre os centros e marque-os com um ponto. Trace, bem leve e por cima de uma cópia impressa, cinco ou seis linhas de corrente que passem pelos traços dele. Depois procure o elemento reto que dá contraste. Com esse mapa pronto, a cópia sai muito mais fiel do que copiando traço por traço.
 
 <figure><img src="img/wheatcyp.jpg" alt="Trigal com ciprestes"><figcaption><i>Trigal com ciprestes</i>, Saint-Rémy, 1889. Óleo sobre tela. National Gallery, Londres. Quatro substâncias em fluxo: nuvens em laços, montanha em linhas longas, trigo em ondas curtas e cipreste em chamas.</figcaption></figure>
+
+</div>

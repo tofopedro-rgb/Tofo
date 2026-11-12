@@ -34,25 +34,25 @@
 Os números seguem a edição completa e anotada das cartas, publicada pelo Van Gogh Museum e pelo Huygens Institute em vangoghletters.org. As datas e os lugares são os da edição.
 
 <table class="letters">
-<tr><td>156</td><td>Cuesmes, 20 de agosto de 1880</td><td>Pede a Theo os <i>Exercices au fusain</i> de Bargue.</td></tr>
-<tr><td>171</td><td>Etten, 26 de agosto de 1881</td><td>Conta que refez toda a série de Bargue.</td></tr>
-<tr><td>210</td><td>Haia, 11 de março de 1882</td><td>Riscar o que sente com um lápis de carpinteiro duro.</td></tr>
-<tr><td>217</td><td>Haia, 14 de abril de 1882</td><td>Fixar o grafite com leite.</td></tr>
-<tr><td>222</td><td>Haia, 1º de maio de 1882</td><td>O lápis de carpinteiro.</td></tr>
-<tr><td>253 e 254</td><td>Haia, 5 de agosto de 1882</td><td>A moldura de perspectiva sobre duas estacas.</td></tr>
-<tr><td>274</td><td>Haia, 22 de outubro de 1882</td><td>Desenhar é abrir caminho através de uma parede de ferro invisível.</td></tr>
-<tr><td>297</td><td>Haia</td><td>O giz litográfico e o leite para tirar o brilho.</td></tr>
-<tr><td>494</td><td>Nuenen, 18 de abril de 1885</td><td>Os antigos começavam pelos centros, e não pela linha.</td></tr>
-<tr><td>515</td><td>Nuenen, 14 de julho de 1885</td><td>Ficaria desesperado se as figuras fossem acadêmicas.</td></tr>
-<tr><td>585</td><td>Arles, 16 de março de 1888</td><td>Três estudos feitos com a moldura de perspectiva.</td></tr>
-<tr><td>600</td><td>Arles, 20 de abril de 1888</td><td>O junco cortado como uma pena de ganso.</td></tr>
-<tr><td>618</td><td>Arles, 29 de maio de 1888</td><td>Junco grosso sobre Whatman fino e pena de ave para o fundo.</td></tr>
-<tr><td>620</td><td>Arles, 5 de junho de 1888</td><td>O desenho dos barcos em uma hora. O japonês desenha depressa, como um relâmpago.</td></tr>
-<tr><td>639</td><td>Arles, 13 de julho de 1888</td><td>Cinco grandes desenhos a pena de Montmajour.</td></tr>
-<tr><td>783</td><td>Saint-Rémy, 25 de junho de 1889</td><td>Os ciprestes, belos como um obelisco egípcio.</td></tr>
-<tr><td>805</td><td>Saint-Rémy, 20 de setembro de 1889</td><td>As cópias como a interpretação de um músico.</td></tr>
-<tr><td>816</td><td>Saint-Rémy, 3 de novembro de 1889</td><td>Pintar a partir de Millet é traduzir.</td></tr>
-<tr><td>874</td><td>Auvers, 21 de maio de 1890</td><td>Pede de novo as pranchas de Bargue.</td></tr>
+<tr><td>Nº 156</td><td>Cuesmes, 20.08.1880</td><td>Pede a Theo os <i>Exercices au fusain</i> de Bargue.</td></tr>
+<tr><td>Nº 171</td><td>Etten, 26.08.1881</td><td>Conta que refez toda a série de Bargue.</td></tr>
+<tr><td>Nº 210</td><td>Haia, 11.03.1882</td><td>Riscar o que sente com um lápis de carpinteiro duro.</td></tr>
+<tr><td>Nº 217</td><td>Haia, 14.04.1882</td><td>Fixar o grafite com leite.</td></tr>
+<tr><td>Nº 222</td><td>Haia, 01.05.1882</td><td>O lápis de carpinteiro.</td></tr>
+<tr><td>Nº 253 e 254</td><td>Haia, 05.08.1882</td><td>A moldura de perspectiva sobre duas estacas.</td></tr>
+<tr><td>Nº 274</td><td>Haia, 22.10.1882</td><td>Desenhar é abrir caminho através de uma parede de ferro invisível.</td></tr>
+<tr><td>Nº 297</td><td>Haia</td><td>O giz litográfico e o leite para tirar o brilho.</td></tr>
+<tr><td>Nº 494</td><td>Nuenen, 18.04.1885</td><td>Os antigos começavam pelos centros, e não pela linha.</td></tr>
+<tr><td>Nº 515</td><td>Nuenen, 14.07.1885</td><td>Ficaria desesperado se as figuras fossem acadêmicas.</td></tr>
+<tr><td>Nº 585</td><td>Arles, 16.03.1888</td><td>Três estudos feitos com a moldura de perspectiva.</td></tr>
+<tr><td>Nº 600</td><td>Arles, 20.04.1888</td><td>O junco cortado como uma pena de ganso.</td></tr>
+<tr><td>Nº 618</td><td>Arles, 29.05.1888</td><td>Junco grosso sobre Whatman fino e pena de ave para o fundo.</td></tr>
+<tr><td>Nº 620</td><td>Arles, 05.06.1888</td><td>O desenho dos barcos em uma hora. O japonês desenha depressa, como um relâmpago.</td></tr>
+<tr><td>Nº 639</td><td>Arles, 13.07.1888</td><td>Cinco grandes desenhos a pena de Montmajour.</td></tr>
+<tr><td>Nº 783</td><td>Saint-Rémy, 25.06.1889</td><td>Os ciprestes, belos como um obelisco egípcio.</td></tr>
+<tr><td>Nº 805</td><td>Saint-Rémy, 20.09.1889</td><td>As cópias como a interpretação de um músico.</td></tr>
+<tr><td>Nº 816</td><td>Saint-Rémy, 03.11.1889</td><td>Pintar a partir de Millet é traduzir.</td></tr>
+<tr><td>Nº 874</td><td>Auvers, 21.05.1890</td><td>Pede de novo as pranchas de Bargue.</td></tr>
 </table>
 
 <!-- id: fontes | Fontes e leituras | back -->

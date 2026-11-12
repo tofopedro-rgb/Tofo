@@ -39,9 +39,23 @@ Nem todo retrato é denso. Em *La Mousmé*, o rosto da moça é quase papel em b
 
 Com luz forte de um lado, o lado iluminado recebe metade das marcas, ou menos. O lado da sombra recebe todas, mais juntas, com a mesma pressão. A direção dos traços continua seguindo os planos dos dois lados. É assim que o rosto ganha volume sem nenhuma área esfumada.
 
+<div class="obra" markdown="1">
+
 ## Por onde começar um rosto
 
-Comece pelos olhos e pelo contorno do chapéu ou do cabelo, que são as marcas mais escuras e mais nítidas. Depois a barba ou o cabelo, depois o casaco. A pele fica para o fim e recebe menos marcas do que você imagina. O fundo vem por último e precisa ficar mais claro que o casaco. O Capítulo 7 mostra essa ordem num retrato completo.
+<ol class="laws">
+<li><b>Olhos e contorno do chapéu ou do cabelo.</b> São as marcas mais escuras e mais nítidas, e fixam a semelhança.</li>
+<li><b>Barba ou cabelo.</b> Na direção do mapa: o cabelo sobe, a barba desce em leque.</li>
+<li><b>O casaco.</b> A zona mais grossa da folha, em hachura que acompanha a lapela.</li>
+<li><b>A pele.</b> Fica para o fim e recebe menos marcas do que você imagina.</li>
+<li><b>O fundo.</b> Por último, sempre mais claro que o casaco.</li>
+</ol>
+
+O Capítulo 7 mostra essa ordem num retrato completo.
+
+<figure><img src="img/roulin2.jpg" alt="Joseph Roulin sentado, desenho a pena"><figcaption><i>Joseph Roulin sentado</i>, Arles, agosto de 1888. Pena e tinta. Los Angeles County Museum of Art. A mesma hierarquia no corpo inteiro: rosto e barba firmes, casaco escuro, fundo quase vazio.</figcaption></figure>
+
+</div>
 
 <!-- id: cap5 | 5. Os autorretratos | chapter -->
 # 5. Os autorretratos
@@ -52,17 +66,25 @@ Van Gogh fez mais de 35 autorretratos, quase todos entre 1886 e 1889. São pintu
 
 Vale acompanhar três soluções, em ordem.
 
+<div class="obra" markdown="1">
+
 ## 1887: o halo
 
 No *Autorretrato com chapéu de feltro cinza*, pintado em Paris no inverno de 1887 para 1888, os tracinhos são curtos e separados. No rosto, giram em volta dos olhos e descem pela barba. No fundo, formam anéis em volta da cabeça, um halo de marcas que a destaca. A aba do chapéu tem tracinhos que dão a volta inteira, e a copa tem arcos que acompanham a cúpula.
 
 <figure><img src="img/sp_felt.jpg" alt="Autorretrato com chapéu de feltro cinza"><figcaption><i>Autorretrato com chapéu de feltro cinza</i>, Paris, 1887 a 1888. Óleo sobre tela. Van Gogh Museum, Amsterdã. F344, JH1353.</figcaption></figure>
 
-<figure><img src="img/sp_felteye.jpg" alt="Detalhe do olho"><figcaption>Detalhe do mesmo autorretrato. Cada pincelada é um tracinho separado. Elas formam anéis em volta do olho, e a pálpebra de cima é a marca mais escura.</figcaption></figure>
+</div>
+
+<div class="obra" markdown="1">
 
 No autorretrato de Chicago, da primavera de 1887, a solução é outra: os tracinhos do rosto saem do nariz como raios, e o fundo é pontilhado, com pontos maiores que as marcas do rosto.
 
 <figure><img src="img/sp_chi.jpg" alt="Autorretrato de 1887, Art Institute of Chicago"><figcaption><i>Autorretrato</i>, Paris, primavera de 1887. Óleo sobre madeira. Art Institute of Chicago. F345, JH1249.</figcaption></figure>
+
+</div>
+
+<div class="obra" markdown="1">
 
 ## 1888: o fundo calmo
 
@@ -70,13 +92,19 @@ Em Arles, no autorretrato dedicado a Paul Gauguin, o fundo fica quase liso. O ro
 
 <figure><img src="img/sp_gauguin.jpg" alt="Autorretrato dedicado a Paul Gauguin"><figcaption><i>Autorretrato dedicado a Paul Gauguin</i>, Arles, setembro de 1888. Óleo sobre tela. Harvard Art Museums. F476, JH1581.</figcaption></figure>
 
+</div>
+
+<div class="obra" markdown="1">
+
 ## 1889: o redemoinho
 
 No autorretrato de setembro de 1889, pintado em Saint-Rémy e hoje no Musée d'Orsay, o fundo vira água em movimento. O casaco entra na mesma corrente, em linhas onduladas iguais às do fundo, e figura e fundo quase se fundem. Só o rosto fica parado, com marcas mais curtas e mais firmes. É o caso mais claro, na obra dele, da quinta lei do fluxo: o movimento precisa de algo parado para aparecer, e aqui o elemento parado é o próprio rosto.
 
 <figure><img src="img/sp_orsay.jpg" alt="Autorretrato de 1889, Musée d'Orsay"><figcaption><i>Autorretrato</i>, Saint-Rémy, setembro de 1889. Óleo sobre tela. Musée d'Orsay, Paris. F627, JH1772.</figcaption></figure>
 
-## O que vale para todos
+</div>
+
+<h2 class="newpage">O que vale para todos</h2>
 
 Os olhos são o ponto mais escuro e mais nítido. Em volta deles tudo pode se mexer. Cabelo e barba costumam ser a mesma marca, a chama, em direções opostas: o cabelo sobe e se afasta do rosto, a barba desce e se afasta da boca.
 

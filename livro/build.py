@@ -120,7 +120,12 @@ def build_sections():
         if s['id'] in BALLOON_CHAPTERS:
             h = add_balloons(h)
         if s['kind'] == 'chapter':
-            h += practice_line(s['id'])
+            pl = practice_line(s['id'])
+            t = h.rstrip()
+            if '<div class="obra"' in t and re.fullmatch(r'(\s*</div>)+\s*', t[t.rfind('</figure>') + 9:]) and t.rfind('<div class="obra"') > t.rfind('</div>', 0, t.rfind('<div class="obra"') + 1) - 1:
+                h = t[:-len('</div>')] + pl + '</div>'
+            else:
+                h += pl
         S.append({**s, 'html': h})
         if s['id'] == 'cap8':  # depois da Parte II vem a Parte III
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
@@ -194,7 +199,8 @@ WORK_DETAILS = {
                              (.86, .16, .2, 'O fundo pontilhado', 'Pontos em fileiras empurram a cabeça para a frente.')]),
  'mousme': ('mousme', [(.47, .33, .26, 'Quase papel', 'Contorno pesado só nos olhos, nas sobrancelhas, nas narinas e na boca.'),
                        (.5, .72, .3, 'A blusa listrada', 'Listras grossas que seguem as pregas da roupa.')]),
- 'sp_felt': ('sp_felt', [(.5, .2, .3, 'A aba do chapéu', 'Tracinhos que dão a volta inteira na aba.'),
+ 'sp_felt': ('sp_felt', [(.5, .5, .55, 'O olho', 'Cada pincelada é um tracinho separado. Elas formam anéis em volta do olho.', 'sp_felteye'),
+                         (.5, .2, .3, 'A aba do chapéu', 'Tracinhos que dão a volta inteira na aba.'),
                          (.13, .42, .24, 'O halo de tracinhos', 'Pinceladas curtas irradiam da cabeça e a destacam.')]),
  'sp_chi': ('sp_chi', [(.5, .44, .2, 'Raios a partir do nariz', 'Os tracinhos do rosto saem do nariz como raios.'),
                        (.12, .2, .22, 'O fundo pontilhado', 'Pontos maiores que as marcas do rosto.')]),
@@ -212,6 +218,8 @@ WORK_DETAILS = {
  'mousme2': ('mousme2', [(.42, .2, .28, 'O rosto', 'Quase papel em branco, com contorno só nas feições.'),
                          (.45, .45, .35, 'A blusa listrada', 'Listras grossas que descem e seguem o corpo.'),
                          (.5, .82, .35, 'A saia pontilhada', 'Pontos e anéis em fileiras soltas.')]),
+ 'roulin2': ('roulin2', [(.5, .2, .3, 'O rosto', 'Barba em curvas e olhos firmes: a zona mais nítida.'),
+                         (.4, .5, .34, 'O casaco', 'Faixas de hachura que seguem os botões e as mangas.')]),
  'sorrow': ('sorrow', [(.45, .66, .26, 'O contorno com peso', 'A linha engrossa embaixo da coxa e no pé, e afina onde bate luz.')]),
 }
 BALLOON_CHAPTERS = ('cap2', 'cap3', 'cap4', 'cap5', 'cap6')
@@ -219,8 +227,8 @@ BALLOON_CHAPTERS = ('cap2', 'cap3', 'cap4', 'cap5', 'cap6')
 def make_details():
     from PIL import Image
     for key, (src, items) in WORK_DETAILS.items():
-        im = Image.open(f'img/{src}.jpg').convert('RGB')
-        for i, (cx, cy, sz, *_ ) in enumerate(items, 1):
+        for i, (cx, cy, sz, *rest) in enumerate(items, 1):
+            im = Image.open(f'img/{rest[2] if len(rest) > 2 else src}.jpg').convert('RGB')
             side = sz * im.width
             x0 = max(0, min(im.width - side, cx * im.width - side / 2))
             y0 = max(0, min(im.height - side, cy * im.height - side / 2))
@@ -230,7 +238,7 @@ def balloons_html(key):
     src, items = WORK_DETAILS[key]
     cells = ''.join(f'<figure class="bal"><img src="img/det-{key}-{i}.jpg" alt="{esc(t)}"/>'
                     f'<figcaption><b>{esc(t)}</b> {esc(d)}</figcaption></figure>'
-                    for i, (cx, cy, sz, t, d) in enumerate(items, 1))
+                    for i, (cx, cy, sz, t, d, *_) in enumerate(items, 1))
     return f'<div class="balrow n{len(items)}">{cells}</div>'
 
 def add_balloons(h):
@@ -369,8 +377,8 @@ td{border-bottom:.4pt solid #CFC4B0;padding:.35em .5em .35em 0;vertical-align:to
 table.chrono td,table.letters td{vertical-align:baseline;line-height:1.38}
 table.chrono tr,table.letters tr{break-inside:avoid}
 table.chrono td:first-child{font:400 10pt Disp;width:.62in;white-space:nowrap}
-table.letters td:first-child{font:400 9pt Disp;width:.72in;white-space:nowrap}
-table.letters td:nth-child(2){font:400 7.6pt/1.4 Sans;color:#6E6253;width:1.35in}
+table.letters td:first-child{font:400 9pt Disp;width:.82in;white-space:nowrap}
+table.letters td:nth-child(2){font:400 7.6pt/1.4 Sans;color:#6E6253;width:1.4in}
 ol.check li{margin:.35em 0}
 dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 .ref{padding-left:1.2em;text-indent:-1.2em;text-align:left}
@@ -399,11 +407,20 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .figbal.side{display:flex;gap:.22in;align-items:flex-start}
 .figbal.side > figure{flex:none;width:3.05in;margin:0}
 .figbal.side > figure img{max-height:4.1in;width:auto;max-width:3.05in}
-.figbal.side .balrow{flex:1;flex-direction:column;gap:.14in;justify-content:flex-start}
-.figbal.side .bal{width:auto}
+.figbal.side .balrow{display:block;flex:1}
+.figbal.side .bal{width:auto;display:block;margin:0 0 .14in}
 .figbal.side .bal img{width:.92in;height:.92in}
 .pline{margin-top:1.4em;border-top:.6pt solid #1E1913;padding-top:.08in;font:400 7.8pt/1.5 Sans;text-align:left}
-.pline b{font-weight:700;margin-right:.3em}.pline a{font-weight:700;border-bottom:.5pt solid #BF8A5A}
+.pline b{font-weight:700;margin-right:.3em}
+.pline a::after{content:" (p. " target-counter(attr(href), page) ")";font-weight:400;color:#6E6253}
+h2.newpage{break-before:page}
+.obra{break-before:page;break-inside:avoid}
+.obra > h2:first-child{margin-top:0}
+.obra .figbal.side > figure img{max-height:3.55in}
+.obra .figbal > figure img{max-height:2.9in}
+.obra ol.laws ~ .figbal.side > figure img{max-height:2.6in}
+.obra ol.laws ~ .figbal .bal img{width:.8in;height:.8in}
+.obra ol.laws li{padding-top:.06in;padding-bottom:.06in}.pline a{font-weight:700;border-bottom:.5pt solid #BF8A5A}
 .balrow{display:flex;gap:.22in;justify-content:center}
 .bal{width:1.45in;flex:none;margin:0;text-align:left}
 .bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
