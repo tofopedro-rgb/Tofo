@@ -78,7 +78,7 @@ function reset() {
 }
 reset();
 
-TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'O parque depois do anoitecer' }); };
+TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'O parque ao entardecer' }); };
 TT.retry = () => {
   if (S.checkpoint < 0) return TT.start();
   const x = C.checkpoints[S.checkpoint];

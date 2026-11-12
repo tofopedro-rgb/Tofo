@@ -6,15 +6,15 @@
 <title>Tintim e os Pugs</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@500;600;700;800&display=swap">
 <style>
-  /* Sistema visual: noite no parque. Vidro escuro, contornos finos de luz, texto que brilha. */
-  :root { --ink: #020d14; --glass: rgba(4, 24, 36, .58); --line: rgba(150, 236, 255, .34); --glow: #8ff0ff; --text: #eafcff; --dim: rgba(234, 252, 255, .62);
+  /* Sistema visual: entardecer no parque. Vidro cor de vinho, contornos finos de luz, texto que brilha. */
+  :root { --ink: #020d14; --glass: rgba(44, 18, 40, .58); --line: rgba(255, 220, 190, .34); --glow: #ffd9a8; --text: #fff6ea; --dim: rgba(255, 246, 234, .62);
     --gold: #ffd98a; --warm: #ffb866; --rose: #ff7d9c; --violet: #a98bff; --mint: #7dffd0;
     --font: "Nunito", "Trebuchet MS", system-ui, sans-serif; --display: "Marcellus", Georgia, serif; --pop: cubic-bezier(.2, 1.4, .4, 1); --out: cubic-bezier(.2, .8, .2, 1); }
   html { color-scheme: dark; }
-  html, body { margin: 0; height: 100%; background: #01070c; color: var(--text); font-family: var(--font); overflow: hidden;
+  html, body { margin: 0; height: 100%; background: #12070f; color: var(--text); font-family: var(--font); overflow: hidden;
     -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
   #wrap { position: fixed; inset: 0; display: grid; place-items: center; }
-  #stage { position: relative; width: min(100vw, 177.78vh); aspect-ratio: 16 / 9; overflow: hidden; container-type: size; background: #020a12; touch-action: none; }
+  #stage { position: relative; width: min(100vw, 177.78vh); aspect-ratio: 16 / 9; overflow: hidden; container-type: size; background: #1a0c1c; touch-action: none; }
   #c { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .layer { position: absolute; inset: 0; pointer-events: none; }
   button { font: inherit; color: inherit; cursor: pointer; border: 0; }
@@ -43,8 +43,8 @@
   .chip.on { display: flex; animation: chipIn .35s var(--pop); }
   .chip img { height: 2.5cqw; }
   @keyframes chipIn { from { transform: scale(0); } }
-  #prog { width: 19cqw; height: .5cqw; background: rgba(150, 236, 255, .16); border-radius: 9cqw; position: relative; margin: .9cqw 0 .9cqw .8cqw; }
-  #progFill { position: absolute; inset: 0 auto 0 0; width: 0; background: linear-gradient(90deg, rgba(143, 240, 255, .2), var(--glow)); border-radius: 9cqw; box-shadow: 0 0 1cqw var(--glow); }
+  #prog { width: 19cqw; height: .5cqw; background: rgba(255, 220, 190, .16); border-radius: 9cqw; position: relative; margin: .9cqw 0 .9cqw .8cqw; }
+  #progFill { position: absolute; inset: 0 auto 0 0; width: 0; background: linear-gradient(90deg, rgba(255, 214, 160, .2), var(--glow)); border-radius: 9cqw; box-shadow: 0 0 1cqw var(--glow); }
   #progDog { position: absolute; top: 50%; height: 3cqw; transform: translate(-50%, -58%); left: 0; }
   #progEnd { font-size: 1.7cqw; }
   #bossBars { display: none; flex-direction: column; gap: .6cqw; font-size: 1.35cqw; padding: .3cqw 0; }
@@ -52,24 +52,24 @@
   .bossRow b { width: 6.6cqw; font-weight: 700; letter-spacing: .05cqw; }
   .seg { width: 3.6cqw; height: .7cqw; border-radius: 9cqw; background: var(--violet); box-shadow: 0 0 1cqw var(--violet); transition: transform .35s var(--pop), background .2s, box-shadow .2s; }
   .bossRow.p2 .seg { background: var(--rose); box-shadow: 0 0 1cqw var(--rose); }
-  .bossRow .seg.off { background: rgba(150, 236, 255, .14); box-shadow: none; transform: scale(.8); }
+  .bossRow .seg.off { background: rgba(255, 220, 190, .14); box-shadow: none; transform: scale(.8); }
   #hr.boss #prog, #hr.boss #progEnd { display: none; } #hr.boss #bossBars { display: flex; }
   #hr.boss { border-radius: 2cqw; }
   .round { position: absolute; top: 7.2cqw; width: 3.8cqw; height: 3.8cqw; border-radius: 50%; background: var(--glass); border: .12cqw solid var(--line); pointer-events: auto;
     display: grid; place-items: center; font-size: 1.5cqw; color: var(--text); padding: 0; transition: transform .15s var(--pop), box-shadow .2s; }
-  .round:hover { box-shadow: 0 0 1.6cqw rgba(143, 240, 255, .45); }
+  .round:hover { box-shadow: 0 0 1.6cqw rgba(255, 214, 160, .45); }
   .round:active { transform: scale(.9); }
   .round.muted { text-decoration: line-through; opacity: .6; }
   #btnPause { right: 1.6cqw; } #btnMute { right: 6.2cqw; }
 
   #banner { position: absolute; left: 50%; top: 20%; transform: translate(-50%, 0); opacity: 0; font-family: var(--display); font-size: 3.5cqw; letter-spacing: .32cqw; color: #fff; white-space: nowrap; pointer-events: none;
-    text-shadow: 0 0 1.2cqw rgba(143, 240, 255, .95), 0 0 4cqw rgba(60, 190, 235, .7), 0 .2cqw .6cqw rgba(0, 10, 16, .8); }
+    text-shadow: 0 0 1.2cqw rgba(255, 214, 160, .95), 0 0 4cqw rgba(255, 130, 90, .7), 0 .2cqw .6cqw rgba(0, 10, 16, .8); }
   #banner::after { content: ""; display: block; height: .12cqw; margin: .7cqw auto 0; width: 60%; background: linear-gradient(90deg, transparent, var(--glow), transparent); }
   #banner.show { animation: banner 2.6s var(--out) both; }
   @keyframes banner { 0% { opacity: 0; transform: translate(-50%, 1cqw); } 16% { opacity: 1; transform: translate(-50%, 0); } 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -1cqw); } }
 
   /* ---------- cena do chefão ---------- */
-  .bar { position: absolute; left: 0; right: 0; height: 12%; background: #01060a; transition: transform .6s var(--out); pointer-events: none; }
+  .bar { position: absolute; left: 0; right: 0; height: 12%; background: #12070f; transition: transform .6s var(--out); pointer-events: none; }
   #barT { top: 0; transform: translateY(-101%); } #barB { bottom: 0; transform: translateY(101%); }
   .cine #barT, .cine #barB { transform: none; }
   .cine #hud { opacity: 0; }
@@ -77,22 +77,22 @@
   .cine #bossCard.show { opacity: 1; transform: none; }
   #bossCard small { display: inline-block; color: var(--rose); font-size: 1.5cqw; font-weight: 800; letter-spacing: .7cqw; text-shadow: 0 0 1cqw rgba(255, 125, 156, .8); }
   #bossCard h2 { margin: .4cqw 0 0; font-family: var(--display); font-weight: 400; font-size: 5.6cqw; line-height: 1; letter-spacing: .3cqw; color: #fff;
-    text-shadow: 0 0 1.4cqw rgba(190, 150, 255, .95), 0 0 5cqw rgba(140, 100, 255, .8), 0 .3cqw .8cqw rgba(0, 6, 12, .9); }
+    text-shadow: 0 0 1.4cqw rgba(255, 170, 120, .95), 0 0 5cqw rgba(230, 80, 110, .8), 0 .3cqw .8cqw rgba(0, 6, 12, .9); }
   #bossCard p { margin: 1cqw 0 0; font-size: 1.9cqw; font-weight: 600; color: var(--text); text-shadow: 0 .2cqw .6cqw rgba(0, 6, 12, .9); }
 
   /* ---------- íris (transição circular) ---------- */
   @property --r { syntax: '<length-percentage>'; inherits: false; initial-value: 150%; }
-  #iris { will-change: background; --r: 150%; --x: 50%; --y: 50%; background: radial-gradient(circle at var(--x) var(--y), transparent var(--r), rgba(1, 6, 10, .6) calc(var(--r) + 3%), #01060a calc(var(--r) + 9%)); transition: --r .8s cubic-bezier(.6, 0, .3, 1); }
+  #iris { will-change: background; --r: 150%; --x: 50%; --y: 50%; background: radial-gradient(circle at var(--x) var(--y), transparent var(--r), rgba(18, 7, 18, .6) calc(var(--r) + 3%), #12070f calc(var(--r) + 9%)); transition: --r .8s cubic-bezier(.6, 0, .3, 1); }
   #iris.closed { --r: -10%; }
 
   /* ---------- telas ---------- */
   .screen { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; visibility: hidden; transition: opacity .5s, visibility 0s .5s; pointer-events: none; }
   .screen.on { opacity: 1; visibility: visible; transition: opacity .5s; pointer-events: auto; }
-  .scrim { background: radial-gradient(ellipse at 50% 42%, rgba(2, 16, 26, .3), rgba(1, 6, 10, .88)); }
-  .btn { background: linear-gradient(180deg, rgba(143, 240, 255, .28), rgba(60, 170, 210, .16)); color: #fff; font-size: 2.3cqw; font-weight: 700; letter-spacing: .3cqw; padding: .9cqw 4.4cqw; border-radius: 99cqw;
-    border: .14cqw solid var(--glow); box-shadow: 0 0 2.4cqw rgba(143, 240, 255, .4), inset 0 0 1.6cqw rgba(143, 240, 255, .2); text-shadow: 0 0 1cqw rgba(143, 240, 255, .9);
+  .scrim { background: radial-gradient(ellipse at 50% 42%, rgba(60, 24, 44, .3), rgba(18, 7, 18, .78)); }
+  .btn { background: linear-gradient(180deg, rgba(255, 214, 160, .28), rgba(255, 140, 100, .16)); color: #fff; font-size: 2.3cqw; font-weight: 700; letter-spacing: .3cqw; padding: .9cqw 4.4cqw; border-radius: 99cqw;
+    border: .14cqw solid var(--glow); box-shadow: 0 0 2.4cqw rgba(255, 214, 160, .4), inset 0 0 1.6cqw rgba(255, 214, 160, .2); text-shadow: 0 0 1cqw rgba(255, 214, 160, .9);
     transition: transform .2s var(--out), box-shadow .2s var(--out), background .2s; line-height: 1.3; }
-  .btn:hover { transform: translateY(-.2cqw); box-shadow: 0 0 3.6cqw rgba(143, 240, 255, .7), inset 0 0 2cqw rgba(143, 240, 255, .3); }
+  .btn:hover { transform: translateY(-.2cqw); box-shadow: 0 0 3.6cqw rgba(255, 214, 160, .7), inset 0 0 2cqw rgba(255, 214, 160, .3); }
   .btn:active { transform: scale(.97); }
   .btn.ghost { background: transparent; border-color: var(--line); box-shadow: none; color: var(--dim); font-size: 1.8cqw; padding: .7cqw 2.8cqw; text-shadow: none; }
   .btn.ghost:hover { color: #fff; border-color: var(--glow); }
@@ -100,13 +100,13 @@
 
   #title { grid-template-columns: auto auto; gap: 6cqw; align-content: center; justify-content: center; }
   .polaroid { background: #eef8fa; padding: .9cqw .9cqw 3.2cqw; border-radius: .5cqw; transform: rotate(-4deg); position: relative;
-    box-shadow: 0 0 4cqw rgba(143, 240, 255, .5), 0 0 12cqw rgba(60, 190, 235, .3), 0 1.6cqw 3cqw rgba(0, 0, 0, .6); animation: float 6s ease-in-out infinite; }
+    box-shadow: 0 0 4cqw rgba(255, 214, 160, .5), 0 0 12cqw rgba(255, 130, 90, .3), 0 1.6cqw 3cqw rgba(0, 0, 0, .6); animation: float 6s ease-in-out infinite; }
   @keyframes float { 50% { transform: rotate(-3deg) translateY(-.8cqw); } }
   .polaroid img { display: block; width: 19cqw; height: 23cqw; object-fit: cover; object-position: 50% 30%; border-radius: .3cqw; }
   .polaroid span { position: absolute; left: 0; right: 0; bottom: .6cqw; text-align: center; color: #12303a; font-family: var(--display); font-size: 1.7cqw; }
   .logo { margin: 0; font-family: var(--display); font-weight: 400; line-height: .9; }
   .logo b { display: block; font-weight: 400; font-size: 11.5cqw; letter-spacing: 1cqw; color: #fff;
-    text-shadow: 0 0 1.6cqw rgba(143, 240, 255, .95), 0 0 5cqw rgba(60, 190, 235, .85), 0 0 12cqw rgba(60, 150, 235, .6); }
+    text-shadow: 0 0 1.6cqw rgba(255, 214, 160, .95), 0 0 5cqw rgba(255, 130, 90, .85), 0 0 12cqw rgba(230, 90, 120, .6); }
   .logo i { display: block; font-style: normal; font-size: 2.7cqw; letter-spacing: .5cqw; color: var(--gold); margin-top: 1.4cqw; text-shadow: 0 0 1.4cqw rgba(255, 200, 110, .7); }
   #title .on-anim > * { animation: rise 1s var(--out) both; }
   #title .on-anim > *:nth-child(2) { animation-delay: .15s; } #title .on-anim > *:nth-child(3) { animation-delay: .3s; } #title .on-anim > *:nth-child(4) { animation-delay: .45s; }
@@ -118,11 +118,11 @@
   .hint { font-size: 1.4cqw; font-weight: 500; color: var(--dim); margin: 1.8cqw 0 0; }
   #best { font-size: 1.5cqw; font-weight: 700; color: var(--gold); margin: 1cqw 0 0; min-height: 2cqw; }
 
-  .card { background: rgba(3, 20, 30, .72); color: var(--text); border: .12cqw solid var(--line); border-radius: 2.4cqw; padding: 3cqw 5cqw 3.2cqw; text-align: center;
-    backdrop-filter: blur(1cqw); -webkit-backdrop-filter: blur(1cqw); box-shadow: 0 0 6cqw rgba(60, 190, 235, .22), inset 0 0 3cqw rgba(143, 240, 255, .06);
+  .card { background: rgba(40, 16, 36, .72); color: var(--text); border: .12cqw solid var(--line); border-radius: 2.4cqw; padding: 3cqw 5cqw 3.2cqw; text-align: center;
+    backdrop-filter: blur(1cqw); -webkit-backdrop-filter: blur(1cqw); box-shadow: 0 0 6cqw rgba(255, 130, 90, .22), inset 0 0 3cqw rgba(255, 214, 160, .06);
     transform: translateY(1.5cqw) scale(.96); transition: transform .6s var(--out); min-width: 40cqw; }
   .screen.on .card { transform: none; }
-  .card h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 4.4cqw; letter-spacing: .3cqw; line-height: 1.1; color: #fff; text-shadow: 0 0 1.4cqw rgba(143, 240, 255, .9), 0 0 4cqw rgba(60, 190, 235, .6); }
+  .card h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 4.4cqw; letter-spacing: .3cqw; line-height: 1.1; color: #fff; text-shadow: 0 0 1.4cqw rgba(255, 214, 160, .9), 0 0 4cqw rgba(255, 130, 90, .6); }
   .card p { margin: 1.2cqw 0 2.2cqw; font-size: 1.8cqw; font-weight: 500; color: var(--dim); }
   .stars { display: flex; justify-content: center; gap: 1.4cqw; margin: 1.8cqw 0 .6cqw; }
   .star { width: 7cqw; height: 7cqw; opacity: .22; transform: scale(.8); }
@@ -132,18 +132,18 @@
   .star.got path { fill: var(--gold); stroke: #fff3d6; }
   @keyframes starIn { from { transform: scale(0) rotate(-140deg); } to { transform: scale(1); } }
   .stats { display: flex; justify-content: center; gap: 1.2cqw; margin: 1.8cqw 0 2.6cqw; flex-wrap: wrap; }
-  .stat { background: rgba(150, 236, 255, .07); border: .1cqw solid rgba(150, 236, 255, .14); border-radius: 1.4cqw; padding: .7cqw 1.6cqw; font-size: 1.3cqw; font-weight: 600; line-height: 1.3; color: var(--dim); }
+  .stat { background: rgba(255, 220, 190, .07); border: .1cqw solid rgba(255, 220, 190, .14); border-radius: 1.4cqw; padding: .7cqw 1.6cqw; font-size: 1.3cqw; font-weight: 600; line-height: 1.3; color: var(--dim); }
   .stat b { display: block; font-size: 2.4cqw; font-variant-numeric: tabular-nums; color: var(--text); }
   .stat.ok { border-color: rgba(125, 255, 208, .5); } .stat.ok b { color: var(--mint); text-shadow: 0 0 1cqw rgba(125, 255, 208, .6); }
 
   /* ---------- toque ---------- */
   #touch { display: none; }
   #touch.on { display: block; }
-  .tbtn { position: absolute; bottom: 4%; width: 11cqw; height: 11cqw; border-radius: 50%; background: rgba(4, 24, 36, .4); border: .14cqw solid var(--line); color: var(--text);
+  .tbtn { position: absolute; bottom: 4%; width: 11cqw; height: 11cqw; border-radius: 50%; background: rgba(44, 18, 40, .4); border: .14cqw solid var(--line); color: var(--text);
     font-size: 3.6cqw; pointer-events: auto; touch-action: none; display: grid; place-items: center; padding: 0; }
-  .tbtn.down { background: rgba(143, 240, 255, .28); border-color: var(--glow); box-shadow: 0 0 3cqw rgba(143, 240, 255, .6); transform: scale(.94); }
+  .tbtn.down { background: rgba(255, 214, 160, .28); border-color: var(--glow); box-shadow: 0 0 3cqw rgba(255, 214, 160, .6); transform: scale(.94); }
   #tL { left: 3%; } #tR { left: 16.5%; } #tJ { right: 3%; width: 13cqw; height: 13cqw; }
-  #msg { position: absolute; inset: 0; display: grid; place-items: center; background: #01070c; font-family: var(--display); font-size: 2.2cqw; letter-spacing: .3cqw; color: var(--dim); text-align: center; padding: 6cqw; transition: opacity .8s; }
+  #msg { position: absolute; inset: 0; display: grid; place-items: center; background: #12070f; font-family: var(--display); font-size: 2.2cqw; letter-spacing: .3cqw; color: var(--dim); text-align: center; padding: 6cqw; transition: opacity .8s; }
   #msg.hide { opacity: 0; pointer-events: none; }
   @media (prefers-reduced-motion: reduce) { #banner.show, .star.got, #title .on-anim > *, .polaroid { animation-duration: .01s; } }
 </style>
@@ -163,7 +163,7 @@
       <span class="chip" id="chipMega"><i class="sep"></i><img src="assets/sprites/monkey.png" alt="Invencível"><span>8</span></span>
     </div>
     <div id="hr" class="pill">
-      <div id="prog"><div id="progFill"></div><img id="progDog" src="assets/sprites/tintim-idle.png" alt=""></div><span id="progEnd">🌙</span>
+      <div id="prog"><div id="progFill"></div><img id="progDog" src="assets/sprites/tintim-idle.png" alt=""></div><span id="progEnd">🛝</span>
       <div id="bossBars">
         <div class="bossRow p1"><b>Pug nº 1</b><i class="seg"></i><i class="seg"></i><i class="seg"></i></div>
         <div class="bossRow p2"><b>Pug nº 2</b><i class="seg"></i><i class="seg"></i><i class="seg"></i></div>
@@ -201,12 +201,12 @@
   </section>
 
   <section id="pause" class="screen scrim"><div class="card">
-    <h2>Pausa</h2><p>O Tintim está olhando os vaga-lumes.</p>
+    <h2>Pausa</h2><p>O Tintim está olhando o pôr do sol.</p>
     <div class="row"><button class="btn" id="btnResume">Continuar</button><button class="btn ghost" id="btnRestart">Recomeçar</button></div>
   </div></section>
 
   <section id="lose" class="screen scrim"><div class="card">
-    <h2>A luz apagou…</h2><p id="loseText">Não foi dessa vez.</p>
+    <h2>Ah, não!</h2><p id="loseText">Não foi dessa vez.</p>
     <div class="row"><button class="btn" id="btnRetry">Tentar de novo</button><button class="btn ghost" id="btnLoseRestart">Do início</button></div>
   </div></section>
 
@@ -226,7 +226,7 @@
     <div class="row"><button class="btn" id="btnAgain">Jogar de novo</button></div>
   </div></section>
 
-  <div id="msg">Anoitecendo no parque…</div>
+  <div id="msg">O sol se pondo no parque…</div>
 </div></div>
 
 <script src="vendor/three.min.js"></script>

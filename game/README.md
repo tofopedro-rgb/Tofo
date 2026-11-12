@@ -1,6 +1,6 @@
 # Tintim e os Pugs
 
-Jogo de plataforma 2.5D curtinho com o Tintim de protagonista: ele atravessa o parque depois do anoitecer, entre flores que brilham e vaga-lumes, e enfrenta os pugs da vizinha no parquinho.
+Jogo de plataforma 2.5D curtinho com o Tintim de protagonista: ele atravessa o parque ao entardecer, entre copas alaranjadas, flores que brilham e pólen dourado, e enfrenta os pugs da vizinha no parquinho.
 
 ## Como jogar
 - ← → / A D: andar · Espaço / ↑ / W: pular (segure para pular mais alto; aperte de novo no ar para a pirueta, um pulo duplo) · P ou Esc: pausa · M: som
