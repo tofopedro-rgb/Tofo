@@ -337,7 +337,7 @@ def bleed_html(spec):
     lum = ImageStat.Stat(im.crop((0, int(h * .82), w, h))).mean[0]
     dark = lum < 150
     return (f'<section class="bleed{" dark" if dark else ""}"><img src="img/{img}.jpg" alt="{esc(PL[key]["t"])}"/>'
-            f'<p class="bcap"><i>{esc(PL[key]["t"])}</i><br/>{esc(PL[key]["c"])}</p></section>')
+            f'<p class="bcap"><i>{esc(PL[key]["t"])}</i> · {esc(PL[key]["c"])}</p></section>')
 
 LEVEL_ART = {'e': 'stacks', 'd': 'street', 'p': 'enclosed'}
 PART_ART = {'parte1': 'sower2', 'parte2': 'zouavepen', 'parte3': 'fountain', 'parte4': 'roulin2'}
@@ -492,9 +492,9 @@ figure.diag img{width:100%;max-height:none}
 .bleed{page:full;break-before:page;width:6in;height:9in;position:relative;overflow:hidden}
 .bleed img{position:absolute;inset:0;width:6in;height:9in;object-fit:cover}
 .bleed::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2in;background:linear-gradient(to bottom,rgba(240,233,218,0),rgba(240,233,218,.92) 60%)}
-.bleed.dark::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.2in;background:linear-gradient(to bottom,rgba(15,11,8,0),rgba(15,11,8,.6))}
-.bleed .bcap{position:absolute;left:.5in;right:.5in;bottom:.45in;z-index:2;font:400 7.6pt/1.45 Sans;color:#1E1913;text-align:left;margin:0}
-.bleed .bcap i{font:italic 400 12pt Serif}
+.bleed.dark::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.2in;background:linear-gradient(to bottom,rgba(15,11,8,0),rgba(15,11,8,.8) 70%)}
+.bleed .bcap{position:absolute;left:.4in;right:.4in;bottom:.45in;z-index:2;white-space:nowrap;font:400 7pt/1.45 Sans;color:#1E1913;text-align:left;margin:0}
+.bleed .bcap i{font:italic 400 9.6pt Serif}
 .bleed.dark .bcap{color:#FBF8F1}
 /* capa */
 .cover{page:full;position:relative;width:6in;height:9in;background:#2A2119;color:#FBF8F1;break-after:page;bookmark-level:1;bookmark-label:"Capa"}
