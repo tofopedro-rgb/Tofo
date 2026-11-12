@@ -51,8 +51,8 @@ function makeEnemies() {
 }
 function makePugs() {
   return [
-    { name: 'Pug nº 1', x: ARENA_X + 640, y: GROUND - 56, w: 74, h: 56, vx: 0, vy: 0, dir: -1, hp: 3, stun: 0, cd: 1.2, hurt: 0, spin: 0 },
-    { name: 'Pug nº 2', x: ARENA_X + 790, y: GROUND - 56, w: 74, h: 56, vx: 0, vy: 0, dir: -1, hp: 3, stun: 0, cd: 2.4, hurt: 0, spin: 0 },
+    { name: 'Pug nº 1', x: ARENA_X + 640, y: GROUND - 56, w: 74, h: 56, vx: 0, vy: 0, dir: -1, hp: 3, stun: 0, cd: 1.2, hurt: 0, spin: 0, wind: 0, landT: 0, turnT: 0 },
+    { name: 'Pug nº 2', x: ARENA_X + 790, y: GROUND - 56, w: 74, h: 56, vx: 0, vy: 0, dir: -1, hp: 3, stun: 0, cd: 2.4, hurt: 0, spin: 0, wind: 0, landT: 0, turnT: 0 },
   ];
 }
 function makePlayer(x) {
@@ -72,7 +72,7 @@ function reset() {
     player: makePlayer(120), items: makeItems(), enemies: makeEnemies(), pugs: makePugs(),
     cam: { x: 0, y: 0, look: 0 }, time: 0, clock: 0, cookies: 0, arena: false, trauma: 0, hitstop: 0,
     timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
-    friends: C.friends.map(f => ({ x: f.x, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
+    friends: C.friends.map(f => ({ x: f.x, home: f.x, vx: 0, follow: 0, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
   });
   S.totalCookies = S.items.filter(i => i.type === 'cookie').length + C.friends.length * C.GIFT;
 }
@@ -192,10 +192,15 @@ TT.update = (rdt) => {
   // amigos: quando o Tintim chega perto, dão um pulinho e jogam um biscoito de presente
   const pcx = p.x + p.w / 2;
   for (const f of S.friends) {
-    f.t += dt; f.hop = Math.max(0, f.hop - dt);
-    if (Math.abs(pcx - f.x) < 420) f.face = pcx < f.x ? -1 : 1;
-    if (playing && !f.given && Math.abs(pcx - f.x) < 150) {
-      f.given = true; f.hop = 0.9; S.gifts.push({ sx: f.x + f.face * 18, sy: GROUND - 58, x: f.x, y: GROUND - 58, t: 0 });
+    f.t += dt; f.hop = Math.max(0, f.hop - dt); f.follow = Math.max(0, f.follow - dt);
+    // corre ao encontro do Tintim, acompanha uns passos depois do presente e volta para o seu lugar
+    const seen = playing && Math.abs(pcx - f.home) < 460, chase = seen && (!f.given || f.follow > 0);
+    const goal = Math.max(f.home - 20, Math.min(f.home + 280, chase ? pcx - Math.sign(pcx - f.x) * 70 : f.home));
+    const want = f.hop > 0.35 || Math.abs(goal - f.x) < 10 ? 0 : Math.sign(goal - f.x) * (chase ? 250 : 130);
+    f.vx += (want - f.vx) * Math.min(1, dt * 9); f.x += f.vx * dt;
+    if (Math.abs(f.vx) > 30) f.face = Math.sign(f.vx); else if (seen) f.face = pcx < f.x ? -1 : 1;
+    if (playing && !f.given && Math.abs(pcx - f.x) < 120) {
+      f.given = true; f.hop = 0.9; f.follow = 3.2; S.gifts.push({ sx: f.x + f.face * 18, sy: GROUND - 58, x: f.x, y: GROUND - 58, t: 0 });
       emit('friend', { x: f.x, y: GROUND - 70 });
     }
   }
@@ -247,20 +252,24 @@ function updatePugs(dt, prevBottom, playing) {
   }
   for (const g of S.pugs) {
     if (g.hp <= 0) { g.vy += GRAV * dt; g.y += g.vy * dt; g.x += g.vx * dt; g.spin += dt * 9; continue; }
-    g.hurt = Math.max(0, g.hurt - dt);
+    g.hurt = Math.max(0, g.hurt - dt); g.landT = Math.max(0, g.landT - dt); g.turnT = Math.max(0, g.turnT - dt);
     const rage = alive.length === 1 ? 1.5 : 1;
     const onGround = g.y + g.h >= GROUND - 0.5;
-    if (g.stun > 0) { g.stun -= dt; g.vx *= 0.9; }
+    if (g.stun > 0) { g.stun -= dt; g.vx *= 0.9; g.wind = 0; }
     else if (!cine && playing) {
-      g.cd -= dt;
-      g.dir = Math.sign(p.x - g.x) || g.dir;
-      if (g.cd <= 0 && onGround) {
-        g.vx = g.dir * (300 + 60 * (3 - g.hp)) * rage; g.vy = Math.random() < 0.45 ? -620 : -260;
-        g.cd = (1.4 + Math.random()) / rage; emit('bark');
-      } else if (onGround) g.vx += (g.dir * 90 * rage - g.vx) * Math.min(1, dt * 3);
+      const nd = Math.sign(p.x - g.x) || g.dir;
+      if (nd !== g.dir && g.wind <= 0 && onGround) { g.dir = nd; g.turnT = 0.2; }
+      if (g.wind > 0) { // agacha antes de investir: dá para ler o ataque
+        g.wind -= dt; g.vx *= 0.8;
+        if (g.wind <= 0) { g.vx = g.dir * (300 + 60 * (3 - g.hp)) * rage; g.vy = Math.random() < 0.45 ? -620 : -260; g.cd = (1.4 + Math.random()) / rage; emit('bark'); }
+      } else {
+        g.cd -= dt;
+        if (g.cd <= 0 && onGround) g.wind = 0.34 / rage;
+        else if (onGround) g.vx += (g.dir * 90 * rage - g.vx) * Math.min(1, dt * 3);
+      }
     } else g.vx *= 0.9;
     g.vy += GRAV * dt; g.x += g.vx * dt; g.y += g.vy * dt;
-    if (g.y + g.h > GROUND) { g.y = GROUND - g.h; g.vy = 0; }
+    if (g.y + g.h > GROUND) { if (g.vy > 350) { g.landT = 0.24; emit('pugLand', { x: g.x + g.w / 2, y: GROUND }); } g.y = GROUND - g.h; g.vy = 0; }
     if (g.x < ARENA_X + 10) { g.x = ARENA_X + 10; g.vx = Math.abs(g.vx); }
     if (g.x + g.w > ARENA_X + W - 10) { g.x = ARENA_X + W - 10 - g.w; g.vx = -Math.abs(g.vx); }
 

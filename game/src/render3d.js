@@ -32,6 +32,8 @@ const AR = { 'tintim-idle': 232 / 220, 'tintim-run': 258 / 200, 'tintim-jump': 2
 const TEX = {};
 for (const k in AR) TEX[k] = load('sprites/' + k + '.png');
 TEX['tintim-run'].repeat.set(0.25, 1);
+// perfis dos chihuahuas (para quando correm); a proporção vem da própria imagem
+['chi-pb-run', 'chi-br-run'].forEach(k => { AR[k] = 1.2; TEX[k] = TL.load('assets/sprites/' + k + '.png', t => { AR[k] = t.image.width / t.image.height; }); TEX[k].anisotropy = 4; });
 
 function rng(seed) { return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function canvasTex(w, h, draw, repeat) {
@@ -389,6 +391,7 @@ const MOTE = [0xfff2c8, 0xffd9a0, 0xffe6f0];
 const dustPuff = (x, y, n, spread) => { for (let i = 0; i < n; i++) spawn({ x, y: y - 2, vx: (Math.random() - 0.5) * spread, vy: -20 - Math.random() * 70, g: -40, life: 0.6, r: 3 + Math.random() * 3, grow: 5, color: MOTE[i % 3] }); };
 TT.on('dust', e => spawn({ x: e.x, y: e.y - 4, vx: e.dir * (20 + Math.random() * 50), vy: -30 - Math.random() * 50, g: -60, life: 0.7, r: 2.5 + Math.random() * 2.5, grow: 3, color: MOTE[Math.floor(Math.random() * 3)] }));
 TT.on('land', e => { dustPuff(e.x, e.y, 10, 260); sqV -= 5; });
+TT.on('pugLand', e => dustPuff(e.x, e.y, 9, 320));
 TT.on('jump', e => { dustPuff(e.x, e.y, 5, 120); sqV += 3.4; });
 TT.on('jump2', e => { sqV += 3; for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28; spawn({ x: e.x + Math.cos(a) * 20, y: e.y + Math.sin(a) * 14, vx: Math.cos(a) * 190, vy: Math.sin(a) * 120, g: 0, life: 0.4, r: 4, grow: -4, color: MOTE[i % 3], hard: true }); } });
 TT.on('cookie', e => burst(e.x, e.y, [0xffd98a, 0xffb65a, 0xfff2c8], 8, 170));
@@ -520,10 +523,13 @@ R.frame = (rdt) => {
   // amigos chihuahuas e o biscoito que eles jogam
   S.friends.forEach((f, i) => {
     const m = friendM[i], near = Math.abs(tx - f.x) < 420;
-    const hop = f.hop > 0 ? Math.abs(Math.sin(f.hop * Math.PI / 0.3)) * 26 * Math.min(1, f.hop * 2.5) : near && !f.given ? Math.abs(Math.sin(f.t * 7)) * 7 : 0;
-    setAnim(m, f.kind, 62, f.face < 0);
-    const br = 1 + Math.sin(f.t * 3 + i) * 0.02; m.scale.x *= 2 - br; m.scale.y *= br;
-    m.position.set(f.x, hop, -36); m.rotation.z = Math.sin(f.t * (near ? 9 : 2)) * (near ? 0.05 : 0.015);
+    const run = Math.abs(f.vx) > 40, gal = f.t * 15 + i;
+    const jump = f.hop > 0 ? Math.abs(Math.sin(f.hop * Math.PI / 0.3)) * 28 * Math.min(1, f.hop * 2.5) : 0;
+    const hop = jump + (run ? Math.abs(Math.sin(gal)) * 9 : near ? Math.abs(Math.sin(f.t * 7)) * 5 : 0);
+    setAnim(m, run ? f.kind + '-run' : f.kind, run ? 54 : 62, f.face < 0);
+    // galope: estica no ar e achata no chão; parado, respira; no pulo de alegria, estica
+    const br = run ? 1 + Math.sin(gal * 2) * 0.07 : jump > 2 ? 1.1 : 1 + Math.sin(f.t * 3 + i) * 0.025; m.scale.x *= 2 - br; m.scale.y *= br;
+    m.position.set(f.x, hop, -36 + (run || f.follow > 0 ? 14 : 0)); m.rotation.z = run ? Math.sin(gal) * 0.13 * -f.face : Math.sin(f.t * (near ? 9 : 2)) * (near ? 0.06 : 0.015);
     const g = m.userData.glow; g.position.set(f.x, 30 + hop, -38); const s = 120 + Math.sin(f.t * 2.2) * 8; g.scale.set(s, s, 1); g.material.opacity = f.given ? 0.2 : 0.34;
   });
   giftM.forEach((m, i) => { const g = S.gifts[i], gl = m.userData.glow; m.visible = gl.visible = !!g; if (!g) return;
@@ -538,9 +544,20 @@ R.frame = (rdt) => {
     else if (g.stun > 0) { n = 'pug-stun'; ph = 56; }
     else if (g.y + g.h < GROUND - 4 || Math.abs(g.vx) > 200) n = 'pug-charge';
     else y += Math.abs(Math.sin(clock * 10 + i)) * 3;
-    setAnim(m, n, ph, flip);
+    const turn = g.turnT > 0 ? g.turnT / 0.2 : 0; // ao virar, o corpo gira de lado em vez de espelhar de uma vez
+    setAnim(m, n, ph, turn > 0.5 ? !flip : flip);
+    let sy = 1, rot = 0, dx = 0;
+    if (g.hp > 0 && g.stun <= 0) {
+      const air = g.y + g.h < GROUND - 4;
+      if (g.wind > 0) { const k = Math.min(1, (0.34 - g.wind) / 0.2); sy = 1 - 0.2 * k; rot = g.dir * 0.1 * k; dx = Math.sin(time * 70) * 2.2 * k; } // agacha e treme antes da investida
+      else if (air) { sy = 1 + Math.min(0.14, Math.abs(g.vy) / 4500); rot = -g.dir * Math.max(-0.3, Math.min(0.3, g.vy / 2600)); }
+      else if (g.landT > 0) sy = 1 - g.landT * 1.3;
+      else if (Math.abs(g.vx) > 200) rot = -g.dir * 0.06;
+      else sy = 1 + Math.sin(clock * 11 + i * 2) * 0.03; // ofegante
+    }
+    m.scale.x *= (2 - sy) * (turn > 0 ? Math.abs(1 - 2 * (1 - turn)) * 0.9 + 0.1 : 1); m.scale.y *= sy;
     if (g.stun > 0 && g.hp > 0) m.scale.y *= 0.85 + Math.min(0.15, (1.1 - g.stun) * 0.5);
-    m.position.set(x, y, i * 1.5); m.rotation.z = g.hp <= 0 ? g.spin : 0;
+    m.position.set(x + dx, y, i * 1.5); m.rotation.z = g.hp <= 0 ? g.spin : rot;
     m.visible = !(g.hurt > 0 && Math.floor(time * 30) % 2) && (S.arena || S.cam.x > ARENA_X - W - 200) && g.y < H + 300;
     m.userData.stars.forEach((s, k) => { s.visible = g.stun > 0 && g.hp > 0; if (s.visible) { const a = time * 6 + k * 2.1; s.position.set(x - g.dir * 26 + Math.cos(a) * 22, y + 62 + Math.sin(a) * 6, 4 + Math.sin(a)); s.rotation.z = a; } });
   });
