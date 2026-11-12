@@ -302,7 +302,7 @@ def make_tracos():
 def map_html(inline=True):
     if inline:
         svg = open('img/mapa-caminho.svg').read()
-        mp = f'<div class="mapa">{svg}</div>'
+        mp = f'<div class="mapa" id="toc-caminho">{svg}</div>'
     else:
         mp = '<figure class="mapa"><img src="img/mapa-caminho.svg" alt="Mapa com os endereços de Van Gogh entre 1879 e 1890"/></figure>'
     rows = ''.join(f'<div class="end"><span class="en">{i}</span><div><p><b>{c}</b> <span class="ey">{y}</span></p><p>{t}</p></div></div>'
@@ -316,7 +316,7 @@ def tracos_html():
         return (f'<div class="tr"><img src="img/traco-{i:02d}.jpg" alt="Detalhe de {esc(t)}"/>'
                 f'<div class="trt"><p class="ty">{yy}</p><p class="tp">{pl} · <i>{esc(t)}</i></p><p>{tx}</p></div></div>')
     rows = [row(i, x) for i, x in enumerate(TRACOS, 1)]
-    return ('<div class="tracos"><h2>Dez anos em dez traços</h2><p class="sub">O mesmo desenhista, de 1881 a 1890, sempre visto de perto.</p>'
+    return ('<div class="tracos" id="toc-tracos"><h2>Dez anos em dez traços</h2><p class="sub">O mesmo desenhista, de 1881 a 1890, sempre visto de perto.</p>'
             + ''.join(rows[:5]) + '<div class="tr2">' + ''.join(rows[5:]) + '</div></div>')
 
 # ---------------------------------------------------------------- PDF (edição ilustrada)
@@ -516,21 +516,16 @@ figure.diag img{width:100%;max-height:none}
 
 /* sumário */
 .toc{page:bare;break-before:page;bookmark-level:1;bookmark-label:"Sumário"}
-.toc h1{font-size:22pt;margin-bottom:.3in}
-.toc a{color:#1E1913}
-.toc .pg::after{content:target-counter(attr(href),page)}
-.toc .tg{margin-bottom:.3in}
-.toc .tf{display:flex;justify-content:space-between;font:italic 400 10.4pt/1.5 Serif;margin:0;text-align:left}
-.toc .tf .pg{font:400 8pt Sans;font-style:normal}
-.toc .tpart{display:flex;align-items:baseline;gap:.12in;border-top:.8pt solid #1E1913;padding-top:.06in;margin-bottom:.04in;break-after:avoid}
-.toc .tn{font:400 16pt/1 Disp;color:#BF8A5A;width:.42in;flex:none}
-.toc .tt{flex:1;font:400 12pt/1.1 Disp}
-.toc .tpart .pg{font:700 8.4pt Sans}
-.toc .tc{display:flex;align-items:baseline;margin:.08in 0 0 .54in;font:400 10.4pt/1.3 Serif;text-align:left}
-.toc .tc .cn{font:400 9pt Disp;width:.26in;flex:none}
-.toc .tc a:not(.pg){flex:1}
-.toc .tc .pg{font:400 8pt Sans}
-.toc .tg-back{margin-top:.34in}
+.toc h1{font:400 22pt/1 Disp;margin:0 0 .3in}
+.toc a{color:#1E1913;text-decoration:none}
+.toc .blk{display:flex;margin-bottom:.19in}
+.toc .col{width:.5in;flex:none;font:400 10pt/1.6 Sans;color:#BF8A5A;padding-top:.01in}
+.toc .body{flex:1}
+.toc p{display:flex;justify-content:space-between;align-items:baseline;margin:0;text-align:left}
+.toc .pt{font:400 11pt/1.6 Disp;margin-bottom:.04in;border-bottom:.5pt solid #1E1913;padding-bottom:.03in}
+.toc .r{font:400 10.2pt/1.5 Serif}
+.toc .pg::after{content:target-counter(attr(href),page);font:400 8.4pt Sans;color:#6E6253}
+.toc .pt .pg::after{color:#1E1913}
 /* páginas de parte */
 .partimg{page:kraft;break-before:page;width:6in;height:9in;position:relative}
 .partimg img{position:absolute;left:.55in;top:.55in;width:4.9in;height:7.4in;object-fit:contain}
@@ -740,45 +735,19 @@ def pdf_html(S):
              '<p>Capa: <i>Retrato de Joseph Roulin</i>, Arles, agosto de 1888. Pena de junco e pena de ave, tinta e giz preto. J. Paul Getty Museum, Los Angeles (85.GA.299), Open Content Program.</p>'
              f'<p>Texto composto em EB Garamond e Archivo. Primeira edição, {yr}.</p></div>')
     # sumário
-    def subs(s):
-        h = s.get('html', '')
-        if s['id'] == 'vida':
-            h = h[h.find('<!--MAPA-->'):]
-        t = [re.sub(r'<[^>]+>', '', x).strip() for x in re.findall(r'<h2[^>]*>(.*?)</h2>', h, re.S)]
-        t = [re.sub(r',\s*\d{4}.*$', '', x) for x in t if x and x != 'Linha do tempo']
-        if s['id'] == 'vida':
-            t = ['O caminho de Vincent'] + t
-        return t
-    toc = ['<div class="toc"><h1>Sumário</h1>']
-    cur_part = None; group = None
-    def open_group(g):
-        nonlocal group
-        if group != g:
-            if group: toc.append('</div>')
-            toc.append(f'<div class="tg tg-{g}">'); group = g
-    for s in S:
-        k = s['kind']; a_ = f'<a class="pg" href="#{s["id"]}"></a>'
-        if k == 'front':
-            open_group('front')
-            toc.append(f'<p class="tf"><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
-        elif k == 'part':
-            cur_part = s['id']; n, lab, name, _ = PARTS[s['id']]
-            open_group(s['id'])
-            toc.append(f'<div class="tpart"><span class="tn">{n}</span><span class="tt"><a href="#{s["id"]}">{name}</a></span>{a_}</div>')
-            if s['id'] == 'parte3':
-                toc.append('<p class="tc"><span class="cn"></span><a href="#primeiros-passos">Nível 1 · Fundamentos, nos Primeiros passos dos capítulos 2 a 6</a><a class="pg" href="#primeiros-passos"></a></p>')
-        elif k == 'level':
-            toc.append(f'<p class="tc"><span class="cn"></span><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
-        elif k == 'back':
-            open_group('back')
-            toc.append(f'<p class="tf"><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
-        elif k == 'chapter' and s['title'] == PARTS.get(cur_part, ('', '', ''))[2]:
-            continue
-        else:
-            m = re.match(r'(\d+)\.\s*(.*)', s['title'])
-            num, tit = (m.group(1), m.group(2)) if m else ('', s['title'])
-            toc.append(f'<p class="tc"><span class="cn">{num}</span><a href="#{s["id"]}">{esc(tit)}</a>{a_}</p>')
-    toc.append('</div></div>')
+    def row(label, href):
+        return f'<p class="r"><a href="#{href}">{label}</a><a class="pg" href="#{href}"></a></p>'
+    def blk(num, inner):
+        return f'<div class="blk"><div class="col">{num}</div><div class="body">{inner}</div></div>'
+    def head(pid):
+        return f'<p class="pt"><a href="#{pid}">{PARTS[pid][2]}</a><a class="pg" href="#{pid}"></a></p>'
+    caps = ''.join(row(t.replace('. ', '.&#8194;', 1), i) for i, t in ((x['id'], x['title']) for x in S if x['kind'] == 'chapter' and re.match(r'\d+\.', x['title'])))
+    lv = row('Nível 1&#8194;Fundamentos, no fim dos capítulos 2 a 6', 'primeiros-passos') + ''.join(row(f'{l[2]}&#8194;{l[3]}', l[1]) for l in LEVELS if l[0] != 'w')
+    front = ''.join(row(esc(x['title']), x['id']) for x in S if x['kind'] == 'front')
+    back = ''.join(row(esc(x['title']), x['id']) for x in S if x['kind'] == 'back')
+    toc = ['<div class="toc"><h1>Sumário</h1>', blk('', front),
+           blk('01', head('parte1') + row('O caminho de Vincent', 'toc-caminho') + row('De Zundert a Auvers', 'toc-periodos') + row('Dez anos em dez traços', 'toc-tracos')),
+           blk('02', head('parte2') + caps), blk('03', head('parte3') + lv), blk('', back), '</div>']
     P.extend(toc)
     part = None
     vida_intro = ''
@@ -818,7 +787,7 @@ def pdf_html(S):
         elif s['id'] == 'indice':
             P.append(ex_index_pdf().replace('<section class="chap" id="indice">', '<section class="chap" id="indice" style="bookmark-level:1;bookmark-label:\'Índice dos exercícios\'">', 1))
         elif s['id'] == 'vida':
-            body = s['html'][s['html'].index('<!--MAPA-->'):]
+            body = s['html'][s['html'].index('<!--MAPA-->'):].replace('<h2>', '<h2 id="toc-periodos">', 1)
             body = body.replace('<!--MAPA-->', '<!--MAPA--><span class="rh">Dez anos de desenho</span>', 1)
             P.append(f'<section id="vida">{body}</section>')
         else:
