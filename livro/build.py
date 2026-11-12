@@ -54,7 +54,7 @@ def ex_html(x):
            f'<p class="crit"><span class="sc">Pronto quando</span> {esc(x["c"])}</p>']
     extra = [f'Teoria no <a href="#{cid}">{cname}</a>.']
     if x.get('ref') and x['ref'] in PL:
-        extra.append(f'Obra para comparar: <i>{esc(PL[x["ref"]]["t"])}</i>, no <a href="#catalogo">catálogo</a>.')
+        extra.append(f'Obra para comparar: <a href="#cat-{x["ref"]}"><i>{esc(PL[x["ref"]]["t"])}</i></a>, no catálogo.')
     out.append(f'<p class="exref">{" ".join(extra)}</p>')
     if x['id'] in STAGES:
         imgs = ''.join(f'<figure><img src="img/{"st-"+x["id"]+"-"+str(k+1) if k < 3 else x["id"]}.jpg" alt="Etapa {k+1}"/><figcaption>{k+1}. {STN[k]}</figcaption></figure>' for k in range(4))
@@ -94,6 +94,19 @@ def practice_list(chid):
     lis = ''.join(f'<li><a href="#ex-{x["id"]}">{x["id"].upper()}</a> {esc(x["t"])} <span class="lvl">{lvn[x["lv"]]}</span></li>' for x in items)
     return f'<div class="practice"><h4>{head}</h4><ul>{lis}</ul></div>'
 
+def practice_line(chid):
+    rev = {v[0]: k for k, v in CHAP.items()}
+    if chid not in rev:
+        return ''
+    items = [x for x in EX if x['ch'] == rev[chid]]
+    codes = sorted(x['id'] for x in items)
+    ess = [x['id'] for x in items if x['lv'] == 'e']
+    link = lambda c: f'<a href="#ex-{c}">{c.upper()}</a>'
+    txt = f'<b>Para praticar</b> {link(codes[0])} a {link(codes[-1])}, {len(codes)} exercícios.'
+    if ess:
+        txt += ' Comece pelos essenciais: ' + ', '.join(link(c) for c in sorted(ess)) + '.'
+    return f'<p class="pline">{txt}</p>'
+
 def build_sections():
     src = parse_src()
     S = []
@@ -106,15 +119,12 @@ def build_sections():
             h = h[:i] + '<!--MAPA-->' + h[i:] + tracos_html()
         if s['id'] in BALLOON_CHAPTERS:
             h = add_balloons(h)
-        # (as listas de exercícios no fim dos capítulos saíram)
+        if s['kind'] == 'chapter':
+            h += practice_line(s['id'])
         S.append({**s, 'html': h})
         if s['id'] == 'cap8':  # depois da Parte II vem a Parte III
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
                       'html': '<h1>Parte III</h1>\n<h2>Exercícios</h2>'})
-            S.append({'id': 'exercicios', 'title': 'Como usar os exercícios', 'kind': 'chapter', 'html': md2html(
-                "# Como usar os exercícios\n\nOs 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.\n\n"
-                "Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.\n\n"
-                "Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.")})
             for code, lid, ln, name, intro in LEVELS:
                 items = [x for x in EX if x['lv'] == code]
                 body = f'<h1><span class="lvnum">{ln}</span> {name}</h1>\n<p class="lead">{intro}</p>\n<p class="count">{len(items)} exercícios</p>\n' + '\n'.join(ex_html(x) for x in items)
@@ -135,7 +145,7 @@ def catalogue():
         if inst and inst.split(' (')[0].split(',')[0][:12] in p['c']:
             inst = ''
         ficha = ' · '.join(v for v in [f.get('cat'), f.get('dim'), inst] if v)
-        rows.append(f'<div class="cat"><img src="img/{k}.jpg" alt="{esc(p["t"])}"/><div><p class="ct"><span class="cn">{i}</span> <i>{esc(p["t"])}</i></p>'
+        rows.append(f'<div class="cat" id="cat-{k}"><img src="img/{k}.jpg" alt="{esc(p["t"])}"/><div><p class="ct"><span class="cn">{i}</span> <i>{esc(p["t"])}</i></p>'
                     f'<p class="cc">{esc(p["c"])}</p>' + (f'<p class="cf">{esc(ficha)}</p>' if ficha else '') + f'<p class="cl">{esc(p.get("l", ""))}</p></div></div>')
     intro = ('<p>As obras de Van Gogh citadas no livro e indicadas nos exercícios, em ordem aproximada de data. Quando disponíveis, '
              'seguem os números de catálogo F (de la Faille) e JH (Hulsker), as dimensões (altura por largura) e o acervo.</p>')
@@ -226,7 +236,12 @@ def balloons_html(key):
 def add_balloons(h):
     def rep(m):
         key = m.group(1)
-        return f'<div class="figbal">{m.group(0)}{balloons_html(key)}</div>' if key in WORK_DETAILS else m.group(0)
+        if key not in WORK_DETAILS:
+            return m.group(0)
+        from PIL import Image
+        w_, h_ = Image.open(f'img/{key}.jpg').size
+        side = h_ > w_ * 1.05
+        return f'<div class="figbal{" side" if side else ""}">{m.group(0)}{balloons_html(key)}</div>'
     return re.sub(r'<figure[^>]*>\s*<img src="img/([a-z0-9_]+)\.jpg"[^>]*>.*?</figure>', rep, h, flags=re.S)
 
 # ---------------------------------------------------------------- ícones e linha do tempo
@@ -290,12 +305,10 @@ def tracos_html():
 
 # ---------------------------------------------------------------- PDF (edição ilustrada)
 FONTDIR = os.path.join(ROOT, 'fonts')
-PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho',
-                    'Entre a decisão de ser artista, em 1880, e a morte, em 1890, passaram-se dez anos. Ele fez nesse tempo cerca de 850 pinturas e mais de mil desenhos. Esta parte acompanha esses dez anos pelo que mudou no traço.'),
+PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho', None),
          'parte2': ('02', 'Parte II', 'A linguagem',
                     'Os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. Um capítulo para cada coisa.'),
-         'parte3': ('03', 'Parte III', 'Exercícios',
-                    'Os 91 exercícios, em quatro níveis. Cada um parte de um desenho-modelo e diz quando está pronto. Cada um indica também o capítulo que explica a teoria.'),
+         'parte3': ('03', 'Parte III', 'Exercícios', '<p>Os 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.</p><p>Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.</p><p>Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.</p>'),
          'parte4': ('04', 'Parte IV', 'Prática',
                     'Um plano de estudo de oito semanas e uma autoavaliação para conferir o resultado.')}
 PART_ART = {'parte1': 'sower2', 'parte2': 'zouavepen', 'parte3': 'fountain', 'parte4': 'roulin2'}
@@ -383,6 +396,14 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .figbal{break-inside:avoid;margin:1em 0 1.3em}
 .figbal > figure{margin:0 0 .16in}
 .figbal > figure img{max-height:3.25in}
+.figbal.side{display:flex;gap:.22in;align-items:flex-start}
+.figbal.side > figure{flex:none;width:3.05in;margin:0}
+.figbal.side > figure img{max-height:4.1in;width:auto;max-width:3.05in}
+.figbal.side .balrow{flex:1;flex-direction:column;gap:.14in;justify-content:flex-start}
+.figbal.side .bal{width:auto}
+.figbal.side .bal img{width:.92in;height:.92in}
+.pline{margin-top:1.4em;border-top:.6pt solid #1E1913;padding-top:.08in;font:400 7.8pt/1.5 Sans;text-align:left}
+.pline b{font-weight:700;margin-right:.3em}.pline a{font-weight:700;border-bottom:.5pt solid #BF8A5A}
 .balrow{display:flex;gap:.22in;justify-content:center}
 .bal{width:1.45in;flex:none;margin:0;text-align:left}
 .bal img{width:1.1in;height:1.1in;border-radius:50%;display:block;margin:0 0 .08in}
@@ -461,7 +482,8 @@ figure.diag img{width:100%;max-height:none}
 .part .prule{position:absolute;left:.55in;right:.55in;top:1.95in;border-top:.6pt solid #1E1913}
 .part .pnum{position:absolute;left:.5in;top:2.1in;font:400 118pt/1 Disp;margin:0}
 .part h1{position:absolute;left:.55in;top:3.85in;width:4.4in;font-size:23pt;margin:0}
-.part .pintro{position:absolute;left:.55in;top:4.95in;width:3.4in;font-size:9.6pt;text-align:left}
+.part .pintro{position:absolute;left:.55in;top:4.85in;width:3.9in;font-size:9.6pt;line-height:1.42}
+.part .pintro p{text-align:left;margin:0 0 .55em}
 
 /* capítulos */
 section.chap{page:chap;break-before:page}
@@ -583,7 +605,7 @@ def ex_pdf(x, chapnames, half=False):
         art = f'<div class="exsolo"><img src="img/{x["id"]}.jpg" alt=""/></div>'
     ref = ''
     if x.get('ref') and x['ref'] in PL:
-        ref = f'<p class="exref">Obra para comparar: <i>{esc(PL[x["ref"]]["t"])}</i>, no <a href="#catalogo">catálogo</a>.</p>'
+        ref = f'<p class="exref">Obra para comparar: <a href="#cat-{x["ref"]}"><i>{esc(PL[x["ref"]]["t"])}</i></a>, no catálogo.</p>'
     foot = (f'<div class="exfoot"><div class="desc"><p>{esc(x["d"])}</p></div>'
             f'<div class="done"><b>Pronto quando</b> {esc(x["c"])}</div></div>')
     return f'<section class="ex{" half" if half else ""}" id="ex-{x["id"]}">{head}{meta}{art}{foot}{ref}</section>'
@@ -674,16 +696,23 @@ def pdf_html(S):
     toc.append('</ul></div>')
     P.extend(toc)
     part = None
+    vida_intro = ''
+    for s in S:
+        if s['id'] == 'vida':
+            m = re.match(r'\s*<h1>.*?</h1>(.*?)<!--MAPA-->', s['html'], re.S)
+            vida_intro = m.group(1).strip()
     for s in S:
         k = s['kind']
         if k == 'part':
             part = PARTS[s['id']]
             n, lab, name, intro = part
+            if intro is None:
+                intro = vida_intro
             art = PART_ART[s['id']]
             P.append(f'<section class="partimg"><img src="img/{art}.jpg" alt="{esc(PL[art]["t"])}"/>'
                      f'<p class="pcap"><i>{esc(PL[art]["t"])}</i>. {esc(PL[art]["c"])}</p></section>')
             P.append(f'<section class="part" id="{s["id"]}" style="bookmark-level:1;bookmark-label:\'{lab} · {name}\'">'
-                     f'<p class="plab">{lab}</p><div class="prule"></div><p class="pnum">{n}</p><h1>{name}</h1><p class="pintro">{intro}</p></section>')
+                     f'<p class="plab">{lab}</p><div class="prule"></div><p class="pnum">{n}</p><h1>{name}</h1><div class="pintro">{intro if intro.startswith('<p>') else '<p>' + intro + '</p>'}</div></section>')
         elif k == 'front':
             h = s['html']
             m = re.match(r'\s*<h1>(.*?)</h1>', h, re.S)
@@ -699,6 +728,10 @@ def pdf_html(S):
             P.append(catalogue_pdf().replace('<section class="chap" id="catalogo">', '<section class="chap" id="catalogo" style="bookmark-level:1;bookmark-label:\'Catálogo das obras\'">', 1))
         elif s['id'] == 'indice':
             P.append(ex_index_pdf().replace('<section class="chap" id="indice">', '<section class="chap" id="indice" style="bookmark-level:1;bookmark-label:\'Índice dos exercícios\'">', 1))
+        elif s['id'] == 'vida':
+            body = s['html'][s['html'].index('<!--MAPA-->'):]
+            body = body.replace('<!--MAPA-->', '<!--MAPA--><span class="rh">Dez anos de desenho</span>', 1)
+            P.append(f'<section id="vida">{body}</section>')
         else:
             head, body, t = chapter_head(s, part if k == 'chapter' else None)
             lvl = 2 if k == 'chapter' else 1
@@ -797,8 +830,9 @@ def build_epub(S, out, small=None):
         if s['kind'] == 'part':
             img = f'img/{PART_ART[s["id"]]}.jpg'
             n_, lab_, name_, intro_ = PARTS[s['id']]
+            it = '' if intro_ is None else (intro_ if intro_.startswith('<p>') else f'<p>{intro_}</p>')
             body = (f'<section id="{s["id"]}"><figure><img src="{img}" alt=""/></figure><div class="parttitle"><p class="pn">{n_}</p>'
-                    f'<h1>{lab_}</h1><h2>{name_}</h2><p>{intro_}</p></div></section>')
+                    f'<h1>{lab_}</h1><h2>{name_}</h2>{it}</div></section>')
         else:
             body = f'<section id="{s["id"]}">{s["html"].replace("<!--MAPA-->", map_html(False))}</section>'
         files.append((name, s['title'], body, s['kind']))

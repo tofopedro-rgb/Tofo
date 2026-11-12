@@ -28,30 +28,6 @@
 <dt>Tradução</dt><dd>Redesenhar uma pintura em outro meio, escolhendo uma marca para cada cor. Vincent fez isso com as próprias telas e com obras de Millet.</dd>
 </dl>
 
-<!-- id: cronologia | Cronologia | back -->
-# Cronologia
-
-<table class="chrono">
-<tr><td>1853</td><td>Nasce em 30 de março em Zundert, na Holanda.</td></tr>
-<tr><td>1857</td><td>Nasce o irmão Theo, em 1º de maio.</td></tr>
-<tr><td>1869</td><td>Começa a trabalhar na Goupil & Cie, em Haia. Depois passa pelas filiais de Londres e Paris.</td></tr>
-<tr><td>1876</td><td>Deixa a Goupil. Trabalha como professor na Inglaterra.</td></tr>
-<tr><td>1877</td><td>Livraria em Dordrecht e estudos de teologia em Amsterdã.</td></tr>
-<tr><td>1879</td><td>Pregador leigo entre os mineiros do Borinage, na Bélgica.</td></tr>
-<tr><td>1880</td><td>Decide ser artista. Pede a Theo as pranchas de Bargue (carta 156). Vai para Bruxelas.</td></tr>
-<tr><td>1881</td><td>Etten. Refaz a série de Bargue (carta 171). No fim do ano vai para Haia e tem aulas com Anton Mauve.</td></tr>
-<tr><td>1882</td><td>Haia. Vive com Sien Hoornik. <i>Sorrow</i>, os homens órfãos, a moldura de perspectiva, <i>Worn Out</i>.</td></tr>
-<tr><td>1883</td><td>Drenthe, de setembro a dezembro. Depois Nuenen, na casa dos pais.</td></tr>
-<tr><td>1885</td><td>Nuenen. <i>Os Comedores de Batata</i> e as figuras de camponeses em giz preto. No fim do ano, Antuérpia.</td></tr>
-<tr><td>1886</td><td>Chega a Paris em março e mora com Theo. Ateliê de Cormon.</td></tr>
-<tr><td>1887</td><td>Paris. Gravuras japonesas, autorretratos, a pincelada em tracinhos.</td></tr>
-<tr><td>1888</td><td>Arles a partir de fevereiro. Pena de junco, Montmajour, Saintes-Maries, os retratos de Roulin e de Escalier. Gauguin chega em outubro. Crise em dezembro.</td></tr>
-<tr><td>1889</td><td>Internação voluntária em Saint-Rémy, em maio. Ciprestes, oliveiras, <i>A Noite Estrelada</i>, cópias de Millet.</td></tr>
-<tr><td>1890</td><td>Auvers-sur-Oise a partir de maio. Morre em 29 de julho, dois dias depois de ser ferido por um tiro.</td></tr>
-<tr><td>1891</td><td>Theo morre em 25 de janeiro.</td></tr>
-<tr><td>1914</td><td>Johanna van Gogh-Bonger publica as cartas.</td></tr>
-</table>
-
 <!-- id: cartas | Cartas citadas | back -->
 # Cartas citadas
 
