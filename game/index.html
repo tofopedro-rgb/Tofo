@@ -71,6 +71,27 @@ const IMG_SRC = {
   far: 'bg/far.jpg', mid: 'bg/mid.png', arena: 'bg/arena.jpg',
 };
 for (const [k, src] of Object.entries(IMG_SRC)) { const im = new Image(); im.src = 'assets/' + src; IMG[k] = im; }
+// Canvas em alta resolução (telas retina): o mundo continua em 960x540, mas desenhado com mais pixels
+let SCALE = 1, maxScale = 2; // maxScale cai sozinho se o aparelho não aguentar (ver loop)
+function resize() {
+  const r = cv.getBoundingClientRect();
+  SCALE = Math.min(maxScale, Math.max(1, (r.width || W) * (window.devicePixelRatio || 1) / W));
+  cv.width = Math.round(W * SCALE); cv.height = Math.round(H * SCALE);
+}
+addEventListener('resize', resize); resize();
+// Perspectiva do chão: ponto de fuga no centro; a linha onde os personagens pisam (GROUND) não tem distorção
+const VPX = W / 2, FLOOR_BACK = GROUND - 34, FLOOR_FRONT = H + 60;
+const T0 = (GROUND - FLOOR_BACK) / (FLOOR_FRONT - FLOOR_BACK);
+const persp = (x, y) => VPX + (x - VPX) * (1 + 0.9 * ((y - FLOOR_BACK) / (FLOOR_FRONT - FLOOR_BACK) - T0));
+// versões desfocadas das camadas distantes (profundidade de campo), geradas uma vez
+const BLUR = {};
+function blurred(name, px) {
+  const k = name + px; if (BLUR[k]) return BLUR[k];
+  const im = img(name); if (!im) return null;
+  const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+  const x = c.getContext('2d'); x.filter = `blur(${px}px)`; x.drawImage(im, 0, 0);
+  return (BLUR[k] = c);
+}
 const img = n => { const i = IMG[n]; return i && i.complete && i.naturalWidth ? i : null; };
 // desenha um sprite com a base (pés) em (cx, by), altura h; flip espelha; frame/nFrames para spritesheets horizontais
 function spr(name, cx, by, h, flip = false, frame = 0, nFrames = 1, rot = 0) {
@@ -157,11 +178,11 @@ function makeEnemies() {
 }
 
 // ---------------- State ----------------
-let state = 'title', player, items, enemies, pugs, camX, time, cookies, particles, arena, shake, banner;
+let state = 'title', player, items, enemies, pugs, camX, camY = 0, look = 0, dustT = 0, time, cookies, particles, arena, shake, banner;
 function reset() {
   player = { x: 120, y: GROUND - 60, w: 54, h: 50, vx: 0, vy: 0, onGround: false, face: 1, hp: 3,
     inv: 0, fast: 0, mega: 0, safeX: 120, coyote: 0, buffer: 0, landT: 0 };
-  items = makeItems(); enemies = makeEnemies(); camX = 0; time = 0; cookies = 0; particles = [];
+  items = makeItems(); enemies = makeEnemies(); camX = 0; camY = 0; look = 0; time = 0; cookies = 0; particles = [];
   arena = false; shake = 0; banner = { text: 'Rumo ao parquinho!', t: 2.2 };
   pugs = [
     { name: 'Pug 1', x: ARENA_X + 640, y: GROUND - 56, w: 74, h: 56, vx: 0, vy: 0, dir: -1, hp: 3, stun: 0, cd: 1.2, hurt: 0, tint: '#d9b07c' },
@@ -229,7 +250,11 @@ function update(dt) {
     else if (p.vy >= 0) { p.y = s.y - p.h; p.vy = 0; p.onGround = true; }
     else { p.y = s.y + s.h; p.vy = 0; }
   }
-  if (p.onGround && !wasGround) { p.landT = 0.18; burst(p.x + p.w / 2, p.y + p.h, '#d7c3a3', 6, 140); }
+  if (p.onGround && !wasGround) {
+    p.landT = 0.18;
+    for (let i = 0; i < 10; i++) particles.push({ x: p.x + p.w / 2, y: p.y + p.h - 2, vx: (Math.random() - 0.5) * 260, vy: -20 - Math.random() * 60,
+      g: 60, life: 0.5, color: '#e9dcc8', r: 3 + Math.random() * 4, grow: 10 });
+  }
   p.landT = Math.max(0, p.landT - dt);
   if (p.onGround && p.y + p.h >= GROUND - 1) p.safeX = p.x;
 
@@ -268,11 +293,21 @@ function update(dt) {
   if (arena) updatePugs(dt, prevBottom);
 
   // câmera
-  const want = arena ? ARENA_X : Math.max(0, Math.min(LEVEL_END - W, p.x - W * 0.38));
-  camX += (want - camX) * Math.min(1, dt * 6);
+  look += (p.vx * 0.32 - look) * Math.min(1, dt * 2.5); // câmera olha um pouco à frente do movimento
+  const want = arena ? ARENA_X : Math.max(0, Math.min(LEVEL_END - W, p.x - W * 0.4 + look));
+  camX += (want - camX) * Math.min(1, dt * 5);
+  const wantY = arena ? 0 : Math.max(-40, Math.min(0, (p.y + p.h - (GROUND - 60)) * 0.3)); // sobe junto quando ele pula alto
+  camY += (wantY - camY) * Math.min(1, dt * 3);
+  // poeirinha das patas ao correr
+  dustT -= dt;
+  if (p.onGround && Math.abs(p.vx) > 160 && dustT <= 0) {
+    dustT = 0.05;
+    particles.push({ x: p.x + p.w / 2 - p.face * 14, y: p.y + p.h - 2, vx: -p.face * (30 + Math.random() * 50), vy: -30 - Math.random() * 40,
+      g: -40, life: 0.45, color: '#e9dcc8', r: 4 + Math.random() * 5, grow: 14 });
+  }
   shake = Math.max(0, shake - dt);
 
-  for (const q of particles) { q.life -= dt; q.vy += 900 * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
+  for (const q of particles) { q.life -= dt; q.vy += (q.g ?? 900) * dt; if (q.grow) q.r += q.grow * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
   particles = particles.filter(q => q.life > 0);
 }
 
@@ -325,20 +360,29 @@ function drawBackground() {
   const far = img('far'), mid = img('mid');
   if (far && mid) {
     // camadas com parallax; blocos alternados são espelhados para esconder a emenda
+    const farB = blurred('far', 2) || far, midB = blurred('mid', 0.6) || mid;
+    ctx.save(); ctx.translate(0, -camY * 0.2);
     const fh = 420, fw = far.naturalWidth * fh / far.naturalHeight, fo = -camX * 0.15;
     for (let i = Math.floor(-fo / fw) - 1, n = i + Math.ceil(W / fw) + 2; i < n; i++) {
       const x = fo + i * fw; ctx.save();
-      if (i % 2) { ctx.translate(x + fw, 0); ctx.scale(-1, 1); ctx.drawImage(far, 0, GROUND - fh + 30, fw, fh); }
-      else ctx.drawImage(far, x, GROUND - fh + 30, fw, fh);
+      if (i % 2) { ctx.translate(x + fw, 0); ctx.scale(-1, 1); ctx.drawImage(farB, 0, GROUND - fh + 30, fw, fh); }
+      else ctx.drawImage(farB, x, GROUND - fh + 30, fw, fh);
       ctx.restore();
     }
+    ctx.restore();
+    // névoa atmosférica entre a cidade e o muro
+    const haze = ctx.createLinearGradient(0, GROUND - 260, 0, GROUND);
+    haze.addColorStop(0, 'rgba(225,238,250,0)'); haze.addColorStop(1, 'rgba(245,232,215,.55)');
+    ctx.fillStyle = haze; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.translate(0, -camY * 0.85);
     const mh = 170, mw = mid.naturalWidth * mh / mid.naturalHeight, mo = -camX * 0.55;
     for (let i = Math.floor(-mo / mw) - 1, n = i + Math.ceil(W / mw) + 2; i < n; i++) {
       const x = mo + i * mw; ctx.save();
-      if (i % 2) { ctx.translate(x + mw, 0); ctx.scale(-1, 1); ctx.drawImage(mid, 0, GROUND - mh + 6, mw, mh); }
-      else ctx.drawImage(mid, x, GROUND - mh + 6, mw, mh);
+      if (i % 2) { ctx.translate(x + mw, 0); ctx.scale(-1, 1); ctx.drawImage(midB, 0, GROUND - mh - 14, mw, mh); }
+      else ctx.drawImage(midB, x, GROUND - mh - 14, mw, mh);
       ctx.restore();
     }
+    ctx.restore();
     return;
   }
   ell(820 - camX * 0.02, 90, 46, 46, 'rgba(255,240,180,.9)');
@@ -372,22 +416,50 @@ function drawBackground() {
 function drawWorld() {
   // chão
   const arenaImg = img('arena');
-  ctx.fillStyle = '#3b2a22'; ctx.fillRect(0, GROUND + 20, W, H); // fundo dos buracos
-  for (const [x, w0] of grounds) {
-    const w = arenaImg ? Math.min(w0, ARENA_X - x) : w0;
-    const sx = x - camX; if (w <= 0 || sx > W || sx + w < 0) continue;
-    ctx.fillStyle = '#c98a55'; ctx.fillRect(sx, GROUND, w, H - GROUND);
-    ctx.fillStyle = '#b5764a';
-    for (let px = Math.ceil(x / 80) * 80; px < x + w; px += 80) ctx.fillRect(px - camX, GROUND, 3, H - GROUND);
-    ctx.fillStyle = '#e3a874'; ctx.fillRect(sx, GROUND, w, 10);
-    ctx.fillStyle = 'rgba(0,0,0,.15)'; ctx.fillRect(sx, GROUND + 10, w, 4);
+  // fundo dos buracos
+  const pit = ctx.createLinearGradient(0, FLOOR_BACK, 0, FLOOR_FRONT);
+  pit.addColorStop(0, '#1c1411'); pit.addColorStop(1, '#4a3528');
+  ctx.fillStyle = pit; ctx.fillRect(0, FLOOR_BACK, W, FLOOR_FRONT);
+  // piso em perspectiva: cada trecho de chão é um trapézio que se abre em direção ao jogador
+  const floorG = ctx.createLinearGradient(0, FLOOR_BACK, 0, FLOOR_FRONT);
+  floorG.addColorStop(0, '#cdb69a'); floorG.addColorStop(0.25, '#e4d0b2'); floorG.addColorStop(1, '#a88866');
+  for (const [x0, w0] of grounds) {
+    const x = x0 === 0 ? -3000 : x0, w = w0 + x0 - x; // o começo da fase continua chão até sumir da tela
+    const sx = x - camX; if (sx > W + 400 || sx + w < -400) continue;
+    const ex = sx + w;
+    ctx.save(); ctx.beginPath();
+    ctx.moveTo(persp(sx, FLOOR_BACK), FLOOR_BACK); ctx.lineTo(persp(ex, FLOOR_BACK), FLOOR_BACK);
+    ctx.lineTo(persp(ex, FLOOR_FRONT), FLOOR_FRONT); ctx.lineTo(persp(sx, FLOOR_FRONT), FLOOR_FRONT); ctx.closePath();
+    ctx.fillStyle = floorG; ctx.fill(); ctx.clip();
+    // juntas do piso convergindo para o ponto de fuga
+    ctx.strokeStyle = 'rgba(110,80,55,.28)'; ctx.lineWidth = 1.5; ctx.beginPath();
+    for (let px = Math.ceil(x / 90) * 90; px < x + w; px += 90) {
+      const s0 = px - camX; ctx.moveTo(persp(s0, FLOOR_BACK), FLOOR_BACK); ctx.lineTo(persp(s0, FLOOR_FRONT), FLOOR_FRONT);
+    }
+    for (let k = 1; k < 7; k++) { const yy = FLOOR_BACK + (FLOOR_FRONT - FLOOR_BACK) * Math.pow(k / 7, 1.5); ctx.moveTo(-50, yy); ctx.lineTo(W + 50, yy); }
+    ctx.stroke();
+    // meio-fio claro no fundo e luz do sol vindo da direita
+    ctx.fillStyle = 'rgba(255,250,240,.55)'; ctx.fillRect(-50, FLOOR_BACK, W + 100, 4);
+    ctx.restore();
+    // borda do buraco com espessura (lado de dentro escuro)
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    if (x > 0) { ctx.beginPath(); ctx.moveTo(persp(sx, FLOOR_BACK), FLOOR_BACK); ctx.lineTo(persp(sx, FLOOR_FRONT), FLOOR_FRONT); ctx.lineTo(persp(sx, FLOOR_FRONT) - 6, FLOOR_FRONT); ctx.lineTo(persp(sx, FLOOR_BACK) - 3, FLOOR_BACK); ctx.fill(); }
   }
   // plataformas (bancos/floreiras)
   for (const [x, y, w] of plats) {
     const sx = x - camX; if (sx > W || sx + w < 0) continue;
-    ctx.fillStyle = 'rgba(0,0,0,.12)'; roundRect(sx + 6, y + 8, w, 18, 6); ctx.fill();
-    ctx.fillStyle = '#8b5a3c'; roundRect(sx, y, w, 18, 6); ctx.fill();
-    ctx.fillStyle = '#a8724e'; ctx.fillRect(sx + 4, y + 3, w - 8, 4);
+    // sombra no chão, mais espalhada quanto mais alta a plataforma
+    const hgt = GROUND - y, sa = Math.max(0.06, 0.2 - hgt / 1500);
+    ell(sx + w / 2, GROUND - 6, w / 2 + hgt * 0.08, 7, `rgba(60,40,20,${sa})`);
+    // tampo (face de cima recuando para o fundo) + frente de madeira
+    const bx0 = sx + (VPX - sx) * 0.06, bx1 = sx + w + (VPX - sx - w) * 0.06;
+    ctx.fillStyle = '#c4935f'; ctx.beginPath(); ctx.moveTo(bx0, y - 10); ctx.lineTo(bx1, y - 10); ctx.lineTo(sx + w, y + 4); ctx.lineTo(sx, y + 4); ctx.fill();
+    ctx.strokeStyle = 'rgba(90,55,30,.35)'; ctx.lineWidth = 1; ctx.beginPath();
+    for (let k = 1; k < 3; k++) { const t = k / 3; ctx.moveTo(bx0 + (sx - bx0) * t, y - 10 + 14 * t); ctx.lineTo(bx1 + (sx + w - bx1) * t, y - 10 + 14 * t); }
+    ctx.stroke();
+    const fr = ctx.createLinearGradient(0, y + 4, 0, y + 20); fr.addColorStop(0, '#8b5a3c'); fr.addColorStop(1, '#5e3a24');
+    ctx.fillStyle = fr; roundRect(sx, y + 4, w, 16, [0, 0, 6, 6]); ctx.fill();
+    ctx.fillStyle = 'rgba(255,230,190,.5)'; ctx.fillRect(sx, y + 3, w, 2);
   }
   // parquinho
   const ax = ARENA_X - camX;
@@ -471,6 +543,15 @@ function drawPigeon(e) {
   ctx.restore();
 }
 
+// sombra de contato: projetada na superfície logo abaixo, menor e mais clara quanto mais alto
+function drawShadow(wx, footY, rx) {
+  let sy = Infinity;
+  for (const s of SOLIDS) if (wx >= s.x && wx <= s.x + s.w && s.y >= footY - 4 && s.y < sy) sy = s.y;
+  if (sy === Infinity) return;
+  const k = Math.max(0.25, 1 - (sy - footY) / 260);
+  ell(wx - camX, sy + (sy === GROUND ? -4 : -2), rx * k, 6 * k, `rgba(40,25,10,${0.28 * k})`);
+}
+
 // Tintim desenhado em camadas de "pelo": branco com mancha preta no rosto, bandana laranja e lacinho vermelho
 function drawTintim() {
   const p = player;
@@ -480,9 +561,12 @@ function drawTintim() {
   const run = moving ? time * (p.fast > 0 || p.mega > 0 ? 22 : 16) : 0;
   const squash = p.landT > 0 ? 1 - p.landT * 0.8 : (!p.onGround ? 1.06 : 1 + Math.sin(time * 3) * 0.015);
   if (img('tintim-idle')) {
-    ctx.save(); ctx.translate(x, y);
-    ell(0, 2, 30, 6, 'rgba(0,0,0,.18)');
+    drawShadow(p.x + p.w / 2, p.y + p.h, 30);
+    ctx.save(); ctx.translate(x, y + (moving ? -Math.abs(Math.sin(time * 13)) * 3 : 0));
     if (p.mega > 0) { ctx.fillStyle = `hsla(${(time * 300) % 360},100%,60%,.35)`; ctx.beginPath(); ctx.arc(0, -38, 52, 0, 7); ctx.fill(); }
+    // inclina no ar (nariz para cima subindo, para baixo caindo) e um pouco para frente ao acelerar
+    const tilt = p.onGround ? (p.vx / FAST) * 0.06 : Math.max(-0.3, Math.min(0.3, p.vy / 2600)) * p.face;
+    ctx.translate(0, -36); ctx.rotate(tilt); ctx.translate(0, 36);
     ctx.scale(2 - squash, squash);
     const fast = p.fast > 0 || p.mega > 0;
     let name = 'tintim-idle', h = 80, fr = 0, nf = 1;
@@ -553,7 +637,7 @@ function drawPug(g) {
   const x = g.x - camX + g.w / 2, y = g.y + g.h;
   if (g.hurt > 0 && Math.floor(time * 30) % 2) return;
   if (img('pug-walk')) {
-    ell(x, y + 2, 38, 7, 'rgba(0,0,0,.2)');
+    drawShadow(g.x + g.w / 2, g.y + g.h, 38);
     if (g.name === 'Pug 2') ctx.filter = 'brightness(0.82) saturate(1.25)'; // segundo pug um pouco mais escuro
     const flip = g.dir > 0; // os sprites olham para a esquerda
     if (g.hp <= 0) spr('pug-stun', x, y - 56, 56, flip, 0, 1, Math.PI);
@@ -653,10 +737,48 @@ function drawHUD() {
   }
 }
 
+// primeiro plano: folhagens desfocadas passando na frente da câmera (parallax mais rápido que o mundo)
+let fgBush = null;
+function makeBush() {
+  // desenhado e desfocado uma única vez num canvas separado (desfocar a cada quadro pesa no celular)
+  const c = document.createElement('canvas'); c.width = 420; c.height = 260;
+  const x = c.getContext('2d'); x.filter = 'blur(5px)';
+  for (let k = 0; k < 9; k++) {
+    const a = -Math.PI / 2 + (k - 4) * 0.27, len = 140 + (k * 37 % 60);
+    x.save(); x.translate(210, 270); x.rotate(a);
+    x.fillStyle = k % 2 ? 'rgba(24,62,34,.94)' : 'rgba(36,86,46,.94)';
+    x.beginPath(); x.ellipse(len / 2, 0, len / 2, 15, 0, 0, 7); x.fill(); x.restore();
+  }
+  return c;
+}
+function drawForeground() {
+  if (arena) return;
+  fgBush = fgBush || makeBush();
+  const off = -camX * 1.35, span = 1100;
+  for (let i = Math.floor(-off / span) - 1; i * span + off < W + 300; i++) {
+    if (((i % 3) + 3) % 3 === 2) continue;
+    const bx = i * span + off + (((i * 397) % 300) + 300) % 300;
+    ctx.save(); ctx.translate(bx, H + 40 - camY * 1.3); ctx.rotate(Math.sin(time * 1.3 + i) * 0.03);
+    ctx.drawImage(fgBush, -210, -260); ctx.restore();
+  }
+}
+// luz quente do sol + vinheta
+function drawLight() {
+  const sun = ctx.createRadialGradient(W * 0.85, -40, 20, W * 0.85, -40, W * 0.9);
+  sun.addColorStop(0, 'rgba(255,214,150,.30)'); sun.addColorStop(1, 'rgba(255,214,150,0)');
+  ctx.fillStyle = sun; ctx.fillRect(0, 0, W, H);
+  const vig = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, H * 1.05);
+  vig.addColorStop(0, 'rgba(20,10,0,0)'); vig.addColorStop(1, 'rgba(20,10,0,.35)');
+  ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
+}
+
 function render() {
+  ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0); ctx.imageSmoothingQuality = 'high';
   ctx.save();
   if (shake > 0) ctx.translate((Math.random() - 0.5) * 12 * shake / 0.3, (Math.random() - 0.5) * 12 * shake / 0.3);
-  drawBackground(); drawWorld();
+  drawBackground();
+  ctx.save(); ctx.translate(0, -camY);
+  drawWorld();
   for (const it of items) {
     if (it.got) continue;
     const x = it.x - camX, y = it.y + Math.sin(time * 4 + it.x) * 4;
@@ -666,8 +788,10 @@ function render() {
   enemies.forEach(drawPigeon);
   if (arena || camX > ARENA_X - W) pugs.forEach(drawPug);
   drawTintim();
-  for (const q of particles) { ctx.globalAlpha = Math.max(0, q.life); ell(q.x - camX, q.y, q.r, q.r, q.color); }
+  for (const q of particles) { ctx.globalAlpha = Math.max(0, Math.min(1, q.life * 1.6)); ell(q.x - camX, q.y, q.r, q.r, q.color); }
   ctx.globalAlpha = 1;
+  ctx.restore();
+  drawForeground(); drawLight();
   ctx.restore();
   drawHUD();
 }
@@ -695,8 +819,17 @@ document.getElementById('again').onclick = start;
 
 reset();
 let last = performance.now();
+let perfT = 0, perfN = 0;
 function loop(now) {
-  const dt = Math.min(0.033, (now - last) / 1000); last = now;
+  const raw = (now - last) / 1000, dt = Math.min(0.033, raw); last = now;
+  // qualidade adaptativa: se ficar abaixo de ~50 fps durante a partida, reduz a resolução interna
+  if (state === 'play' && raw < 0.5) {
+    perfT += raw; perfN++;
+    if (perfT > 2) {
+      if (perfN / perfT < 50 && maxScale > 1) { maxScale = Math.max(1, Math.min(maxScale, SCALE) - 0.5); resize(); }
+      perfT = 0; perfN = 0;
+    }
+  }
   if (state === 'play' || state === 'end') update(dt);
   render();
   requestAnimationFrame(loop);
