@@ -113,9 +113,9 @@ def build_sections():
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
                       'html': '<h1>Parte III</h1>\n<h2>Exercícios</h2>'})
             S.append({'id': 'exercicios', 'title': 'Como usar os exercícios', 'kind': 'chapter', 'html': md2html(
-                "# Como usar os exercícios\n\nOs 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício é o mesmo das folhas para imprimir e dos guias para Procreate.\n\n"
+                "# Como usar os exercícios\n\nOs 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício aparece também no índice, no fim do livro.\n\n"
                 "Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.\n\n"
-                "Para desenhar por cima, use as folhas para imprimir, que têm o mesmo modelo apagado em azul claro, ou desenhe ao lado do livro, olhando o modelo.")})
+                "Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.")})
             for code, lid, ln, name, intro in LEVELS:
                 items = [x for x in EX if x['lv'] == code]
                 body = f'<h1><span class="lvnum">{ln}</span> {name}</h1>\n<p class="lead">{intro}</p>\n<p class="count">{len(items)} exercícios</p>\n' + '\n'.join(ex_html(x) for x in items)
@@ -154,7 +154,7 @@ CREDITS = {'id': 'creditos', 'title': 'Créditos', 'kind': 'back', 'html': md2ht
 
 As reproduções de obras de Vincent van Gogh são de domínio público e foram obtidas no Wikimedia Commons. A reprodução do *Retrato de Joseph Roulin* usada na capa vem do Open Content Program do J. Paul Getty Museum, em Los Angeles. Os dados de catálogo vêm do Wikidata e do Wikimedia Commons. As citações das cartas são traduções livres do autor a partir da edição em inglês publicada pelo Van Gogh Museum e pelo Huygens Institute em vangoghletters.org.
 
-Os desenhos-modelo dos exercícios, as demonstrações em etapas, as amostras de marcas e as fotografias de materiais foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele.
+Os desenhos-modelo dos exercícios, as demonstrações em etapas e as amostras de marcas foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele. Os diagramas, os ícones e o mapa foram desenhados para este livro.
 
 Texto composto em EB Garamond e Archivo.""")}
 
@@ -197,6 +197,12 @@ WORK_DETAILS = {
  'wornout': ('wornout', [(.55, .3, .45, 'O rosto escondido', 'A cabeça entre as mãos. A emoção inteira está na pose.')]),
  'peasant': ('peasant', [(.55, .3, .3, 'Duas massas ovais', 'Costas e quadril são duas massas. A hachura muda de direção em cada uma.'),
                          (.3, .52, .24, 'A hachura em aros', 'No braço, a hachura dá a volta na forma.')]),
+ 'cafe': ('cafe', [(.42, .42, .25, 'O lampião', 'Contorno quebrado e raios curtos em volta da luz.'),
+                   (.3, .15, .35, 'O toldo', 'Linhas longas e paralelas que seguem a curva do pano.'),
+                   (.5, .88, .35, 'O calçamento', 'Pedras em pequenos laços, cada vez menores rumo ao fundo.')]),
+ 'mousme2': ('mousme2', [(.42, .2, .28, 'O rosto', 'Quase papel em branco, com contorno só nas feições.'),
+                         (.45, .45, .35, 'A blusa listrada', 'Listras grossas que descem e seguem o corpo.'),
+                         (.5, .82, .35, 'A saia pontilhada', 'Pontos e anéis em fileiras soltas.')]),
  'sorrow': ('sorrow', [(.45, .66, .26, 'O contorno com peso', 'A linha engrossa embaixo da coxa e no pé, e afina onde bate luz.')]),
 }
 BALLOON_CHAPTERS = ('cap2', 'cap3', 'cap4', 'cap5', 'cap6')
@@ -395,6 +401,13 @@ h2.ic .icon{width:.36in;height:.36in;flex:none}
 .tr2{break-before:page;padding-top:.68in}
 .lvhead .lvtag{position:absolute;left:0;bottom:.62in;font:400 30pt/1 Disp;color:#BF8A5A;margin:0}
 
+/* blocos numerados e diagramas */
+ol.laws{list-style:none;margin:.6em 0 1.2em;padding:0;counter-reset:law}
+ol.laws li{counter-increment:law;position:relative;padding:.09in 0 .09in .46in;border-top:.6pt solid #CFC4B0;text-align:left;break-inside:avoid}
+ol.laws li:last-child{border-bottom:.6pt solid #CFC4B0}
+ol.laws li::before{content:counter(law);position:absolute;left:0;top:.06in;font:400 17pt/1 Disp;color:#1E1913}
+ol.laws li b{display:block;font:700 8.8pt Sans;margin-bottom:.03in}
+figure.diag img{width:100%;max-height:none}
 /* capa */
 .cover{page:full;position:relative;width:6in;height:9in;background:#2A2119;color:#FBF8F1;break-after:page;bookmark-level:1;bookmark-label:"Capa"}
 .cover .art{position:absolute;top:0;bottom:0;left:0;right:0;background:url("img/cover-roulin.jpg") 46% 0/122% auto no-repeat}
@@ -502,6 +515,8 @@ section.level{page:chap;break-before:page}
 .iconinfo .cc{font:400 7.8pt/1.45 Sans;color:#6E6253;text-align:left}
 .iconinfo .cl{font-size:10.6pt;line-height:1.45;margin:.2in 0}
 .ficha{width:100%;font:400 7.4pt Sans;margin-top:.15in}
+.iconinfo .balrow{margin-top:.35in;justify-content:flex-start;gap:.18in}
+.iconinfo .bal{width:1.5in}
 .ficha td{border-top:.6pt solid #A39682;border-bottom:none;padding:.05in 0}
 .ficha td:first-child{width:.95in;color:#6E6253}
 .catlist{break-before:page}
@@ -598,7 +613,7 @@ def catalogue_pdf():
         out.append(f'<section class="iconimg"><img src="img/{k}.jpg" alt="{esc(p["t"])}"/></section>')
         out.append(f'<section class="iconinfo" id="cat-{k}"><div class="ptop"><span>Catálogo das obras</span><span>Prancha {num[k]}</span></div>'
                    f'<p class="no">{num[k]}</p><h2>{esc(p["t"])}</h2><p class="cc">{esc(p["c"])}</p><p class="cl">{esc(p.get("l", ""))}</p>'
-                   + (f'<table class="ficha">{tr}</table>' if tr else '') + '</section>')
+                   + (f'<table class="ficha">{tr}</table>' if tr else '') + (balloons_html(k) if k in WORK_DETAILS else '') + '</section>')
     cards = []
     for k in order:
         if k in ICONS:
@@ -748,6 +763,8 @@ h2.ic img.icon{width:1.6em;height:1.6em;vertical-align:middle;margin-right:.4em}
 .tr{border-top:1px solid #CFC4B0;padding:.6em 0;page-break-inside:avoid}.tr img{width:100%}
 .trt .ty{font-family:Disp,sans-serif;font-size:1.3em;margin:.3em 0 0}.trt .tp{font-family:Sans,sans-serif;font-size:.85em;font-weight:700;margin:0}
 .tracos .sub,.enderecos .sub{font-style:italic}
+ol.laws{list-style:none;padding:0}ol.laws li{border-top:1px solid #CFC4B0;padding:.5em 0}ol.laws li b{display:block;font-family:Sans,sans-serif}
+figure.diag img{width:100%}
 .titlepage{text-align:center;margin-top:25%}.titlepage .t{font-size:2.1em;line-height:1.1}.titlepage .s{font-style:italic;color:#5F5446}
 .titlepage .a{font-family:Sans,sans-serif;font-size:.8em;letter-spacing:.2em;margin-top:3em}
 """

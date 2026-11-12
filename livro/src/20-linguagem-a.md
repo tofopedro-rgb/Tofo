@@ -29,7 +29,7 @@ Carvão de salgueiro ou de vinha, usado de lado para fazer massas grandes. Vince
 
 É a ferramenta dos desenhos de Arles e de Saint-Rémy. Um pedaço de cana seca é cortado em bisel com canivete, "do mesmo jeito que se corta uma pena de ganso" (carta 600), e ganha uma pequena fenda na ponta para guardar tinta. Vincent cortava as suas dos juncos que cresciam à beira dos canais.
 
-<figure><img src="img/g1.jpg" alt="Penas de junco cortadas, canivete e aparas"><figcaption>Penas de junco cortadas a canivete.</figcaption></figure>
+<figure class="diag"><img src="img/diag/pena.svg" alt="Pena de junco cortada em bisel, com fenda na ponta, e o traço que ela faz"><figcaption>A pena de junco cortada em bisel e o traço que ela deixa.</figcaption></figure>
 
 A pena de junco tem quatro comportamentos, e são eles que você precisa imitar, seja no papel, seja no tablet.
 
@@ -41,7 +41,7 @@ Para os detalhes miúdos do fundo, ele trocava o junco por uma pena de ave. Numa
 
 Vincent usava tinta ferrogálica, feita de sais de ferro e taninos, que é quase preta quando fresca. Com o tempo, a tinta de muitos desenhos dele desbotou para marrom e cinza, de forma desigual. O marrom que vemos hoje nos museus não é a cor original. Os desenhos-modelo deste livro imitam esse papel envelhecido para ficarem próximos do que você vai ver nas reproduções.
 
-<figure><img src="img/g3.jpg" alt="Tinta ferrogálica fresca e a mesma tinta desbotada"><figcaption>A tinta ferrogálica fresca, à esquerda, e desbotada pelo tempo, à direita.</figcaption></figure>
+<figure class="diag"><img src="img/diag/tinta.svg" alt="Traços de tinta preta ao lado dos mesmos traços desbotados em marrom"><figcaption>A mesma tinta ferrogálica fresca e depois de mais de um século.</figcaption></figure>
 
 ## O papel
 
@@ -53,7 +53,7 @@ Hoje, um papel Canson Ingres ou um Mi-Teintes cinza claro dão uma textura parec
 
 Em agosto de 1882 Vincent mandou fazer uma moldura de madeira com fios esticados na vertical, na horizontal e nas diagonais, montada sobre duas estacas com ponta de ferro para cravar na areia das dunas (cartas 253 e 254). Olhando através dela, o motivo já aparece dividido, e basta repetir as divisões no papel. Ele continuou a usá-la anos depois. Em março de 1888, já em Arles, contou que fez os três últimos estudos com a ajuda dela (carta 585).
 
-<figure><img src="img/g5.jpg" alt="Moldura de perspectiva cravada nas dunas"><figcaption>Uma moldura de perspectiva montada sobre estacas.</figcaption></figure>
+<figure class="diag"><img src="img/diag/moldura.svg" alt="Moldura com fios esticados, montada sobre estacas, vista pelo olho do desenhista"><figcaption>A moldura de perspectiva montada sobre estacas.</figcaption></figure>
 
 Para fazer a sua, corte uma janela de 20 por 30 centímetros num papelão e prenda quatro linhas pretas com fita: uma vertical e uma horizontal no centro, e duas diagonais de canto a canto. Segure sempre à mesma distância do olho.
 
@@ -107,7 +107,16 @@ Em quase todas as folhas de Arles há uma área grande quase vazia: o céu de La
 
 ## As seis regras da folha de Arles
 
-Quem estuda muitos desenhos dele chega a uma ordem de trabalho parecida em quase todos. Primeiro vem o esboço leve de grafite, só com as grandes divisões. Antes de pegar a pena, decida qual marca vai para cada superfície; vale escrever a legenda no canto da folha. Comece pelo horizonte com a pena mais fina e engrosse a ferramenta conforme desce para o primeiro plano. Mantenha uma pressão por zona e faça o escuro aproximando as marcas. Deixe pelo menos uma área grande em branco. Os pretos máximos entram no fim, em meia dúzia de lugares, no primeiro plano e nas sebes, e então você para.
+Quem estuda muitos desenhos dele chega a uma ordem de trabalho parecida em quase todos.
+
+<ol class="laws">
+<li><b>Esboço leve de grafite.</b> Só as grandes divisões, sem detalhe.</li>
+<li><b>Uma marca para cada superfície.</b> Decida antes de pegar a pena. Vale escrever a legenda no canto da folha.</li>
+<li><b>Do horizonte para a frente.</b> Comece com a pena mais fina e engrosse a ferramenta conforme desce para o primeiro plano.</li>
+<li><b>Uma pressão por zona.</b> O escuro vem de aproximar as marcas, nunca de apertar mais.</li>
+<li><b>Uma área grande em branco.</b> Escolha qual será e não desenhe nela.</li>
+<li><b>Os pretos no fim.</b> Meia dúzia de acentos no primeiro plano e nas sebes. Então pare.</li>
+</ol>
 
 O Capítulo 7 mostra essa ordem imagem por imagem.
 
@@ -128,15 +137,13 @@ Em Saint-Rémy as marcas curtas de Arles se alongaram e passaram a se ligar umas
 
 ## As cinco leis do fluxo
 
-A primeira é que vizinhos são paralelos. Dois traços lado a lado têm quase o mesmo ângulo, e a mudança de direção acontece aos poucos.
-
-A segunda é que todo fluxo tem centros. Um astro, um olho, o topo de uma colina. Perto do centro os traços giram em volta dele. Decida onde ficam os centros antes de desenhar.
-
-A terceira é que o fluxo contorna os corpos. Diante de um cipreste, de uma cabeça ou da lua, as linhas se abrem, passam pelos lados e se fecham depois, como água em volta de uma pedra.
-
-A quarta é que a marca encurta onde a curva fecha. Perto de um centro o traço é curto. Onde a corrente é reta ele se alonga.
-
-A quinta é que o movimento precisa de uma reta para aparecer. Em *A Noite Estrelada*, a vila é feita de tracinhos retos e verticais, e é contra ela que o céu parece girar.
+<ol class="laws">
+<li><b>Vizinhos são paralelos.</b> Dois traços lado a lado têm quase o mesmo ângulo, e a mudança de direção acontece aos poucos.</li>
+<li><b>Todo fluxo tem centros.</b> Um astro, um olho, o topo de uma colina. Perto do centro os traços giram em volta dele. Decida onde ficam os centros antes de desenhar.</li>
+<li><b>O fluxo contorna os corpos.</b> Diante de um cipreste, de uma cabeça ou da lua, as linhas se abrem, passam pelos lados e se fecham depois, como água em volta de uma pedra.</li>
+<li><b>A marca encurta onde a curva fecha.</b> Perto de um centro o traço é curto. Onde a corrente é reta, ele se alonga.</li>
+<li><b>O movimento precisa de uma reta.</b> Em <i>A Noite Estrelada</i>, a vila é feita de tracinhos retos e verticais, e é contra ela que o céu parece girar.</li>
+</ol>
 
 <figure class="wide"><img src="img/fig-fluxo.jpg" alt="Três campos de tracinhos com um, dois e três centros"><figcaption>Um, dois e três centros. Os tracinhos vizinhos continuam paralelos em todos os casos.</figcaption></figure>
 

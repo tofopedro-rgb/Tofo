@@ -160,13 +160,13 @@ Os estudos de mestre deste livro, no Nível 4, pedem um destes cinco métodos. S
 
 Divida a reprodução em quadrados de 3 a 4 centímetros. Repita a grade na sua folha, na mesma proporção, com grafite bem leve. Copie quadrado por quadrado só as grandes divisões: horizonte, contornos, eixos. Apague a grade antes de começar as marcas. A grade serve para a estrutura e nunca para o traço.
 
-<figure><img src="img/g7.jpg" alt="Reprodução com grade ao lado de uma folha com a mesma grade"><figcaption>Grade sobre a reprodução e a mesma grade na folha.</figcaption></figure>
+<figure class="diag"><img src="img/diag/grade.svg" alt="Reprodução com grade ao lado de uma folha com a mesma grade"><figcaption>A grade sobre a reprodução e a mesma grade na folha. Só as grandes divisões passam de um lado para o outro.</figcaption></figure>
 
 ## 2. Pela medida a olho
 
 Escolha uma unidade, como a altura da cabeça, e meça tudo em relação a ela com o lápis à distância do braço. Use o lápis também para copiar ângulos: incline-o até coincidir com a linha e leve o ângulo para o papel. É mais lento que a grade e ensina mais. Use nas cópias de rosto.
 
-<figure><img src="img/g8.jpg" alt="Mão medindo com o lápis"><figcaption>O lápis à distância do braço serve de régua e de transferidor.</figcaption></figure>
+<figure class="diag"><img src="img/diag/medida.svg" alt="Olho, braço esticado e lápis medindo a altura de uma cabeça"><figcaption>Com o braço esticado, o lápis serve de régua e de transferidor.</figcaption></figure>
 
 ## 3. Em etapas
 

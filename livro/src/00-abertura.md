@@ -36,7 +36,7 @@ Cada exercício parte de um desenho-modelo, feito no estilo das folhas dele, e a
 
 ## Material para desenhar por cima
 
-Este livro foi feito para ser lido, inclusive num leitor digital. Para desenhar por cima dos modelos, use as folhas de exercício para imprimir (com o modelo apagado em azul claro) ou os guias em camadas para Procreate, que acompanham o curso.
+Este livro foi feito para ser lido, inclusive num leitor digital. Para desenhar sobre um modelo, imprima a página do exercício e trabalhe por cima com papel vegetal, ou abra a página num aplicativo como o Procreate e desenhe numa camada acima dela, com o modelo esmaecido. Na maioria dos exercícios, porém, o melhor é desenhar ao lado do livro, olhando o modelo.
 
 ## As cartas
 
