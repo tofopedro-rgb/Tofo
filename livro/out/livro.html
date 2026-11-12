@@ -168,16 +168,23 @@ figure.diag img{width:100%;max-height:none}
 
 /* sumário */
 .toc{page:bare;break-before:page;bookmark-level:1;bookmark-label:"Sumário"}
-.toc h1{font-size:22pt;margin-bottom:.9em}
-.toc ul{list-style:none;margin:0;padding:0}
-.toc li{font-size:9.8pt;line-height:1.3;margin:.12em 0}
-.toc li a::after{content:leader(" ") target-counter(attr(href),page);font:400 8pt Sans}
-.toc li.tp{margin:1.05em 0 .35em;border-top:.6pt solid #1E1913;padding-top:.07in;break-after:avoid}
-.toc li.tp a{font:400 10pt Disp}
-.toc li.tp .n{font:400 10pt Disp;color:#BF8A5A;margin-right:.6em}
-.toc li.sub{padding-left:1.1em;font-size:9.2pt}
-.toc li.front a,.toc li.back a{font-style:italic}
-
+.toc h1{font-size:24pt;margin-bottom:.32in}
+.toc a{color:#1E1913}
+.toc .pg::after{content:target-counter(attr(href),page)}
+.toc .tg{margin-bottom:.26in}
+.toc .tf{display:flex;justify-content:space-between;font:italic 400 10.5pt/1.5 Serif;margin:0;text-align:left}
+.toc .tf .pg{font:400 8.4pt Sans;font-style:normal}
+.toc .tpart{display:flex;align-items:baseline;gap:.14in;border-top:1.2pt solid #1E1913;padding-top:.08in;margin-bottom:.1in;break-after:avoid}
+.toc .tn{font:400 22pt/1 Disp;color:#BF8A5A;width:.5in;flex:none}
+.toc .tt{flex:1;font:400 14pt/1.1 Disp}
+.toc .tpart .pg{font:700 9pt Sans}
+.toc .tc{display:flex;align-items:baseline;margin:.1in 0 0 .64in;font:400 11pt/1.3 Serif;text-align:left;break-after:avoid}
+.toc .tc .cn{font:400 10pt Disp;width:.28in;flex:none}
+.toc .tc a:not(.pg){flex:1}
+.toc .tc .pg{font:400 8.4pt Sans;color:#1E1913}
+.toc .tsub{margin:.02in 0 0 .92in;font:400 7.6pt/1.5 Sans;color:#6E6253;text-align:left;hyphens:manual}
+.toc .tpart + .tsub{margin-left:.64in}
+.toc .tg-back{margin-top:.36in}
 /* páginas de parte */
 .partimg{page:kraft;break-before:page;width:6in;height:9in;position:relative}
 .partimg img{position:absolute;left:.55in;top:.55in;width:4.9in;height:7.4in;object-fit:contain}
@@ -284,29 +291,47 @@ section.level{page:chap;break-before:page}
 <div class="cover"><div class="art"></div><div class="topsh"></div><div class="shade"></div><div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Teoria e prática para desenhar como Vincent</div><div class="coll">91 exercícios em quatro níveis</div></div>
 <div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Teoria e prática para desenhar como Vincent</p><p class="a">PEDRO TORRES</p></div>
 <div class="copy"><p>© 2026 Pedro Torres. Todos os direitos reservados.</p><p>Nenhuma parte deste livro pode ser reproduzida sem autorização do autor, exceto as folhas de exercício destinadas ao uso pessoal do leitor.</p><p>Capa: <i>Retrato de Joseph Roulin</i>, Arles, agosto de 1888. Pena de junco e pena de ave, tinta e giz preto. J. Paul Getty Museum, Los Angeles (85.GA.299), Open Content Program.</p><p>Texto composto em EB Garamond e Archivo. Primeira edição, 2026.</p></div>
-<div class="toc"><h1>Sumário</h1><ul>
-<li class="front"><a href="#prefacio">Prefácio</a></li>
-<li class="front"><a href="#como-usar">Como usar este livro</a></li>
-<li class="tp"><span class="n">01</span><a href="#parte1">Dez anos de desenho</a></li>
-<li class="tp"><span class="n">02</span><a href="#parte2">A linguagem</a></li>
-<li><a href="#cap1">1. Materiais</a></li>
-<li><a href="#cap2">2. Ranhuras</a></li>
-<li><a href="#cap3">3. Direção e fluxo</a></li>
-<li><a href="#cap4">4. O rosto como terreno</a></li>
-<li><a href="#cap5">5. Os autorretratos</a></li>
-<li><a href="#cap6">6. O corpo em aros</a></li>
-<li><a href="#cap7">7. Como ele construía uma folha</a></li>
-<li><a href="#cap8">8. Cópia de mestre</a></li>
-<li class="tp"><span class="n">03</span><a href="#parte3">Estudos</a></li>
-<li class="sub"><a href="#nivel2">Nível 2 · Essenciais</a></li>
-<li class="sub"><a href="#nivel3">Nível 3 · Aprofundamento</a></li>
-<li class="sub"><a href="#nivel4">Nível 4 · Provas de mestre</a></li>
-<li class="back"><a href="#glossario">Glossário</a></li>
-<li class="back"><a href="#cartas">Cartas citadas</a></li>
-<li class="back"><a href="#fontes">Fontes e leituras</a></li>
-<li class="back"><a href="#catalogo">Catálogo das obras</a></li>
-<li class="back"><a href="#creditos">Créditos</a></li>
-</ul></div>
+<div class="toc"><h1>Sumário</h1>
+<div class="tg tg-front">
+<p class="tf"><a href="#prefacio">Prefácio</a><a class="pg" href="#prefacio"></a></p>
+<p class="tf"><a href="#como-usar">Como usar este livro</a><a class="pg" href="#como-usar"></a></p>
+</div>
+<div class="tg tg-parte1">
+<div class="tpart"><span class="tn">01</span><span class="tt"><a href="#parte1">Dez anos de desenho</a></span><a class="pg" href="#parte1"></a></div>
+<p class="tsub">O caminho de Vincent · Antes da arte · Bruxelas e Etten · Haia · Drenthe e Nuenen · Antuérpia e Paris · Arles · Saint-Rémy · Auvers-sur-Oise · Dez anos em dez traços</p>
+</div>
+<div class="tg tg-parte2">
+<div class="tpart"><span class="tn">02</span><span class="tt"><a href="#parte2">A linguagem</a></span><a class="pg" href="#parte2"></a></div>
+<p class="tc"><span class="cn">1</span><a href="#cap1">Materiais</a><a class="pg" href="#cap1"></a></p>
+<p class="tsub">O lápis 6B · A caneta nanquim · O papel · A moldura de perspectiva · No tablet</p>
+<p class="tc"><span class="cn">2</span><a href="#cap2">Ranhuras</a><a class="pg" href="#cap2"></a></p>
+<p class="tsub">As doze marcas · O tamanho da marca é a distância · O valor vem da densidade · O papel reservado · As seis regras da folha de Arles</p>
+<p class="tc"><span class="cn">3</span><a href="#cap3">Direção e fluxo</a><a class="pg" href="#cap3"></a></p>
+<p class="tsub">As cinco leis do fluxo · Por que parece errado · O cipreste · A Noite Estrelada desenhada · Como estudar o fluxo numa obra</p>
+<p class="tc"><span class="cn">4</span><a href="#cap4">O rosto como terreno</a><a class="pg" href="#cap4"></a></p>
+<p class="tsub">O mapa de direções · As quatro substâncias · Pouca marca · A luz de lado · Por onde começar um rosto</p>
+<p class="tc"><span class="cn">5</span><a href="#cap5">Os autorretratos</a><a class="pg" href="#cap5"></a></p>
+<p class="tsub">1887: o halo · 1888: o fundo calmo · 1889: o redemoinho · O que vale para todos</p>
+<p class="tc"><span class="cn">6</span><a href="#cap6">O corpo em aros</a><a class="pg" href="#cap6"></a></p>
+<p class="tsub">O peso embaixo · A emoção na pose</p>
+<p class="tc"><span class="cn">7</span><a href="#cap7">Como ele construía uma folha</a><a class="pg" href="#cap7"></a></p>
+<p class="tsub">Uma paisagem · Um retrato · Um autorretrato com halo</p>
+<p class="tc"><span class="cn">8</span><a href="#cap8">Cópia de mestre</a><a class="pg" href="#cap8"></a></p>
+<p class="tsub">1. Pela grade · 2. Pela medida a olho · 3. Em etapas · 4. Por substância · 5. De memória · A tradução de pintura para desenho</p>
+</div>
+<div class="tg tg-parte3">
+<div class="tpart"><span class="tn">03</span><span class="tt"><a href="#parte3">Estudos</a></span><a class="pg" href="#parte3"></a></div>
+<p class="tc"><span class="cn"></span><a href="#nivel2">Nível 2 · Essenciais</a><a class="pg" href="#nivel2"></a></p>
+<p class="tc"><span class="cn"></span><a href="#nivel3">Nível 3 · Aprofundamento</a><a class="pg" href="#nivel3"></a></p>
+<p class="tc"><span class="cn"></span><a href="#nivel4">Nível 4 · Provas de mestre</a><a class="pg" href="#nivel4"></a></p>
+</div>
+<div class="tg tg-back">
+<p class="tf"><a href="#glossario">Glossário</a><a class="pg" href="#glossario"></a></p>
+<p class="tf"><a href="#cartas">Cartas citadas</a><a class="pg" href="#cartas"></a></p>
+<p class="tf"><a href="#fontes">Fontes e leituras</a><a class="pg" href="#fontes"></a></p>
+<p class="tf"><a href="#catalogo">Catálogo das obras</a><a class="pg" href="#catalogo"></a></p>
+<p class="tf"><a href="#creditos">Créditos</a><a class="pg" href="#creditos"></a></p>
+</div></div>
 <section class="front" id="prefacio" style="page:pg1;bookmark-level:1;bookmark-label:'Prefácio'"><span class="rh">Prefácio</span><h1>Prefácio</h1>
 <p><span class="ini">P</span>oucos artistas atravessaram o tempo como Vincent van Gogh. Ele vendeu pouquíssimo em vida, morreu aos 37 anos sem ter visto o próprio nome reconhecido e hoje está entre os pintores mais vistos e mais estudados do mundo. Talvez por causa dessa virada o nome dele chame a atenção desde a primeira vez que a gente o escuta. A paleta ajuda: ninguém a confunde com outra, com aqueles azuis profundos que muita gente já chama de azul Van Gogh.</p>
 <p>A história da arte o coloca entre os pós-impressionistas, ao lado de Cézanne, Gauguin e Seurat. Ele chegou a Paris em 1886, absorveu o que os impressionistas tinham feito com a luz e a cor e seguiu adiante, rumo a uma pintura que mostra o que o artista sente diante do motivo. Por isso também é lembrado como um dos que abriram caminho para o expressionismo.</p>
@@ -568,7 +593,8 @@ section.level{page:chap;break-before:page}
 <h2 class="newpage">O que vale para todos</h2>
 
 <p>Os olhos são o ponto mais escuro e mais nítido. Em volta deles tudo pode se mexer. Cabelo e barba costumam ser a mesma marca, a chama, em direções opostas: o cabelo sobe e se afasta do rosto, a barba desce e se afasta da boca.</p>
-<p>Ele também se pintou ora virado para a esquerda, ora para a direita. Faça o mesmo. A mão estranha o lado contrário, e é exatamente por isso que vale treinar os dois.</p><p class="pline"><b>Para praticar</b> <a href="#ex-a01">A01</a>–<a href="#ex-a15">A15</a> · p. <a class="pg" href="#ex-a01"></a>–<a class="pg" href="#ex-a15"></a> · essenciais <a href="#ex-a01">A01</a>, <a href="#ex-a05">A05</a>, <a href="#ex-a06">A06</a></p></section>
+<p>Ele também se pintou ora virado para a esquerda, ora para a direita. Faça o mesmo. A mão estranha o lado contrário, e é exatamente por isso que vale treinar os dois.</p>
+<div class="pair"><figure><img src="img/sp_straw.jpg" alt="Autorretrato com chapéu de palha"><figcaption><i>Autorretrato com chapéu de palha</i>, Paris, 1887. Metropolitan Museum of Art. Virado para a esquerda.</figcaption></figure><figure><img src="img/sp_ear.jpg" alt="Autorretrato com a orelha enfaixada"><figcaption><i>Autorretrato com a orelha enfaixada</i>, Arles, janeiro de 1889. The Courtauld, Londres. Virado para a direita.</figcaption></figure><p class="pline"><b>Para praticar</b> <a href="#ex-a01">A01</a>–<a href="#ex-a15">A15</a> · p. <a class="pg" href="#ex-a01"></a>–<a class="pg" href="#ex-a15"></a> · essenciais <a href="#ex-a01">A01</a>, <a href="#ex-a05">A05</a>, <a href="#ex-a06">A06</a></p></div></section>
 <div class="pair2 first"><div class="pshead"><span class="rh">Primeiros passos</span><p class="psl">Primeiros passos</p><p class="pst">Exercícios curtos do capítulo 5, de 8 a 20 minutos.</p></div><section class="ex half" id="ex-a02"><div class="exh"><span class="code">A02</span><span class="lv">Nível 1 · Fundamentos<br/>Capítulo 5 · Os autorretratos</span></div><h3>Chapéu de feltro: copa e aba</h3><div class="meta"><div>Tempo<b>15 min</b></div><div>Material<b>Nanquim 0.5</b></div><div>Teoria<b><a href="#cap5">Capítulo 5</a></b></div></div><div class="exsolo"><img src="img/a02.jpg" alt=""/></div><div class="exfoot"><div class="desc"><p>Na copa os tracinhos fazem arcos que acompanham a cúpula. Na aba eles dão a volta inteira, como uma pista.</p></div><div class="done"><b>Pronto quando</b> a aba e a copa têm direções claramente diferentes.</div></div><p class="exref">Obra para comparar: <a href="#cat-sp_felt"><i>Autorretrato com chapéu de feltro cinza</i></a>, no catálogo.</p></section><section class="ex half" id="ex-a07"><div class="exh"><span class="code">A07</span><span class="lv">Nível 1 · Fundamentos<br/>Capítulo 5 · Os autorretratos</span></div><h3>O olhar</h3><div class="meta"><div>Tempo<b>20 min</b></div><div>Material<b>Nanquim 0.1</b></div><div>Teoria<b><a href="#cap5">Capítulo 5</a></b></div></div><div class="exsolo"><img src="img/a07.jpg" alt=""/></div><div class="exfoot"><div class="desc"><p>Os olhos são o ponto mais escuro e mais nítido. Pálpebra de cima pesada, íris como um ponto cheio, sobrancelha em seis traços curtos.</p></div><div class="done"><b>Pronto quando</b> o olhar segura a folha a três metros.</div></div><p class="exref">Obra para comparar: <a href="#cat-sp_felteye"><i>Detalhe do olho no autorretrato de 1887 a 1888</i></a>, no catálogo.</p></section></div>
 <div class="pair2"><section class="ex half" id="ex-a08"><div class="exh"><span class="code">A08</span><span class="lv">Nível 1 · Fundamentos<br/>Capítulo 5 · Os autorretratos</span></div><h3>Cabelo e barba: a mesma chama</h3><div class="meta"><div>Tempo<b>25 min</b></div><div>Material<b>Nanquim 0.5</b></div><div>Teoria<b><a href="#cap5">Capítulo 5</a></b></div></div><div class="exsolo"><img src="img/a08.jpg" alt=""/></div><div class="exfoot"><div class="desc"><p>O cabelo sobe e se afasta do rosto, a barba desce e se afasta da boca. As duas massas emolduram a pele.</p></div><div class="done"><b>Pronto quando</b> cabelo e barba têm a mesma marca e direções opostas.</div></div></section></div>
 <section class="chap" id="cap6" style="page:pg8;bookmark-level:2;bookmark-label:'6. O corpo em aros'"><span class="rh">O corpo em aros</span><div class="chhead"><p class="chlab">Parte II · A linguagem<br/>Capítulo 6</p><p class="chnum">6</p><h1>O corpo em aros</h1></div>

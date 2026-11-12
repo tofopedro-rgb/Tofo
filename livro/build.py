@@ -496,16 +496,23 @@ figure.diag img{width:100%;max-height:none}
 
 /* sumário */
 .toc{page:bare;break-before:page;bookmark-level:1;bookmark-label:"Sumário"}
-.toc h1{font-size:22pt;margin-bottom:.9em}
-.toc ul{list-style:none;margin:0;padding:0}
-.toc li{font-size:9.8pt;line-height:1.3;margin:.12em 0}
-.toc li a::after{content:leader(" ") target-counter(attr(href),page);font:400 8pt Sans}
-.toc li.tp{margin:1.05em 0 .35em;border-top:.6pt solid #1E1913;padding-top:.07in;break-after:avoid}
-.toc li.tp a{font:400 10pt Disp}
-.toc li.tp .n{font:400 10pt Disp;color:#BF8A5A;margin-right:.6em}
-.toc li.sub{padding-left:1.1em;font-size:9.2pt}
-.toc li.front a,.toc li.back a{font-style:italic}
-
+.toc h1{font-size:24pt;margin-bottom:.32in}
+.toc a{color:#1E1913}
+.toc .pg::after{content:target-counter(attr(href),page)}
+.toc .tg{margin-bottom:.26in}
+.toc .tf{display:flex;justify-content:space-between;font:italic 400 10.5pt/1.5 Serif;margin:0;text-align:left}
+.toc .tf .pg{font:400 8.4pt Sans;font-style:normal}
+.toc .tpart{display:flex;align-items:baseline;gap:.14in;border-top:1.2pt solid #1E1913;padding-top:.08in;margin-bottom:.1in;break-after:avoid}
+.toc .tn{font:400 22pt/1 Disp;color:#BF8A5A;width:.5in;flex:none}
+.toc .tt{flex:1;font:400 14pt/1.1 Disp}
+.toc .tpart .pg{font:700 9pt Sans}
+.toc .tc{display:flex;align-items:baseline;margin:.1in 0 0 .64in;font:400 11pt/1.3 Serif;text-align:left;break-after:avoid}
+.toc .tc .cn{font:400 10pt Disp;width:.28in;flex:none}
+.toc .tc a:not(.pg){flex:1}
+.toc .tc .pg{font:400 8.4pt Sans;color:#1E1913}
+.toc .tsub{margin:.02in 0 0 .92in;font:400 7.6pt/1.5 Sans;color:#6E6253;text-align:left;hyphens:manual}
+.toc .tpart + .tsub{margin-left:.64in}
+.toc .tg-back{margin-top:.36in}
 /* páginas de parte */
 .partimg{page:kraft;break-before:page;width:6in;height:9in;position:relative}
 .partimg img{position:absolute;left:.55in;top:.55in;width:4.9in;height:7.4in;object-fit:contain}
@@ -715,22 +722,49 @@ def pdf_html(S):
              '<p>Capa: <i>Retrato de Joseph Roulin</i>, Arles, agosto de 1888. Pena de junco e pena de ave, tinta e giz preto. J. Paul Getty Museum, Los Angeles (85.GA.299), Open Content Program.</p>'
              f'<p>Texto composto em EB Garamond e Archivo. Primeira edição, {yr}.</p></div>')
     # sumário
-    toc = ['<div class="toc"><h1>Sumário</h1><ul>']
-    cur_part = None
+    def subs(s):
+        h = s.get('html', '')
+        if s['id'] == 'vida':
+            h = h[h.find('<!--MAPA-->'):]
+        t = [re.sub(r'<[^>]+>', '', x).strip() for x in re.findall(r'<h2[^>]*>(.*?)</h2>', h, re.S)]
+        t = [re.sub(r',\s*\d{4}.*$', '', x) for x in t if x and x != 'Linha do tempo']
+        if s['id'] == 'vida':
+            t = ['O caminho de Vincent'] + t
+        return t
+    toc = ['<div class="toc"><h1>Sumário</h1>']
+    cur_part = None; group = None
+    def open_group(g):
+        nonlocal group
+        if group != g:
+            if group: toc.append('</div>')
+            toc.append(f'<div class="tg tg-{g}">'); group = g
     for s in S:
-        if s['kind'] == 'part':
-            cur_part = s['id']
-            n, lab, name, _ = PARTS[s['id']]
-            toc.append(f'<li class="tp"><span class="n">{n}</span><a href="#{s["id"]}">{name}</a></li>')
-        elif s['kind'] == 'level':
-            toc.append(f'<li class="sub"><a href="#{s["id"]}">{esc(s["title"])}</a></li>')
-        elif s['kind'] in ('front', 'back'):
-            toc.append(f'<li class="{s["kind"]}"><a href="#{s["id"]}">{esc(s["title"])}</a></li>')
-        elif s['kind'] == 'chapter' and s['title'] == PARTS.get(cur_part, ('', '', ''))[2]:
+        k = s['kind']; a_ = f'<a class="pg" href="#{s["id"]}"></a>'
+        if k == 'front':
+            open_group('front')
+            toc.append(f'<p class="tf"><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
+        elif k == 'part':
+            cur_part = s['id']; n, lab, name, _ = PARTS[s['id']]
+            open_group(s['id'])
+            toc.append(f'<div class="tpart"><span class="tn">{n}</span><span class="tt"><a href="#{s["id"]}">{name}</a></span>{a_}</div>')
+            if s['id'] == 'parte1':
+                vida = next(x for x in S if x['id'] == 'vida')
+                toc.append(f'<p class="tsub">{" · ".join(esc(x) for x in subs(vida))}</p>')
+        elif k == 'level':
+            toc.append(f'<p class="tc"><span class="cn"></span><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
+        elif k == 'back':
+            open_group('back')
+            toc.append(f'<p class="tf"><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
+        elif k == 'chapter' and s['title'] == PARTS.get(cur_part, ('', '', ''))[2]:
             continue
         else:
-            toc.append(f'<li><a href="#{s["id"]}">{esc(s["title"])}</a></li>')
-    toc.append('</ul></div>')
+            m = re.match(r'(\d+)\.\s*(.*)', s['title'])
+            num, tit = (m.group(1), m.group(2)) if m else ('', s['title'])
+            toc.append(f'<p class="tc"><span class="cn">{num}</span><a href="#{s["id"]}">{esc(tit)}</a>{a_}</p>')
+            sb = subs(s)
+            if sb:
+                toc.append(f'<p class="tsub">{" · ".join(esc(x) for x in sb)}</p>')
+    toc.append('</div></div>')
     P.extend(toc)
     part = None
     vida_intro = ''

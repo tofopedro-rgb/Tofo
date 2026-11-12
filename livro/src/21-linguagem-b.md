@@ -112,6 +112,9 @@ Os olhos são o ponto mais escuro e mais nítido. Em volta deles tudo pode se me
 
 Ele também se pintou ora virado para a esquerda, ora para a direita. Faça o mesmo. A mão estranha o lado contrário, e é exatamente por isso que vale treinar os dois.
 
+<div class="pair"><figure><img src="img/sp_straw.jpg" alt="Autorretrato com chapéu de palha"><figcaption><i>Autorretrato com chapéu de palha</i>, Paris, 1887. Metropolitan Museum of Art. Virado para a esquerda.</figcaption></figure><figure><img src="img/sp_ear.jpg" alt="Autorretrato com a orelha enfaixada"><figcaption><i>Autorretrato com a orelha enfaixada</i>, Arles, janeiro de 1889. The Courtauld, Londres. Virado para a direita.</figcaption></figure></div>
+
+
 <!-- id: cap6 | 6. O corpo em aros | chapter -->
 # 6. O corpo em aros
 
