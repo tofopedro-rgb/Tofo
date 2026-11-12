@@ -4,7 +4,7 @@
 const TT = window.TT, S = TT.S, R = TT.R;
 
 const sfxOn = (ev, name) => TT.on(ev, () => TT.sfx(name));
-sfxOn('jump', 'jump'); sfxOn('land', 'land'); sfxOn('cookie', 'cookie'); sfxOn('power', 'power'); sfxOn('stomp', 'stomp'); sfxOn('hurt', 'hurt');
+sfxOn('jump', 'jump'); sfxOn('jump2', 'jump2'); sfxOn('friend', 'friend'); sfxOn('gift', 'gift'); sfxOn('land', 'land'); sfxOn('cookie', 'cookie'); sfxOn('power', 'power'); sfxOn('stomp', 'stomp'); sfxOn('hurt', 'hurt');
 sfxOn('bark', 'bark'); sfxOn('checkpoint', 'checkpoint'); sfxOn('bossIntro', 'boss'); sfxOn('finalBlow', 'final');
 TT.on('start', () => { TT.music(S.arena ? 'boss' : 'level'); TT.audioDuck(false); });
 TT.on('bossIntro', () => TT.music(null));

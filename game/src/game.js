@@ -13,6 +13,8 @@ const C = TT.C = {
     [4150, 250, 160], [4400, 330, 150], [4620, 300, 120], [5150, 320, 180], [5480, 250, 140],
   ],
   checkpoints: [3560, 5880],
+  // amigos chihuahuas que esperam no caminho e entregam biscoito
+  friends: [{ x: 1452, kind: 'chi-pb' }, { x: 4792, kind: 'chi-br' }], GIFT: 3,
 };
 const { W, H, GROUND, GRAV, JUMP_V, RUN, FAST, LEVEL_END, ARENA_X } = C;
 
@@ -44,7 +46,7 @@ function makeItems() {
   return it;
 }
 function makeEnemies() {
-  return [[900, 700, 1150], [1600, 1450, 2300], [2700, 2560, 3300], [3700, 3520, 4500], [4300, 4150, 4300], [5000, 4800, 5900]]
+  return [[900, 700, 1150], [1700, 1570, 2300], [2700, 2560, 3300], [3700, 3520, 4500], [4300, 4150, 4300], [5100, 4930, 5900]]
     .map(([x, a, b]) => ({ x, y: GROUND - 30, w: 38, h: 30, a, b, dir: -1, alive: true, t: Math.random() * 6, dy: 0 }));
 }
 function makePugs() {
@@ -55,7 +57,7 @@ function makePugs() {
 }
 function makePlayer(x) {
   return { x, y: GROUND - 60, w: 54, h: 50, vx: 0, vy: 0, onGround: false, face: 1, hp: 3, inv: 0, fast: 0, mega: 0,
-    safeX: x, coyote: 0, buffer: 0, landT: 0, won: false, hurtT: 0 };
+    safeX: x, coyote: 0, buffer: 0, landT: 0, won: false, hurtT: 0, dj: true, djT: 0 };
 }
 
 const SOLIDS = [];
@@ -70,16 +72,17 @@ function reset() {
     player: makePlayer(120), items: makeItems(), enemies: makeEnemies(), pugs: makePugs(),
     cam: { x: 0, y: 0, look: 0 }, time: 0, clock: 0, cookies: 0, arena: false, trauma: 0, hitstop: 0,
     timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
+    friends: C.friends.map(f => ({ x: f.x, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
   });
-  S.totalCookies = S.items.filter(i => i.type === 'cookie').length;
+  S.totalCookies = S.items.filter(i => i.type === 'cookie').length + C.friends.length * C.GIFT;
 }
 reset();
 
-TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'Rumo ao parquinho!' }); };
+TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'O parque depois do anoitecer' }); };
 TT.retry = () => {
   if (S.checkpoint < 0) return TT.start();
   const x = C.checkpoints[S.checkpoint];
-  S.player = makePlayer(x); S.pugs = makePugs(); S.arena = false; S.cine = null; S.timeScale = 1; S.slowT = 0; S.hitstop = 0;
+  S.player = makePlayer(x); S.pugs = makePugs(); S.arena = false; S.cine = null; S.timeScale = 1; S.slowT = 0; S.hitstop = 0; S.gifts = [];
   S.cam.x = Math.max(0, x - W * 0.4); S.cam.look = 0; S.mode = 'play';
   emit('start', { retry: true }); emit('banner', { text: 'De volta ao checkpoint!' });
 };
@@ -123,17 +126,25 @@ TT.update = (rdt) => {
 
   const speed = p.fast > 0 || p.mega > 0 ? FAST : RUN;
   const dir = locked ? 0 : (I.right ? 1 : 0) - (I.left ? 1 : 0);
-  const target = dir * speed, accel = p.onGround ? 2600 : 1600;
+  const target = dir * speed, accel = p.onGround ? 2600 : 1900;
   if (p.vx < target) p.vx = Math.min(target, p.vx + accel * dt);
   else if (p.vx > target) p.vx = Math.max(target, p.vx - accel * dt);
   if (dir) p.face = dir;
 
   p.coyote = p.onGround ? 0.1 : Math.max(0, p.coyote - dt);
-  p.buffer = (!locked && I.jumpPressed) ? 0.12 : Math.max(0, p.buffer - dt);
+  const pressedNow = !locked && I.jumpPressed;
+  p.buffer = pressedNow ? 0.12 : Math.max(0, p.buffer - dt);
   I.jumpPressed = false;
+  if (p.onGround) p.dj = true;
+  p.djT = Math.max(0, p.djT - dt);
   if (p.buffer > 0 && p.coyote > 0) { p.vy = JUMP_V; p.coyote = 0; p.buffer = 0; p.onGround = false; emit('jump', { x: p.x + p.w / 2, y: p.y + p.h }); }
+  else if (pressedNow && !p.onGround && p.dj) { // pulo duplo: uma pirueta no ar
+    p.dj = false; p.buffer = 0; p.vy = JUMP_V * 0.86; p.djT = 0.42; if (dir) p.vx = dir * Math.max(Math.abs(p.vx), speed * 0.8);
+    emit('jump2', { x: p.x + p.w / 2, y: p.y + p.h / 2 });
+  }
   if ((locked || !I.jump) && p.vy < -300) p.vy += GRAV * 1.4 * dt; // pulo variável
-  p.vy = Math.min(p.vy + GRAV * dt, 1200);
+  const hang = !p.onGround && I.jump && !locked && Math.abs(p.vy) < 130 ? 0.55 : 1; // flutua um instante no topo do pulo
+  p.vy = Math.min(p.vy + GRAV * hang * dt, 1200);
 
   p.x += p.vx * dt;
   p.x = Math.max(S.arena ? ARENA_X + 4 : 0, Math.min(LEVEL_END - p.w - 4, p.x));
@@ -178,6 +189,25 @@ TT.update = (rdt) => {
     }
   }
 
+  // amigos: quando o Tintim chega perto, dão um pulinho e jogam um biscoito de presente
+  const pcx = p.x + p.w / 2;
+  for (const f of S.friends) {
+    f.t += dt; f.hop = Math.max(0, f.hop - dt);
+    if (Math.abs(pcx - f.x) < 420) f.face = pcx < f.x ? -1 : 1;
+    if (playing && !f.given && Math.abs(pcx - f.x) < 150) {
+      f.given = true; f.hop = 0.9; S.gifts.push({ sx: f.x + f.face * 18, sy: GROUND - 58, x: f.x, y: GROUND - 58, t: 0 });
+      emit('friend', { x: f.x, y: GROUND - 70 });
+    }
+  }
+  for (let i = S.gifts.length - 1; i >= 0; i--) {
+    const g = S.gifts[i]; g.t += dt / 0.8; const k = Math.min(1, g.t), e = k * k * (3 - 2 * k);
+    g.x = g.sx + (pcx - g.sx) * e; g.y = g.sy + (p.y + p.h / 2 - g.sy) * e - Math.sin(k * Math.PI) * 110;
+    if (k >= 1) {
+      S.gifts.splice(i, 1); S.cookies += C.GIFT; p.hp = Math.min(3, p.hp + 1);
+      emit('gift', { x: g.x, y: g.y }); emit('banner', { text: 'Biscoito de presente! +1 coração' });
+    }
+  }
+
   // pombos
   for (const e of S.enemies) {
     if (!e.alive) { e.dy += GRAV * dt; e.y += e.dy * dt; continue; }
@@ -204,8 +234,8 @@ TT.update = (rdt) => {
   cam.look += (p.vx * 0.32 - cam.look) * Math.min(1, dt * 2.5);
   const want = S.arena ? ARENA_X : Math.max(0, Math.min(ARENA_X, p.x - W * 0.4 + cam.look));
   cam.x += (want - cam.x) * Math.min(1, dt * 5);
-  const wantY = S.arena ? 0 : Math.max(-46, Math.min(0, (p.y + p.h - (GROUND - 60)) * 0.3));
-  cam.y += (wantY - cam.y) * Math.min(1, dt * 3);
+  const wantY = S.arena ? Math.max(-60, Math.min(0, (p.y + p.h - (GROUND - 150)) * 0.3)) : Math.max(-150, Math.min(0, (p.y + p.h - (GROUND - 70)) * 0.42));
+  cam.y += (wantY - cam.y) * Math.min(1, dt * 3.4);
 };
 
 function updatePugs(dt, prevBottom, playing) {

@@ -37,6 +37,9 @@ function noise(t, dur, { vol = 0.2, freq = 2000, q = 1, type = 'bandpass', bus =
 
 const sfx = {
   jump: t => { tone(330, t, 0.16, { type: 'sine', vol: 0.22, slide: 2.1 }); noise(t, 0.06, { vol: 0.05, freq: 3000 }); },
+  jump2: t => { tone(520, t, 0.22, { type: 'sine', vol: 0.16, slide: 2.4 }); tone(1040, t + 0.03, 0.3, { type: 'triangle', vol: 0.06, slide: 1.8 }); noise(t, 0.18, { vol: 0.04, freq: 5200, q: 2 }); },
+  friend: t => { [0, 0.11].forEach(o => tone(760, t + o, 0.08, { type: 'triangle', vol: 0.13, slide: 1.35 })); },
+  gift: t => [784, 988, 1175, 1568].forEach((f, i) => tone(f, t + i * 0.07, 0.4, { type: 'sine', vol: 0.13, attack: 0.01 })),
   land: t => { tone(120, t, 0.09, { type: 'sine', vol: 0.18, slide: 0.5 }); noise(t, 0.07, { vol: 0.07, freq: 700 }); },
   cookie: t => { tone(1175, t, 0.07, { vol: 0.16 }); tone(1568, t + 0.06, 0.12, { vol: 0.16 }); },
   power: t => [523, 659, 784, 1046, 1318].forEach((f, i) => tone(f, t + i * 0.06, 0.18, { vol: 0.16 })),
@@ -53,10 +56,10 @@ const sfx = {
 };
 TT.sfx = name => { if (!init() || !sfx[name]) return; sfx[name](ctx.currentTime); };
 
-// ---- trilha: um baião alegre para a fase e uma versão tensa para os pugs ----
+// ---- trilha: caixinha de música etérea para a fase e um baião tenso para os pugs ----
 const N = n => 440 * Math.pow(2, (n - 69) / 12);
 const SONGS = {
-  level: { bpm: 126,
+  level: { bpm: 100, soft: true,
     lead: [74, 0, 78, 81, 0, 78, 81, 83, 81, 0, 78, 0, 76, 78, 74, 0,  76, 0, 79, 83, 0, 79, 83, 84, 83, 0, 79, 0, 78, 76, 74, 0,
            74, 0, 78, 81, 0, 78, 81, 83, 86, 0, 84, 0, 83, 81, 78, 0,  79, 0, 78, 76, 0, 74, 76, 78, 74, 0, 0, 0, 74, 0, 0, 0],
     bass: [50, 50, 55, 57], },
@@ -71,6 +74,13 @@ function schedule() {
   while (nextT < ctx.currentTime + 0.15) {
     const i = step % s.lead.length, bar = Math.floor(step / 16) % s.bass.length, b = step % 16;
     const n = s.lead[i];
+    if (s.soft) { // fase: a mesma melodia, tocada como caixinha de música sobre um colchão de notas longas
+      if (n) { tone(N(n), nextT, st * 4.5, { type: 'sine', vol: 0.11, attack: 0.012, bus: musicBus }); tone(N(n) * 2, nextT, st * 2.5, { type: 'triangle', vol: 0.028, bus: musicBus }); }
+      if (b === 0) [0, 7, 12, 16].forEach((o, k) => tone(N(s.bass[bar] + o), nextT, st * 17, { type: 'sine', vol: k ? 0.035 : 0.09, attack: 0.5, bus: musicBus }));
+      if (b === 8) tone(N(s.bass[bar] + 12), nextT, st * 6, { type: 'triangle', vol: 0.05, attack: 0.05, bus: musicBus });
+      if (b % 4 === 2) noise(nextT, 0.05, { vol: 0.012, freq: 6000, q: 3, bus: musicBus });
+      step++; nextT += st; continue;
+    }
     if (n) { tone(N(n), nextT, st * 1.8, { type: 'square', vol: 0.09, bus: musicBus }); tone(N(n) * 2, nextT, st, { type: 'triangle', vol: 0.05, bus: musicBus }); }
     // baixo no ritmo do baião: 1, "e" do 2, 3
     if (b === 0 || b === 6 || b === 8 || b === 14) tone(N(s.bass[bar] - (b === 6 || b === 14 ? 0 : 0)), nextT, st * 2.4, { type: 'triangle', vol: 0.26, bus: musicBus });
