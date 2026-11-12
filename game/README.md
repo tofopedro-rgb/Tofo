@@ -1,26 +1,30 @@
-# Tintim: A Fuga do Térreo
+# Tintim e os Pugs
 
-Jogo de plataforma curtinho com o Tintim de protagonista. HTML5 + Canvas, sem build: abra `index.html` no navegador.
+Jogo de plataforma 2.5D curtinho com o Tintim de protagonista: ele atravessa o térreo do prédio e enfrenta os pugs da vizinha no parquinho.
 
 ## Como jogar
-- ← → / A D: andar · Espaço / ↑ / W: pular (segure para pular mais alto)
-- No celular aparecem botões na tela.
-- 🍪 Biscoito: pontos · 🍌 Banana de pelúcia: turbo por 7s · 🐒 Macaco de pelúcia: invencível por 8s e +1 vida
-- Pombos: pise neles. Chefões no parquinho: **os dois Pugs** (3 pisões cada; o último fica mais bravo).
+- ← → / A D: andar · Espaço / ↑ / W: pular (segure para pular mais alto) · P ou Esc: pausa · M: som
+- Celular: botões na tela. Controle (gamepad): direcional + botão A.
+- 🍪 Biscoito: pontos · 🍌 Banana de pelúcia: turbo por 7s · 🐒 Macaco de pelúcia: invencível por 8s e +1 coração
+- Pombos: pise por cima. Chefões: 3 pisões em cada pug; o último fica mais bravo.
+- Estrelas: 1 por vencer, 1 por pegar 80% dos biscoitos, 1 por não perder coração.
 
-## Rodar localmente
+## Rodar
+O jogo usa WebGL, então precisa de um servidor (abrir o arquivo direto não carrega as imagens):
 ```
-cd game && python3 -m http.server 8000   # abrir http://localhost:8000
+cd game && python3 -m http.server 8765   # abrir http://localhost:8765
 ```
+`?q=0`, `?q=1` ou `?q=2` na URL fixa a qualidade gráfica; sem isso ela se ajusta sozinha ao aparelho.
 
-## Arte
-Sprites e cenários gerados no Higgsfield (GPT Image 2.6, fundo transparente) usando o character sheet e a foto do Tintim como referência:
-- `assets/sprites/`: Tintim (parado, correndo em 4 quadros, pulando, caindo, levando dano, comemorando), Pug (andando, investindo, tonto), pombo, macaco, banana, biscoito
-- `assets/bg/`: horizonte da cidade, muro do térreo com plantas e parquinho
+## Estrutura
+| Arquivo | Papel |
+|---|---|
+| `src/game.js` | Regras: física, inimigos, chefão, checkpoints, fluxo. Avisa o resto por eventos. |
+| `src/render3d.js` | Cenário 3D (three.js), sprites, sombras, partículas, câmera e pós-processamento. |
+| `src/ui.js` | Controles, placar, telas e transições (HTML/CSS). |
+| `src/audio.js` | Efeitos e trilha gerados no navegador. |
+| `src/main.js` | Laço principal e qualidade adaptativa. |
+| `docs/design.md` | Decisões de design e de arte. |
+| `tests/smoke.js` | Teste automático do caminho crítico (`node game/tests/smoke.js`). |
 
-Se alguma imagem não carregar, o jogo usa os desenhos vetoriais de reserva em `index.html`.
-
-## Próximos passos
-1. Publicar no GitHub Pages para mandar o link para os amigos.
-2. Fotos reais do macaco de pelúcia e dos pugs da vizinha para gerar versões mais fiéis.
-3. Música e efeitos sonoros.
+Arte dos personagens e cenários gerada no Higgsfield a partir das fotos do Tintim. `vendor/three.min.js` é a three.js r149 (licença MIT).
