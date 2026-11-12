@@ -7,6 +7,11 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 os.chdir(ROOT)
 D = json.load(open('data.json'))
 EX, PL, FI = D['ex'], D['pl'], D['fi']
+# exercícios retirados na revisão de imagens (modelos fracos ou repetidos)
+REMOVED = set('c15 a04 a09 a14 c23 p02 p05 c20 f12 f09 p01 p04 p06 a15 c13 c18 a10 b07 r18 f16'.split())
+EX = [x for x in EX if x['id'] not in REMOVED]
+NEX = len(EX)
+NESS = sum(1 for x in EX if x['lv'] == 'e')
 esc = html.escape
 
 # ---------------------------------------------------------------- textos dos exercícios para o livro
@@ -33,11 +38,11 @@ PL['sorrow']['l'] = 'O contorno é uma linha contínua e angulosa. O peso muda d
 LEVELS = [('w', 'nivel1', 'Nível 1', 'Fundamentos',
            'Exercícios curtos, de 8 a 20 minutos, que treinam uma marca ou uma parte do rosto de cada vez. Comece por aqui se está começando a desenhar, e volte a eles como aquecimento antes de cada sessão.'),
           ('e', 'nivel2', 'Nível 2', 'Essenciais',
-           'Os dezoito exercícios que formam o núcleo do método. Quem fizer só estes já aprende a linguagem: planícies em faixas, fluxo, ciprestes, rostos em direções, autorretratos e figuras.'),
+           f'Os {NESS} exercícios que formam o núcleo do método. Quem fizer só estes já aprende a linguagem: planícies em faixas, fluxo, ciprestes, rostos em direções, autorretratos e figuras.'),
           ('d', 'nivel3', 'Nível 3', 'Aprofundamento',
            'Variações e casos mais difíceis, para quando o essencial estiver firme: outras soluções de fundo, luz lateral, marcas maiores e menores, novas paisagens.'),
           ('p', 'nivel4', 'Nível 4', 'Provas de mestre',
-           'Estudos longos de obras de Van Gogh e o projeto final, em que você leva a linguagem para o seu próprio mundo. Use os métodos do Capítulo 8.')]
+           'Estudos longos de obras de Van Gogh e um projeto pessoal, em que você leva a linguagem para o seu próprio mundo. Use os métodos do Capítulo 8.')]
 CHAP = {'r': ('cap2', 'Capítulo 2'), 'f': ('cap3', 'Capítulo 3'), 'c': ('cap4', 'Capítulo 4'), 'a': ('cap5', 'Capítulo 5'), 'b': ('cap6', 'Capítulo 6'), 'p': ('cap8', 'Capítulo 8')}
 STAGES = set('r13 r16 r19 f13 f17 c11 c12 c16 a01 a13 b04 b06'.split())
 STN = ['Esboço', 'Primeiras tintas', 'Quase pronto', 'Acabado']
@@ -103,7 +108,8 @@ def practice_line(chid):
     ess = [x['id'] for x in items if x['lv'] == 'e']
     lk = lambda c: f'<a href="#ex-{c}">{c.upper()}</a>'
     pg = lambda c: f'<a class="pg" href="#ex-{c}"></a>'
-    txt = f'<b>Para praticar</b> {lk(first)}–{lk(last)} · p. {pg(first)}–{pg(last)}'
+    txt = (f'<b>Para praticar</b> {lk(first)}–{lk(last)} · p. {pg(first)}–{pg(last)}' if first != last
+           else f'<b>Para praticar</b> {lk(first)} · p. {pg(first)}')
     if ess:
         txt += ' · essenciais ' + ', '.join(lk(c) for c in ess)
     return f'<p class="pline">{txt}</p>'
@@ -324,7 +330,7 @@ FONTDIR = os.path.join(ROOT, 'fonts')
 PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho', None),
          'parte2': ('02', 'Parte II', 'A linguagem',
                     'Os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. Um capítulo para cada coisa.'),
-         'parte3': ('03', 'Parte III', 'Estudos', '<p>Os 60 estudos dos Níveis 2 a 4. Os exercícios curtos do Nível 1 já apareceram no fim de cada capítulo, como Primeiros passos. Aqui o desenho é inteiro: paisagens, rostos, figuras e cópias de mestre. O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.</p><p>Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.</p><p>Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.</p>'),
+         'parte3': ('03', 'Parte III', 'Estudos', f'<p>Os {NEX - sum(1 for x in EX if x["lv"] == "w")} estudos dos Níveis 2 a 4. Os exercícios curtos do Nível 1 já apareceram no fim de cada capítulo, como Primeiros passos. Aqui o desenho é inteiro: paisagens, rostos, figuras e cópias de mestre. O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.</p><p>Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.</p><p>Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.</p>'),
          'parte4': ('04', 'Parte IV', 'Prática',
                     'Um plano de estudo de oito semanas e uma autoavaliação para conferir o resultado.')}
 END_ART = {'cap2': ('cafe', 'cafe'), 'cap4': ('tanguy', 'tanguy'), 'cap5': ('sp_painter', 'sp_painter-sem-moldura'), 'cap6': ('digger', 'digger')}
@@ -728,7 +734,7 @@ def pdf_html(S):
          f'<meta name="author" content="Pedro Torres"><style>{font_faces()}{PDF_CSS}</style></head><body>']
     P.append('<div class="cover"><div class="art"></div><div class="topsh"></div><div class="shade"></div>'
              '<div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Teoria e prática para desenhar como Vincent</div>'
-             '<div class="coll">91 exercícios em quatro níveis</div></div>')
+             f'<div class="coll">{NEX} exercícios em quatro níveis</div></div>')
     P.append('<div class="titlepage"><p class="t">Van Gogh a Lápis</p><p class="s">Teoria e prática para desenhar como Vincent</p><p class="a">PEDRO TORRES</p></div>')
     P.append(f'<div class="copy"><p>© {yr} Pedro Torres. Todos os direitos reservados.</p>'
              '<p>Nenhuma parte deste livro pode ser reproduzida sem autorização do autor, exceto as folhas de exercício destinadas ao uso pessoal do leitor.</p>'
@@ -966,7 +972,7 @@ def build_epub(S, out, small=None):
                '<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">'
                f'<dc:identifier id="bid">{bid}</dc:identifier><dc:title>Van Gogh a Lápis</dc:title><dc:creator>Pedro Torres</dc:creator>'
                '<dc:language>pt-BR</dc:language><dc:subject>Desenho</dc:subject>'
-               '<dc:description>Um curso de desenho na linguagem de Vincent van Gogh: ranhuras, fluxo, rostos e autorretratos, com 91 exercícios em quatro níveis.</dc:description>'
+               f'<dc:description>Um curso de desenho na linguagem de Vincent van Gogh: ranhuras, fluxo, rostos e autorretratos, com {NEX} exercícios em quatro níveis.</dc:description>'
                f'<meta property="dcterms:modified">{now}</meta><meta name="cover" content="i{sorted(imgs).index("img/cover.jpg")}"/></metadata>'
                f'<manifest>{"".join(man)}</manifest><spine>{"".join(spine)}</spine></package>')
         z.writestr('OEBPS/content.opf', opf, compress_type=zipfile.ZIP_DEFLATED)
@@ -983,7 +989,7 @@ COVER_EBOOK = """<!doctype html><html><head><meta charset="utf-8"><style>{fonts}
 .coll{{position:absolute;bottom:.5in;left:0;right:0;text-align:center;font:italic 400 11.5pt Serif}}
 </style></head><body><div class="c"><div class="art"></div><div class="topsh"></div><div class="shade"></div>
 <div class="ed">PEDRO TORRES</div><div class="t">Van Gogh a Lápis</div><div class="d">Teoria e prática para desenhar como Vincent</div>
-<div class="coll">91 exercícios em quatro níveis</div></div></body></html>"""
+<div class="coll">{nex} exercícios em quatro níveis</div></div></body></html>"""
 
 def make_cover():
     """Capa do e-book em 1600 × 2560 px (proporção pedida pela Amazon)."""
@@ -991,7 +997,7 @@ def make_cover():
     from weasyprint import HTML
     from PIL import Image
     with tempfile.TemporaryDirectory() as td:
-        HTML(string=COVER_EBOOK.format(fonts=font_faces()), base_url=ROOT).write_pdf(f'{td}/c.pdf')
+        HTML(string=COVER_EBOOK.format(fonts=font_faces(), nex=NEX), base_url=ROOT).write_pdf(f'{td}/c.pdf')
         subprocess.run(['pdftoppm', '-r', '266.67', '-png', '-singlefile', f'{td}/c.pdf', f'{td}/c'], check=True)
         im = Image.open(f'{td}/c.png').convert('RGB').resize((1600, 2560), Image.LANCZOS)
     im.save('img/cover.jpg', quality=92)
