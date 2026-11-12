@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Van Gogh a Lápis · Teoria e prática para desenhar como Vincent</title>
+<meta name="description" content="E-book de desenho com a linguagem de Van Gogh: as marcas, a direção do traço, o rosto e o corpo, com 91 exercícios em quatro níveis e um catálogo das obras.">
+<meta property="og:title" content="Van Gogh a Lápis">
+<meta property="og:description" content="Teoria e prática para desenhar como Vincent. 91 exercícios em quatro níveis.">
+<meta property="og:image" content="img/capa.jpg">
+<style>
+@font-face{font-family:Disp;src:url(fonts/archivo-black-latin-400-normal.woff) format("woff");font-display:swap}
+@font-face{font-family:Sans;src:url(fonts/archivo-latin-500-normal.woff) format("woff");font-weight:500;font-display:swap}
+@font-face{font-family:Sans;src:url(fonts/archivo-latin-700-normal.woff) format("woff");font-weight:700;font-display:swap}
+@font-face{font-family:Serif;src:url(fonts/eb-garamond-latin-400-normal.ttf);font-display:swap}
+@font-face{font-family:Serif;src:url(fonts/eb-garamond-latin-400-italic.ttf);font-style:italic;font-display:swap}
+:root{--paper:#EEEAE0;--paper2:#E4DCCB;--kraft:#D6C7A8;--ink:#1E1913;--mute:#6E6253;--line:#CFC4B0;--clay:#BF8A5A;--dark:#241C15}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 20px/1.5 Serif,Georgia,serif;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.narrow{max-width:680px}
+h1,h2,h3{font-family:Disp,Arial Black,sans-serif;font-weight:400;line-height:1.05;letter-spacing:-.01em}
+h2{font-size:clamp(30px,4.4vw,46px);margin-bottom:18px}
+h3{font-size:21px;margin-bottom:6px}
+.lab{font:500 14px/1.4 Sans,Arial,sans-serif;color:var(--mute);margin-bottom:14px}
+.lead{font-size:23px;line-height:1.45}
+p+p{margin-top:.8em}
+section{padding:88px 0;border-top:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--clay);color:var(--ink);text-decoration:none;font:700 18px Sans,Arial,sans-serif;padding:17px 30px;border-radius:999px;transition:transform .15s ease,background .15s ease}
+.btn:hover{background:#c99766;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.price{font:500 15px Sans,Arial,sans-serif;color:var(--mute);margin-top:14px}
+
+/* topo */
+.nav{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.nav b{font:400 18px Disp,sans-serif}
+.nav a.small{font:700 15px Sans,sans-serif;text-decoration:none;border-bottom:2px solid var(--clay);padding-bottom:2px}
+
+/* hero */
+.hero{border-top:0;padding:56px 0 80px}
+.hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(42px,6.6vw,76px);margin-bottom:22px}
+.hero .sub{font-size:24px;font-style:italic;margin-bottom:30px;max-width:30ch}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:30px;font:500 15px Sans,sans-serif;color:var(--mute)}
+.hero .facts span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ink);margin-right:8px;vertical-align:2px}
+.cover{justify-self:center;width:min(100%,400px);height:auto;box-shadow:0 26px 50px -18px rgba(30,25,19,.55),0 2px 6px rgba(30,25,19,.2)}
+
+/* problema */
+.problem .grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.problem img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.problem .cap{font:500 13px/1.4 Sans,sans-serif;color:var(--mute);margin-top:10px}
+
+/* o que aprende */
+.learn .items{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 32px;margin-top:44px}
+.learn .it img{width:150px;height:150px;border-radius:50%;margin-bottom:18px}
+.learn .it p{font-size:18px}
+
+/* páginas */
+.inside{background:var(--paper2)}
+.pages{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 24px 26px;margin:36px -24px 0}
+.pages figure{flex:none;width:300px;scroll-snap-align:start}
+.pages img{width:300px;height:450px;object-fit:cover;box-shadow:0 14px 30px -14px rgba(30,25,19,.45)}
+.pages figcaption{font:500 14px/1.4 Sans,sans-serif;color:var(--mute);margin-top:12px}
+.hint{font:500 14px Sans,sans-serif;color:var(--mute)}
+
+/* exercícios */
+.ex .grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.steps figure img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.steps figcaption{font:500 13px Sans,sans-serif;margin-top:8px}
+.levels{margin-top:28px;border-top:1px solid var(--ink)}
+.levels div{display:grid;grid-template-columns:110px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.levels b{font:400 18px Disp,sans-serif}
+.levels p{font-size:18px}
+
+/* vídeo */
+.film .grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+.film video{width:100%;max-width:360px;aspect-ratio:9/16;background:var(--dark);border-radius:14px}
+
+/* para quem */
+.who .cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:30px}
+.who .card{border-top:3px solid var(--ink);padding-top:18px}
+
+/* autor e faq */
+.author .grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:56px;align-items:center}
+.author img{width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 30%;border-radius:50%}
+details{border-bottom:1px solid var(--line);padding:18px 0}
+details:first-of-type{border-top:1px solid var(--ink)}
+summary{cursor:pointer;font:700 18px Sans,sans-serif;list-style:none;display:flex;justify-content:space-between;gap:18px}
+summary::after{content:"+";font:400 26px/1 Sans,sans-serif}
+details[open] summary::after{content:"–"}
+details p{margin-top:10px;font-size:19px}
+
+/* fim */
+.final{background:var(--dark);color:#EFE8DA;text-align:center;border-top:0}
+.final h2{color:#FBF8F1}
+.final .lead{max-width:34ch;margin:0 auto 34px}
+.final .price{color:#BDB09A}
+footer{background:var(--dark);color:#9C8F7A;font:500 14px/1.6 Sans,sans-serif;padding:28px 0 40px;border-top:1px solid #3a3027}
+
+@media (max-width:860px){
+  body{font-size:19px}
+  section{padding:64px 0}
+  .hero .grid,.problem .grid,.ex .grid,.film .grid,.author .grid{grid-template-columns:1fr;gap:36px}
+  .hero{padding-top:32px}
+  .cover{width:min(78%,340px);order:-1}
+  .learn .items{grid-template-columns:1fr;gap:30px}
+  .learn .it{display:grid;grid-template-columns:110px 1fr;gap:18px;align-items:center}
+  .learn .it img{width:110px;height:110px;margin:0}
+  .who .cols{grid-template-columns:1fr}
+  .author img{width:200px}
+  .film video{margin:0 auto}
+  .steps{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="wrap"><b>Van Gogh a Lápis</b><a class="small" href="#comprar">Comprar o e-book</a></div></header>
+
+<main>
+<section class="hero"><div class="wrap grid">
+  <div>
+    <p class="lab">E-book de desenho · Pedro Torres</p>
+    <h1>Aprenda o traço de Van Gogh.</h1>
+    <p class="sub">Teoria e prática para desenhar como Vincent, do primeiro rabisco à cópia de mestre.</p>
+    <a class="btn" href="#comprar">Quero o livro</a>
+    <div class="facts"><span>186 páginas ilustradas</span><span>91 exercícios em 4 níveis</span><span>PDF e EPUB</span></div>
+  </div>
+  <img class="cover" src="img/capa.jpg" width="800" height="1280" alt="Capa do livro Van Gogh a Lápis, com o retrato de Joseph Roulin desenhado por Van Gogh">
+</div></section>
+
+<section class="problem"><div class="wrap grid">
+  <img src="img/roulin.jpg" alt="Retrato de Joseph Roulin, desenho a pena de Van Gogh, 1888" loading="lazy">
+  <div>
+    <p class="lab">O problema</p>
+    <h2>Imitar o estilo não é a mesma coisa que entender o traço.</h2>
+    <p>Quem tenta copiar Van Gogh costuma encher a folha de tracinhos e redemoinhos. O resultado fica com textura, mas sem volume e sem profundidade.</p>
+    <p>Nos desenhos dele, cada marca tem uma função. A barba do carteiro Roulin é feita de curvas em leque, o casaco de hachura cruzada, a pele de pontos e o fundo de uma treliça clara. Este livro mostra por que cada traço está onde está e como fazer o mesmo.</p>
+    <p class="cap">Retrato de Joseph Roulin, Arles, 1888. J. Paul Getty Museum.</p>
+  </div>
+</div></section>
+
+<section class="learn"><div class="wrap">
+  <p class="lab">O que você aprende</p>
+  <h2>A linguagem dele, uma regra de cada vez.</h2>
+  <div class="items">
+    <div class="it"><img src="img/det-lacrau-2.jpg" alt="Detalhe de La Crau: faixas de tracinhos" loading="lazy"><div><h3>Uma marca para cada coisa</h3><p>As doze marcas de Arles e onde ele usava cada uma: tracinho no campo, ponto na areia, vírgula na relva.</p></div></div>
+    <div class="it"><img src="img/det-starry-1.jpg" alt="Detalhe da Noite Estrelada: anéis em volta da lua" loading="lazy"><div><h3>A direção do traço</h3><p>As cinco leis do fluxo, que fazem o céu girar e a forma aparecer sem contorno.</p></div></div>
+    <div class="it"><img src="img/det-roulin-1.jpg" alt="Detalhe do Roulin: o olho em anéis" loading="lazy"><div><h3>O rosto como terreno</h3><p>O mapa de direções do rosto: olhos em redemoinho, testa em arcos, barba em leque.</p></div></div>
+    <div class="it"><img src="img/det-sp_orsay-1.jpg" alt="Detalhe do autorretrato de 1889: fundo em redemoinho" loading="lazy"><div><h3>Os autorretratos</h3><p>Três soluções, de 1887 a 1889: o halo, o fundo calmo e o redemoinho.</p></div></div>
+    <div class="it"><img src="img/det-peasant-2.jpg" alt="Detalhe da Camponesa curvada: hachura em aros" loading="lazy"><div><h3>O corpo em aros</h3><p>Massas ovais e hachura que dá a volta na forma, como os aros de um barril.</p></div></div>
+    <div class="it"><img src="img/det-cypress-1.jpg" alt="Detalhe dos Ciprestes: cachos em chama" loading="lazy"><div><h3>Cópia de mestre</h3><p>Cinco métodos para copiar uma obra dele, da grade ao desenho de memória.</p></div></div>
+  </div>
+</div></section>
+
+<section class="inside"><div class="wrap">
+  <p class="lab">Por dentro</p>
+  <h2>Um livro de arte que também é um curso.</h2>
+  <p class="narrow">Obras do próprio Van Gogh com os detalhes ampliados, diagramas, um mapa da vida dele e um catálogo com as obras citadas.</p>
+  <div class="pages">
+    <figure><img src="img/p-mapa.jpg" alt="Página com o mapa dos endereços de Van Gogh" loading="lazy"><figcaption>O caminho de Vincent, em onze endereços</figcaption></figure>
+    <figure><img src="img/p-tracos.jpg" alt="Página Dez anos em dez traços" loading="lazy"><figcaption>Dez anos em dez traços</figcaption></figure>
+    <figure><img src="img/p-materiais.jpg" alt="Página sobre os materiais" loading="lazy"><figcaption>Os materiais e os equivalentes de hoje</figcaption></figure>
+    <figure><img src="img/p-fluxo.jpg" alt="Abertura do capítulo Direção e fluxo" loading="lazy"><figcaption>As cinco leis do fluxo</figcaption></figure>
+    <figure><img src="img/p-rosto.jpg" alt="Página com o retrato de Roulin e detalhes" loading="lazy"><figcaption>Cada obra com os detalhes ampliados</figcaption></figure>
+    <figure><img src="img/p-exercicio.jpg" alt="Página do exercício C11" loading="lazy"><figcaption>Um exercício por página</figcaption></figure>
+    <figure><img src="img/p-prancha.jpg" alt="Prancha do Terraço do café à noite" loading="lazy"><figcaption>Pranchas em página inteira</figcaption></figure>
+  </div>
+  <p class="hint">Arraste para ver mais páginas.</p>
+</div></section>
+
+<section class="ex"><div class="wrap grid">
+  <div>
+    <p class="lab">A prática</p>
+    <h2>91 exercícios, do esboço ao traço final.</h2>
+    <p>Cada exercício parte de um desenho-modelo e traz o tempo, o material e um critério claro para saber quando está pronto. Doze deles mostram a construção em etapas.</p>
+    <div class="levels">
+      <div><b>Nível 1</b><p>Fundamentos. Uma marca de cada vez, em 8 a 20 minutos.</p></div>
+      <div><b>Nível 2</b><p>Essenciais. Os 18 exercícios que formam o núcleo do método.</p></div>
+      <div><b>Nível 3</b><p>Aprofundamento. Variações, luz de lado, novas paisagens.</p></div>
+      <div><b>Nível 4</b><p>Provas de mestre. Cópias longas e um projeto final seu.</p></div>
+    </div>
+  </div>
+  <div class="steps">
+    <figure><img src="img/st-c11-1.jpg" alt="Etapa 1: esboço" loading="lazy"><figcaption>1 · Esboço</figcaption></figure>
+    <figure><img src="img/st-c11-2.jpg" alt="Etapa 2: primeiras tintas" loading="lazy"><figcaption>2 · Primeiras tintas</figcaption></figure>
+    <figure><img src="img/st-c11-3.jpg" alt="Etapa 3: quase pronto" loading="lazy"><figcaption>3 · Quase pronto</figcaption></figure>
+    <figure><img src="img/c11.jpg" alt="Etapa 4: pronto" loading="lazy"><figcaption>4 · Pronto</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="film"><div class="wrap grid">
+  <video src="video.mp4" poster="img/video-poster.jpg" controls muted playsinline preload="none"></video>
+  <div>
+    <p class="lab">Em 30 segundos</p>
+    <h2>Ele não rabiscava ao acaso.</h2>
+    <p>Cada coisa tem a sua marca, e cada traço segue uma corrente. Quando você enxerga isso, o desenho dele deixa de ser mistério e vira método.</p>
+  </div>
+</div></section>
+
+<section class="who"><div class="wrap">
+  <p class="lab">Para quem é</p>
+  <h2>Do primeiro rabisco ao refinamento.</h2>
+  <div class="cols">
+    <div class="card"><h3>Se você está começando</h3><p>Leia a Parte I e os três primeiros capítulos e faça o Nível 1 na ordem. Os exercícios são curtos e treinam uma marca por vez.</p></div>
+    <div class="card"><h3>Se você já desenha</h3><p>Vá direto aos 18 exercícios essenciais do Nível 2 e depois às cópias de mestre. Funciona no papel e no tablet.</p></div>
+  </div>
+</div></section>
+
+<section class="author"><div class="wrap grid">
+  <img src="img/det-roulin-2.jpg" alt="Detalhe da barba no retrato de Roulin" loading="lazy">
+  <div>
+    <p class="lab">Do autor</p>
+    <h2>Por que este livro.</h2>
+    <p class="lead">“O que mais me interessa em Van Gogh está nas folhas de papel. Foi desenhando que ele inventou a sua linguagem, e isso faz dele um professor generoso.”</p>
+    <p>Pedro Torres</p>
+  </div>
+</div></section>
+
+<section class="faq"><div class="wrap narrow">
+  <p class="lab">Perguntas</p>
+  <h2>Antes de comprar.</h2>
+  <details><summary>Em que formato o livro vem?</summary><p>Em PDF ilustrado, diagramado para ler no tablet ou no computador, e em EPUB, que se adapta à tela de leitores digitais e celulares.</p></details>
+  <details><summary>Preciso saber desenhar?</summary><p>Não. O livro indica por onde começar, e o Nível 1 treina uma marca de cada vez, em exercícios de 8 a 20 minutos.</p></details>
+  <details><summary>Que material vou usar?</summary><p>Lápis, giz, carvão e pena, e o livro mostra o equivalente moderno de cada um. Também explica como configurar um pincel no Procreate para imitar a pena de junco.</p></details>
+  <details><summary>As obras são de Van Gogh?</summary><p>As obras citadas e as pranchas são reproduções de desenhos e pinturas dele, em domínio público. Os desenhos-modelo dos exercícios foram feitos para o livro, no estilo das folhas dele, e estão identificados como tal.</p></details>
+  <details><summary>O livro trata da pintura dele?</summary><p>Só do desenho: do lápis, do carvão e da pena. Os autorretratos pintados entram porque cada pincelada é um traço visível, fácil de levar para o papel.</p></details>
+</div></section>
+
+<section class="final" id="comprar"><div class="wrap">
+  <h2>Van Gogh a Lápis</h2>
+  <p class="lead">Teoria e prática para desenhar como Vincent. 186 páginas, 91 exercícios e um catálogo das obras.</p>
+  <a class="btn" href="#" data-checkout>Comprar o e-book</a>
+  <p class="price">PDF e EPUB · acesso imediato</p>
+</div></section>
+</main>
+
+<footer><div class="wrap">© Pedro Torres · Reproduções de obras de Vincent van Gogh em domínio público; capa: J. Paul Getty Museum, Open Content Program.</div></footer>
+
+<script>
+/* Coloque aqui o link do checkout (Hotmart, Gumroad, Kiwify…). Enquanto estiver vazio, os botões levam ao fim da página. */
+const CHECKOUT_URL = '';
+if (CHECKOUT_URL) document.querySelectorAll('[data-checkout], a[href="#comprar"]').forEach(a => { a.href = CHECKOUT_URL; });
+</script>
+</body>
+</html>
