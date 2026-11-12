@@ -18,15 +18,13 @@ A proposta é aprender a rabiscar como Van Gogh, entender por que cada traço es
 <!-- id: como-usar | Como usar este livro | front -->
 # Como usar este livro
 
-O livro tem três partes. A Parte I conta, em poucas páginas, os dez anos em que Van Gogh desenhou, com o foco no que mudou no traço. A Parte II explica a linguagem dele capítulo por capítulo: os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. A Parte III reúne os 91 exercícios, organizados em quatro níveis.
-
-Os exercícios estão separados da teoria de propósito. Cada um indica o capítulo que o explica. Você pode ler a teoria inteira antes de pegar no lápis ou alternar um capítulo com os exercícios dele.
+O livro tem três partes. A Parte I conta, em poucas páginas, os dez anos em que Van Gogh desenhou, com o foco no que mudou no traço. A Parte II explica a linguagem dele capítulo por capítulo: os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. São 91 exercícios em quatro níveis. Os do Nível 1, curtos, aparecem no fim de cada capítulo da Parte II, como *Primeiros passos*: você lê a teoria e já pratica. Os dos Níveis 2 a 4, mais longos, ficam reunidos na Parte III, *Estudos*, para quando a linguagem já estiver na mão.
 
 ## Por onde começar
 
-Se você está começando a desenhar agora, leia a Parte I e os capítulos 1 a 3, depois faça os exercícios do Nível 1 na ordem. Eles são curtos e treinam uma marca de cada vez.
+Se você está começando a desenhar agora, leia o livro na ordem e faça os *Primeiros passos* de cada capítulo antes de seguir. Eles são curtos e treinam uma marca de cada vez.
 
-Se você já desenha, pode ir direto ao Nível 2, que reúne os 18 exercícios essenciais do método. Volte ao Nível 1 sempre que uma marca não sair como você quer.
+Se você já desenha, pode ir direto ao Nível 2, que reúne os 18 exercícios essenciais do método. Volte aos *Primeiros passos* sempre que uma marca não sair como você quer.
 
 Os Níveis 3 e 4 são para quando o essencial estiver firme. O Nível 4 traz os estudos de mestre: cópias longas de obras dele e o projeto final, em que você leva a linguagem para o seu próprio mundo.
 

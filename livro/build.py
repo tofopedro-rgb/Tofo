@@ -120,6 +120,12 @@ def build_sections():
             h = h[:i] + '<!--MAPA-->' + h[i:] + tracos_html()
         if s['id'] in BALLOON_CHAPTERS:
             h = add_balloons(h)
+        rev = {v[0]: k for k, v in CHAP.items()}
+        if s['id'] in rev:
+            fs = [x for x in EX if x['lv'] == 'w' and x['ch'] == rev[s['id']]]
+            if fs:
+                s = {**s, 'first_steps': fs,
+                     'epub_extra': '<h2>Primeiros passos</h2>' + '\n'.join(ex_html(x) for x in fs)}
         if s['kind'] == 'chapter':
             pl = practice_line(s['id'])
             t = h.rstrip()
@@ -132,6 +138,8 @@ def build_sections():
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
                       'html': '<h1>Parte III</h1>\n<h2>Exercícios</h2>'})
             for code, lid, ln, name, intro in LEVELS:
+                if code == 'w':
+                    continue
                 items = [x for x in EX if x['lv'] == code]
                 body = f'<h1><span class="lvnum">{ln}</span> {name}</h1>\n<p class="lead">{intro}</p>\n<p class="count">{len(items)} exercícios</p>\n' + '\n'.join(ex_html(x) for x in items)
                 S.append({'id': lid, 'title': f'{ln} · {name}', 'kind': 'level', 'html': body})
@@ -316,9 +324,10 @@ FONTDIR = os.path.join(ROOT, 'fonts')
 PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho', None),
          'parte2': ('02', 'Parte II', 'A linguagem',
                     'Os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. Um capítulo para cada coisa.'),
-         'parte3': ('03', 'Parte III', 'Exercícios', '<p>Os 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.</p><p>Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.</p><p>Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.</p>'),
+         'parte3': ('03', 'Parte III', 'Estudos', '<p>Os 60 estudos dos Níveis 2 a 4. Os exercícios curtos do Nível 1 já apareceram no fim de cada capítulo, como Primeiros passos. Aqui o desenho é inteiro: paisagens, rostos, figuras e cópias de mestre. O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.</p><p>Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.</p><p>Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.</p>'),
          'parte4': ('04', 'Parte IV', 'Prática',
                     'Um plano de estudo de oito semanas e uma autoavaliação para conferir o resultado.')}
+LEVEL_ART = {'e': 'stacks', 'd': 'street', 'p': 'enclosed'}
 PART_ART = {'parte1': 'sower2', 'parte2': 'zouavepen', 'parte3': 'fountain', 'parte4': 'roulin2'}
 ICONS = ['sorrow', 'cafe', 'roulin', 'mousme2', 'starry', 'cypress']
 CAT_ORDER = ['sorrow', 'wornout', 'orphan', 'yard', 'peasant', 'reaper', 'head85', 'hands', 'sower1', 'sower2', 'digger',
@@ -535,6 +544,9 @@ section.level{page:chap;break-before:page}
 .ex{break-before:page;break-inside:avoid}
 .ex.half{break-before:auto;height:3.5in;margin-top:0;overflow:hidden}
 .pair2{break-before:page}
+.pshead{border-bottom:.6pt solid #1E1913;padding-bottom:.06in;margin-bottom:.12in}
+.pshead .psl{font:400 13pt Disp;margin:0;white-space:nowrap}.pshead .pst{font:400 7.6pt Sans;color:#6E6253;margin:.03in 0 0;text-align:left}
+.pair2.first .ex.half{height:3.14in}
 .pair2 .ex.half + .ex.half{border-top:.6pt solid #CFC4B0;padding-top:.14in;margin-top:.14in}
 .exh{position:relative;height:.62in}
 .exh .code{position:absolute;left:0;top:0;font:400 30pt/1 Disp}
@@ -747,6 +759,10 @@ def pdf_html(S):
             P.append(f'<section class="front" id="{s["id"]}" style="bookmark-level:1;bookmark-label:\'{s["title"]}\'"><span class="rh">{s["title"]}</span><h1>{m.group(1)}</h1>{body}</section>')
         elif k == 'level':
             code, lid, ln, name, intro = next(l for l in LEVELS if l[1] == s['id'])
+            art = LEVEL_ART.get(code)
+            if art:
+                P.append(f'<section class="partimg"><img src="img/{art}.jpg" alt="{esc(PL[art]["t"])}"/>'
+                         f'<p class="pcap"><i>{esc(PL[art]["t"])}</i>. {esc(PL[art]["c"])}</p></section>')
             P.append(level_pdf(code, lid, ln, name, intro, chapnames).replace(
                 f'<section class="level" id="{lid}">', f'<section class="level" id="{lid}" style="bookmark-level:2;bookmark-label:\'{ln} · {name}\'">', 1))
         elif s['id'] == 'catalogo':
@@ -762,6 +778,12 @@ def pdf_html(S):
             lvl = 2 if k == 'chapter' else 1
             lab = s['title'].replace("'", "’")
             P.append(f'<section class="chap" id="{s["id"]}" style="bookmark-level:{lvl};bookmark-label:\'{lab}\'">{head}{body}</section>')
+            fs = s.get('first_steps')
+            if fs:
+                for i in range(0, len(fs), 2):
+                    hd = ('<div class="pshead"><span class="rh">Primeiros passos</span><p class="psl">Primeiros passos</p>'
+                          f'<p class="pst">Exercícios curtos do {CHAP[fs[0]["ch"]][1].lower()}, de 8 a 20 minutos.</p></div>') if i == 0 else ''
+                    P.append(f'<div class="pair2{" first" if i == 0 else ""}">{hd}' + ''.join(ex_pdf(x, chapnames, half=True) for x in fs[i:i + 2]) + '</div>')
     P.append('<section class="fim"><img src="img/harvest.jpg" alt="A colheita, desenho a pena de Van Gogh"/>'
              '<p class="fq">“O que é desenhar? Como se chega lá? É abrir caminho através de uma parede de ferro invisível, '
              'que parece estar entre o que se sente e o que se consegue fazer.”</p>'
@@ -859,7 +881,7 @@ def build_epub(S, out, small=None):
             body = (f'<section id="{s["id"]}"><figure><img src="{img}" alt=""/></figure><div class="parttitle"><p class="pn">{n_}</p>'
                     f'<h1>{lab_}</h1><h2>{name_}</h2>{it}</div></section>')
         else:
-            body = f'<section id="{s["id"]}">{s["html"].replace("<!--MAPA-->", map_html(False))}</section>'
+            body = f'<section id="{s["id"]}">{s["html"].replace("<!--MAPA-->", map_html(False))}{s.get("epub_extra", "")}</section>'
         files.append((name, s['title'], body, s['kind']))
         for m in re.finditer(r'id="([^"]+)"', body):
             idfile[m.group(1)] = name
