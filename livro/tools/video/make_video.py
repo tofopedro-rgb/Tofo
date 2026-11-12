@@ -107,7 +107,7 @@ def s_flow(t):          # 8.4 – 12.6  corrente
     text(d, (W // 2, 1480), 'A Noite Estrelada, desenho a pena, 1889', F(SERIF_I, 44), (110, 98, 83), 'mm')
     return fr
 
-BOOK = [11, 33, 93, 162]
+BOOK = [11, 34, 42, 93]
 def s_book(t):          # 12.6 – 19.2  páginas do livro
     fr = Image.new('RGB', (W, H), KRAFT); d = ImageDraw.Draw(fr)
     text(d, (W // 2, 320), 'Teoria explicada,\npágina por página.', F(DISP, 66), INK, 'mm', 12)

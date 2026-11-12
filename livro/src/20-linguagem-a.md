@@ -29,7 +29,7 @@ Carvão de salgueiro ou de vinha, usado de lado para fazer massas grandes. Vince
 
 É a ferramenta dos desenhos de Arles e de Saint-Rémy. Um pedaço de cana seca é cortado em bisel com canivete, "do mesmo jeito que se corta uma pena de ganso" (carta 600), e ganha uma pequena fenda na ponta para guardar tinta. Vincent cortava as suas dos juncos que cresciam à beira dos canais.
 
-<figure class="diag"><img src="img/diag/pena.svg" alt="Pena de junco cortada em bisel, com fenda na ponta, e o traço que ela faz"><figcaption>A pena de junco cortada em bisel e o traço que ela deixa.</figcaption></figure>
+<figure><img src="img/g1.jpg" alt="Penas de junco cortadas, canivete e aparas"><figcaption>Penas de junco cortadas a canivete.</figcaption></figure>
 
 A pena de junco tem quatro comportamentos, e são eles que você precisa imitar, seja no papel, seja no tablet.
 
@@ -41,7 +41,7 @@ Para os detalhes miúdos do fundo, ele trocava o junco por uma pena de ave. Numa
 
 Vincent usava tinta ferrogálica, feita de sais de ferro e taninos, que é quase preta quando fresca. Com o tempo, a tinta de muitos desenhos dele desbotou para marrom e cinza, de forma desigual. O marrom que vemos hoje nos museus não é a cor original. Os desenhos-modelo deste livro imitam esse papel envelhecido para ficarem próximos do que você vai ver nas reproduções.
 
-<figure class="diag"><img src="img/diag/tinta.svg" alt="Traços de tinta preta ao lado dos mesmos traços desbotados em marrom"><figcaption>A mesma tinta ferrogálica fresca e depois de mais de um século.</figcaption></figure>
+<figure><img src="img/g3.jpg" alt="Tinta ferrogálica fresca e a mesma tinta desbotada"><figcaption>A tinta ferrogálica fresca, à esquerda, e desbotada pelo tempo, à direita.</figcaption></figure>
 
 ## O papel
 
@@ -53,7 +53,7 @@ Hoje, um papel Canson Ingres ou um Mi-Teintes cinza claro dão uma textura parec
 
 Em agosto de 1882 Vincent mandou fazer uma moldura de madeira com fios esticados na vertical, na horizontal e nas diagonais, montada sobre duas estacas com ponta de ferro para cravar na areia das dunas (cartas 253 e 254). Olhando através dela, o motivo já aparece dividido, e basta repetir as divisões no papel. Ele continuou a usá-la anos depois. Em março de 1888, já em Arles, contou que fez os três últimos estudos com a ajuda dela (carta 585).
 
-<figure class="diag"><img src="img/diag/moldura.svg" alt="Moldura com fios esticados, montada sobre estacas, vista pelo olho do desenhista"><figcaption>A moldura de perspectiva montada sobre estacas.</figcaption></figure>
+<figure><img src="img/g5.jpg" alt="Moldura de perspectiva cravada nas dunas"><figcaption>Uma moldura de perspectiva montada sobre estacas.</figcaption></figure>
 
 Para fazer a sua, corte uma janela de 20 por 30 centímetros num papelão e prenda quatro linhas pretas com fita: uma vertical e uma horizontal no centro, e duas diagonais de canto a canto. Segure sempre à mesma distância do olho.
 

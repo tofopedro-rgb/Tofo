@@ -106,14 +106,13 @@ def build_sections():
             h = h[:i] + '<!--MAPA-->' + h[i:] + tracos_html()
         if s['id'] in BALLOON_CHAPTERS:
             h = add_balloons(h)
-        elif s['kind'] == 'chapter':
-            h += practice_list(s['id'])
+        # (as listas de exercícios no fim dos capítulos saíram)
         S.append({**s, 'html': h})
         if s['id'] == 'cap8':  # depois da Parte II vem a Parte III
             S.append({'id': 'parte3', 'title': 'Parte III · Exercícios', 'kind': 'part', 'opener': 'ex/part3.jpg',
                       'html': '<h1>Parte III</h1>\n<h2>Exercícios</h2>'})
             S.append({'id': 'exercicios', 'title': 'Como usar os exercícios', 'kind': 'chapter', 'html': md2html(
-                "# Como usar os exercícios\n\nOs 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício aparece também no índice, no fim do livro.\n\n"
+                "# Como usar os exercícios\n\nOs 91 exercícios estão em quatro níveis. Dentro de cada nível, aparecem na ordem dos capítulos: ranhuras (R), fluxo (F), rostos (C), autorretratos (A), corpo (B) e projeto (P). O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.\n\n"
                 "Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.\n\n"
                 "Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.")})
             for code, lid, ln, name, intro in LEVELS:
@@ -154,7 +153,7 @@ CREDITS = {'id': 'creditos', 'title': 'Créditos', 'kind': 'back', 'html': md2ht
 
 As reproduções de obras de Vincent van Gogh são de domínio público e foram obtidas no Wikimedia Commons. A reprodução do *Retrato de Joseph Roulin* usada na capa vem do Open Content Program do J. Paul Getty Museum, em Los Angeles. Os dados de catálogo vêm do Wikidata e do Wikimedia Commons. As citações das cartas são traduções livres do autor a partir da edição em inglês publicada pelo Van Gogh Museum e pelo Huygens Institute em vangoghletters.org.
 
-Os desenhos-modelo dos exercícios, as demonstrações em etapas e as amostras de marcas foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele. Os diagramas, os ícones e o mapa foram desenhados para este livro.
+Os desenhos-modelo dos exercícios, as demonstrações em etapas as amostras de marcas e as fotografias de materiais foram criados para este livro com o auxílio de ferramentas de inteligência artificial, a partir de orientações do autor. São interpretações no estilo dos desenhos de Van Gogh e não reproduzem obras dele. Os ícones e o mapa foram desenhados para este livro.
 
 Texto composto em EB Garamond e Archivo.""")}
 
@@ -354,7 +353,11 @@ figcaption i{color:#1E1913;font-weight:500}
 table{border-collapse:collapse;width:100%;font-size:9.2pt;margin:.6em 0 1em}
 th{font:700 7.2pt Sans;text-align:left;border-bottom:.6pt solid #1E1913;padding:.3em .4em .3em 0}
 td{border-bottom:.4pt solid #CFC4B0;padding:.35em .5em .35em 0;vertical-align:top}
-table.chrono td:first-child,table.letters td:first-child{font:700 7.8pt Sans;white-space:nowrap}
+table.chrono td,table.letters td{vertical-align:baseline;line-height:1.38}
+table.chrono tr,table.letters tr{break-inside:avoid}
+table.chrono td:first-child{font:400 10pt Disp;width:.62in;white-space:nowrap}
+table.letters td:first-child{font:400 9pt Disp;width:.72in;white-space:nowrap}
+table.letters td:nth-child(2){font:400 7.6pt/1.4 Sans;color:#6E6253;width:1.35in}
 ol.check li{margin:.35em 0}
 dl.gloss dt{font:700 8.6pt Sans;margin-top:.7em}dl.gloss dd{margin:.1em 0 0 0}
 .ref{padding-left:1.2em;text-indent:-1.2em;text-align:left}
@@ -408,6 +411,16 @@ ol.laws li:last-child{border-bottom:.6pt solid #CFC4B0}
 ol.laws li::before{content:counter(law);position:absolute;left:0;top:.06in;font:400 17pt/1 Disp;color:#1E1913}
 ol.laws li b{display:block;font:700 8.8pt Sans;margin-bottom:.03in}
 figure.diag img{width:100%;max-height:none}
+
+/* final */
+.fim{page:kraft;break-before:page;width:6in;height:9in;position:relative}
+.fim img{position:absolute;left:.7in;top:.8in;width:4.6in;height:4.2in;object-fit:contain}
+.fim .fq{position:absolute;left:.85in;right:.85in;top:5.45in;font:italic 400 15pt/1.35 Serif;text-align:left;color:#1E1913}
+.fim .fs{position:absolute;left:.85in;right:.85in;top:7.25in;font:500 7.4pt/1.4 Sans;color:#4A4034;text-align:left}
+.contra{page:full;break-before:page;width:6in;height:9in;background:#2A2119;color:#EFE8DA;text-align:center;position:relative}
+.contra .ct1{position:absolute;left:0;right:0;top:3.7in;font:400 30pt/1 Serif;text-align:center}
+.contra .ct2{position:absolute;left:0;right:0;top:4.35in;font:italic 400 11pt Serif;color:#BDB09A;text-align:center}
+.contra .ct3{position:absolute;left:0;right:0;bottom:.7in;font:500 8pt Sans;letter-spacing:.2em;text-align:center}
 /* capa */
 .cover{page:full;position:relative;width:6in;height:9in;background:#2A2119;color:#FBF8F1;break-after:page;bookmark-level:1;bookmark-label:"Capa"}
 .cover .art{position:absolute;top:0;bottom:0;left:0;right:0;background:url("img/cover-roulin.jpg") 46% 0/122% auto no-repeat}
@@ -519,16 +532,16 @@ section.level{page:chap;break-before:page}
 .iconinfo .bal{width:1.5in}
 .ficha td{border-top:.6pt solid #A39682;border-bottom:none;padding:.05in 0}
 .ficha td:first-child{width:.95in;color:#6E6253}
-.catlist{break-before:page}
-.cat{display:flex;gap:.18in;margin:0 0 .22in;break-inside:avoid;align-items:flex-start;border-top:.6pt solid #CFC4B0;padding-top:.14in}
-.cat .im{width:1.75in;flex:none;text-align:left}
-.cat img{max-width:1.75in;max-height:1.95in}
+.catlist{}
+.cat{display:flex;gap:.16in;margin:0 0 .12in;break-inside:avoid;align-items:flex-start;border-top:.6pt solid #CFC4B0;padding-top:.1in}
+.cat .im{width:1.15in;flex:none;text-align:left}
+.cat img{max-width:1.15in;max-height:1.25in}
 .cat p{text-align:left;margin:0 0 .18em}
 .cat .ct{font:400 10.4pt/1.25 Serif}
 .cat .cn{font:400 9pt Disp;margin-right:.35em}
 .cat .cc{font:400 7.2pt/1.42 Sans;color:#6E6253}
 .cat .cf{font:400 6.8pt/1.4 Sans;color:#6E6253}
-.cat .cl{font-size:9pt;line-height:1.38}
+.cat .cl{font-size:8.8pt;line-height:1.34}
 
 /* índice */
 .idx{columns:2;column-gap:.25in}
@@ -601,30 +614,18 @@ def ficha(k):
 
 def catalogue_pdf():
     num, order = cat_numbers()
-    out = ['<section class="chap" id="catalogo"><span class="rh">Catálogo das obras</span>'
-           '<div class="chhead nonum"><p class="chlab">Consulta</p><h1>Catálogo das obras</h1></div>'
-           '<p>As obras de Van Gogh citadas no livro e indicadas nos exercícios, em ordem aproximada de data. Seis delas aparecem primeiro, '
-           'em página inteira, para ver de perto. Quando disponíveis, seguem os números de catálogo F (de la Faille) e JH (Hulsker), '
-           'as dimensões (altura por largura) e o acervo.</p></section>']
-    for k in sorted(ICONS, key=lambda k: num[k]):
-        p = PL[k]; f, inst = ficha(k)
-        rows = [('Catálogo', f.get('cat')), ('Medidas', f.get('dim')), ('Acervo', inst)]
-        tr = ''.join(f'<tr><td>{a}</td><td>{esc(b)}</td></tr>' for a, b in rows if b)
-        out.append(f'<section class="iconimg"><img src="img/{k}.jpg" alt="{esc(p["t"])}"/></section>')
-        out.append(f'<section class="iconinfo" id="cat-{k}"><div class="ptop"><span>Catálogo das obras</span><span>Prancha {num[k]}</span></div>'
-                   f'<p class="no">{num[k]}</p><h2>{esc(p["t"])}</h2><p class="cc">{esc(p["c"])}</p><p class="cl">{esc(p.get("l", ""))}</p>'
-                   + (f'<table class="ficha">{tr}</table>' if tr else '') + (balloons_html(k) if k in WORK_DETAILS else '') + '</section>')
     cards = []
     for k in order:
-        if k in ICONS:
-            continue
         p = PL[k]; f, inst = ficha(k)
         fi = ' · '.join(v for v in [f.get('cat'), f.get('dim'), inst] if v)
         cards.append(f'<div class="cat" id="cat-{k}"><div class="im"><img src="img/{k}.jpg" alt="{esc(p["t"])}"/></div><div>'
                      f'<p class="ct"><span class="cn">{num[k]}</span><i>{esc(p["t"])}</i></p><p class="cc">{esc(p["c"])}</p>'
                      + (f'<p class="cf">{esc(fi)}</p>' if fi else '') + f'<p class="cl">{esc(p.get("l", ""))}</p></div></div>')
-    out.append('<section class="catlist"><span class="rh">Catálogo das obras</span>' + ''.join(cards) + '</section>')
-    return ''.join(out)
+    return ('<section class="chap" id="catalogo"><span class="rh">Catálogo das obras</span>'
+            '<div class="chhead nonum"><p class="chlab">Consulta</p><h1>Catálogo das obras</h1></div>'
+            '<p>As obras de Van Gogh citadas no livro e indicadas nos exercícios, em ordem aproximada de data. Quando disponíveis, '
+            'seguem os números de catálogo F (de la Faille) e JH (Hulsker), as dimensões (altura por largura) e o acervo.</p>'
+            + ''.join(cards) + '</section>')
 
 def ex_index_pdf():
     lvn = {l[0]: l[2] for l in LEVELS}
@@ -703,6 +704,12 @@ def pdf_html(S):
             lvl = 2 if k == 'chapter' else 1
             lab = s['title'].replace("'", "’")
             P.append(f'<section class="chap" id="{s["id"]}" style="bookmark-level:{lvl};bookmark-label:\'{lab}\'">{head}{body}</section>')
+    P.append('<section class="fim"><img src="img/harvest.jpg" alt="A colheita, desenho a pena de Van Gogh"/>'
+             '<p class="fq">“O que é desenhar? Como se chega lá? É abrir caminho através de uma parede de ferro invisível, '
+             'que parece estar entre o que se sente e o que se consegue fazer.”</p>'
+             '<p class="fs">Vincent van Gogh a Theo, Haia, outubro de 1882 (carta 274)</p></section>')
+    P.append('<section class="contra"><p class="ct1">Van Gogh a Lápis</p><p class="ct2">Teoria e prática para desenhar como Vincent</p>'
+             '<p class="ct3">PEDRO TORRES</p></section>')
     P.append('</body></html>')
     html_ = '\n'.join(P).replace('<!--MAPA-->', map_html(True))
     # cada capítulo ganha um nome de página próprio, para a primeira página sair sem rodapé
@@ -892,7 +899,7 @@ def make_cover():
 if __name__ == '__main__':
     import sys
     S = build_sections()
-    S += [catalogue(), ex_index(), CREDITS]
+    S += [catalogue(), CREDITS]
     os.makedirs('out', exist_ok=True)
     args = sys.argv[1:] or ['cover', 'pdf']  # EPUB só com: python3 build.py epub
     make_details(); make_tracos()

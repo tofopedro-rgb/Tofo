@@ -18,9 +18,9 @@ A proposta é aprender a rabiscar como Van Gogh, entender por que cada traço es
 <!-- id: como-usar | Como usar este livro | front -->
 # Como usar este livro
 
-O livro tem quatro partes. A Parte I conta, em poucas páginas, os dez anos em que Van Gogh desenhou, com o foco no que mudou no traço. A Parte II explica a linguagem dele capítulo por capítulo: os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. A Parte III reúne os 91 exercícios, organizados em quatro níveis. A Parte IV traz um plano de estudo de oito semanas e uma autoavaliação.
+O livro tem três partes. A Parte I conta, em poucas páginas, os dez anos em que Van Gogh desenhou, com o foco no que mudou no traço. A Parte II explica a linguagem dele capítulo por capítulo: os materiais, as marcas, a direção do traço, o rosto, os autorretratos, o corpo, a ordem em que ele construía uma folha e a maneira de copiar um mestre. A Parte III reúne os 91 exercícios, organizados em quatro níveis.
 
-Os exercícios estão separados da teoria de propósito. Cada um indica o capítulo que o explica, e o índice no fim do livro agrupa os exercícios por assunto. Você pode ler a teoria inteira antes de pegar no lápis ou alternar um capítulo com os exercícios dele.
+Os exercícios estão separados da teoria de propósito. Cada um indica o capítulo que o explica. Você pode ler a teoria inteira antes de pegar no lápis ou alternar um capítulo com os exercícios dele.
 
 ## Por onde começar
 
