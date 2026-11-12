@@ -327,6 +327,18 @@ PARTS = {'parte1': ('01', 'Parte I', 'Dez anos de desenho', None),
          'parte3': ('03', 'Parte III', 'Estudos', '<p>Os 60 estudos dos Níveis 2 a 4. Os exercícios curtos do Nível 1 já apareceram no fim de cada capítulo, como Primeiros passos. Aqui o desenho é inteiro: paisagens, rostos, figuras e cópias de mestre. O código de cada exercício indica o assunto: R para ranhuras, F para fluxo, C para rostos, A para autorretratos, B para o corpo e P para o projeto.</p><p>Cada página traz o desenho-modelo, o tempo e o material sugeridos, a instrução e um critério para saber quando o exercício está pronto. Doze exercícios mostram também as etapas da construção, do esboço ao acabamento.</p><p>Para desenhar por cima, imprima a página e use papel vegetal, ou importe-a num aplicativo de desenho e trabalhe numa camada acima. Na maioria das vezes, porém, desenhe ao lado do livro, olhando o modelo.</p>'),
          'parte4': ('04', 'Parte IV', 'Prática',
                     'Um plano de estudo de oito semanas e uma autoavaliação para conferir o resultado.')}
+END_ART = {'cap2': ('cafe', 'cafe'), 'cap4': ('tanguy', 'tanguy'), 'cap5': ('sp_painter', 'sp_painter-sem-moldura'), 'cap6': ('digger', 'digger')}
+
+def bleed_html(spec):
+    key, img = spec
+    from PIL import Image, ImageStat
+    im = Image.open(f'img/{img}.jpg').convert('L')
+    w, h = im.size
+    lum = ImageStat.Stat(im.crop((0, int(h * .82), w, h))).mean[0]
+    dark = lum < 150
+    return (f'<section class="bleed{" dark" if dark else ""}"><img src="img/{img}.jpg" alt="{esc(PL[key]["t"])}"/>'
+            f'<p class="bcap"><i>{esc(PL[key]["t"])}</i><br/>{esc(PL[key]["c"])}</p></section>')
+
 LEVEL_ART = {'e': 'stacks', 'd': 'street', 'p': 'enclosed'}
 PART_ART = {'parte1': 'sower2', 'parte2': 'zouavepen', 'parte3': 'fountain', 'parte4': 'roulin2'}
 ICONS = ['sorrow', 'cafe', 'roulin', 'mousme2', 'starry', 'cypress']
@@ -476,6 +488,14 @@ figure.diag img{width:100%;max-height:none}
 .contra .ct1{position:absolute;left:0;right:0;top:3.7in;font:400 30pt/1 Serif;text-align:center}
 .contra .ct2{position:absolute;left:0;right:0;top:4.35in;font:italic 400 11pt Serif;color:#BDB09A;text-align:center}
 .contra .ct3{position:absolute;left:0;right:0;bottom:.7in;font:500 8pt Sans;letter-spacing:.2em;text-align:center}
+/* obra em página inteira */
+.bleed{page:full;break-before:page;width:6in;height:9in;position:relative;overflow:hidden}
+.bleed img{position:absolute;inset:0;width:6in;height:9in;object-fit:cover}
+.bleed::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2in;background:linear-gradient(to bottom,rgba(240,233,218,0),rgba(240,233,218,.92) 60%)}
+.bleed.dark::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.2in;background:linear-gradient(to bottom,rgba(15,11,8,0),rgba(15,11,8,.6))}
+.bleed .bcap{position:absolute;left:.5in;right:.5in;bottom:.45in;z-index:2;font:400 7.6pt/1.45 Sans;color:#1E1913;text-align:left;margin:0}
+.bleed .bcap i{font:italic 400 12pt Serif}
+.bleed.dark .bcap{color:#FBF8F1}
 /* capa */
 .cover{page:full;position:relative;width:6in;height:9in;background:#2A2119;color:#FBF8F1;break-after:page;bookmark-level:1;bookmark-label:"Capa"}
 .cover .art{position:absolute;top:0;bottom:0;left:0;right:0;background:url("img/cover-roulin.jpg") 46% 0/122% auto no-repeat}
@@ -496,23 +516,21 @@ figure.diag img{width:100%;max-height:none}
 
 /* sumário */
 .toc{page:bare;break-before:page;bookmark-level:1;bookmark-label:"Sumário"}
-.toc h1{font-size:24pt;margin-bottom:.32in}
+.toc h1{font-size:22pt;margin-bottom:.3in}
 .toc a{color:#1E1913}
 .toc .pg::after{content:target-counter(attr(href),page)}
-.toc .tg{margin-bottom:.26in}
-.toc .tf{display:flex;justify-content:space-between;font:italic 400 10.5pt/1.5 Serif;margin:0;text-align:left}
-.toc .tf .pg{font:400 8.4pt Sans;font-style:normal}
-.toc .tpart{display:flex;align-items:baseline;gap:.14in;border-top:1.2pt solid #1E1913;padding-top:.08in;margin-bottom:.1in;break-after:avoid}
-.toc .tn{font:400 22pt/1 Disp;color:#BF8A5A;width:.5in;flex:none}
-.toc .tt{flex:1;font:400 14pt/1.1 Disp}
-.toc .tpart .pg{font:700 9pt Sans}
-.toc .tc{display:flex;align-items:baseline;margin:.1in 0 0 .64in;font:400 11pt/1.3 Serif;text-align:left;break-after:avoid}
-.toc .tc .cn{font:400 10pt Disp;width:.28in;flex:none}
+.toc .tg{margin-bottom:.3in}
+.toc .tf{display:flex;justify-content:space-between;font:italic 400 10.4pt/1.5 Serif;margin:0;text-align:left}
+.toc .tf .pg{font:400 8pt Sans;font-style:normal}
+.toc .tpart{display:flex;align-items:baseline;gap:.12in;border-top:.8pt solid #1E1913;padding-top:.06in;margin-bottom:.04in;break-after:avoid}
+.toc .tn{font:400 16pt/1 Disp;color:#BF8A5A;width:.42in;flex:none}
+.toc .tt{flex:1;font:400 12pt/1.1 Disp}
+.toc .tpart .pg{font:700 8.4pt Sans}
+.toc .tc{display:flex;align-items:baseline;margin:.08in 0 0 .54in;font:400 10.4pt/1.3 Serif;text-align:left}
+.toc .tc .cn{font:400 9pt Disp;width:.26in;flex:none}
 .toc .tc a:not(.pg){flex:1}
-.toc .tc .pg{font:400 8.4pt Sans;color:#1E1913}
-.toc .tsub{margin:.02in 0 0 .92in;font:400 7.6pt/1.5 Sans;color:#6E6253;text-align:left;hyphens:manual}
-.toc .tpart + .tsub{margin-left:.64in}
-.toc .tg-back{margin-top:.36in}
+.toc .tc .pg{font:400 8pt Sans}
+.toc .tg-back{margin-top:.34in}
 /* páginas de parte */
 .partimg{page:kraft;break-before:page;width:6in;height:9in;position:relative}
 .partimg img{position:absolute;left:.55in;top:.55in;width:4.9in;height:7.4in;object-fit:contain}
@@ -747,9 +765,8 @@ def pdf_html(S):
             cur_part = s['id']; n, lab, name, _ = PARTS[s['id']]
             open_group(s['id'])
             toc.append(f'<div class="tpart"><span class="tn">{n}</span><span class="tt"><a href="#{s["id"]}">{name}</a></span>{a_}</div>')
-            if s['id'] == 'parte1':
-                vida = next(x for x in S if x['id'] == 'vida')
-                toc.append(f'<p class="tsub">{" · ".join(esc(x) for x in subs(vida))}</p>')
+            if s['id'] == 'parte3':
+                toc.append('<p class="tc"><span class="cn"></span><a href="#primeiros-passos">Nível 1 · Fundamentos, nos Primeiros passos dos capítulos 2 a 6</a><a class="pg" href="#primeiros-passos"></a></p>')
         elif k == 'level':
             toc.append(f'<p class="tc"><span class="cn"></span><a href="#{s["id"]}">{esc(s["title"])}</a>{a_}</p>')
         elif k == 'back':
@@ -761,9 +778,6 @@ def pdf_html(S):
             m = re.match(r'(\d+)\.\s*(.*)', s['title'])
             num, tit = (m.group(1), m.group(2)) if m else ('', s['title'])
             toc.append(f'<p class="tc"><span class="cn">{num}</span><a href="#{s["id"]}">{esc(tit)}</a>{a_}</p>')
-            sb = subs(s)
-            if sb:
-                toc.append(f'<p class="tsub">{" · ".join(esc(x) for x in sb)}</p>')
     toc.append('</div></div>')
     P.extend(toc)
     part = None
@@ -817,7 +831,10 @@ def pdf_html(S):
                 for i in range(0, len(fs), 2):
                     hd = ('<div class="pshead"><span class="rh">Primeiros passos</span><p class="psl">Primeiros passos</p>'
                           f'<p class="pst">Exercícios curtos do {CHAP[fs[0]["ch"]][1].lower()}, de 8 a 20 minutos.</p></div>') if i == 0 else ''
-                    P.append(f'<div class="pair2{" first" if i == 0 else ""}">{hd}' + ''.join(ex_pdf(x, chapnames, half=True) for x in fs[i:i + 2]) + '</div>')
+                    anchor = ' id="primeiros-passos"' if (i == 0 and fs[0]['ch'] == 'r') else ''
+                    P.append(f'<div class="pair2{" first" if i == 0 else ""}"{anchor}>{hd}' + ''.join(ex_pdf(x, chapnames, half=True) for x in fs[i:i + 2]) + '</div>')
+            if s['id'] in END_ART:
+                P.append(bleed_html(END_ART[s['id']]))
     P.append('<section class="fim"><img src="img/harvest.jpg" alt="A colheita, desenho a pena de Van Gogh"/>'
              '<p class="fq">“O que é desenhar? Como se chega lá? É abrir caminho através de uma parede de ferro invisível, '
              'que parece estar entre o que se sente e o que se consegue fazer.”</p>'
