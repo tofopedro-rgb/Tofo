@@ -60,6 +60,27 @@ const ctx = cv.getContext('2d');
 const W = 960, H = 540, GROUND = 452;
 const GRAV = 2300, JUMP_V = -860, RUN = 290, FAST = 440;
 
+// ---------------- Sprites (gerados no Higgsfield) ----------------
+// Se alguma imagem não carregar, o jogo cai de volta nos desenhos vetoriais.
+const IMG = {};
+const IMG_SRC = {
+  'tintim-idle': 'sprites/tintim-idle.png', 'tintim-run': 'sprites/tintim-run.png', 'tintim-jump': 'sprites/tintim-jump.png',
+  'tintim-fall': 'sprites/tintim-fall.png', 'tintim-hurt': 'sprites/tintim-hurt.png', 'tintim-win': 'sprites/tintim-win.png',
+  'pug-walk': 'sprites/pug-walk.png', 'pug-charge': 'sprites/pug-charge.png', 'pug-stun': 'sprites/pug-stun.png',
+  pigeon: 'sprites/pigeon.png', monkey: 'sprites/monkey.png', banana: 'sprites/banana.png', cookie: 'sprites/cookie.png',
+  far: 'bg/far.jpg', mid: 'bg/mid.png', arena: 'bg/arena.jpg',
+};
+for (const [k, src] of Object.entries(IMG_SRC)) { const im = new Image(); im.src = 'assets/' + src; IMG[k] = im; }
+const img = n => { const i = IMG[n]; return i && i.complete && i.naturalWidth ? i : null; };
+// desenha um sprite com a base (pés) em (cx, by), altura h; flip espelha; frame/nFrames para spritesheets horizontais
+function spr(name, cx, by, h, flip = false, frame = 0, nFrames = 1, rot = 0) {
+  const im = img(name); if (!im) return false;
+  const fw = im.naturalWidth / nFrames, w = fw * h / im.naturalHeight;
+  ctx.save(); ctx.translate(cx, by); if (rot) ctx.rotate(rot); if (flip) ctx.scale(-1, 1);
+  ctx.drawImage(im, frame * fw, 0, fw, im.naturalHeight, -w / 2, -h, w, h);
+  ctx.restore(); return true;
+}
+
 // ---------------- Input ----------------
 const keys = { left: false, right: false, jump: false };
 let jumpPressed = false;
@@ -301,6 +322,25 @@ function drawBackground() {
   const sky = ctx.createLinearGradient(0, 0, 0, H);
   sky.addColorStop(0, '#6fb6ff'); sky.addColorStop(0.6, '#bfe2ff'); sky.addColorStop(1, '#fde8c8');
   ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+  const far = img('far'), mid = img('mid');
+  if (far && mid) {
+    // camadas com parallax; blocos alternados são espelhados para esconder a emenda
+    const fh = 420, fw = far.naturalWidth * fh / far.naturalHeight, fo = -camX * 0.15;
+    for (let i = Math.floor(-fo / fw) - 1, n = i + Math.ceil(W / fw) + 2; i < n; i++) {
+      const x = fo + i * fw; ctx.save();
+      if (i % 2) { ctx.translate(x + fw, 0); ctx.scale(-1, 1); ctx.drawImage(far, 0, GROUND - fh + 30, fw, fh); }
+      else ctx.drawImage(far, x, GROUND - fh + 30, fw, fh);
+      ctx.restore();
+    }
+    const mh = 170, mw = mid.naturalWidth * mh / mid.naturalHeight, mo = -camX * 0.55;
+    for (let i = Math.floor(-mo / mw) - 1, n = i + Math.ceil(W / mw) + 2; i < n; i++) {
+      const x = mo + i * mw; ctx.save();
+      if (i % 2) { ctx.translate(x + mw, 0); ctx.scale(-1, 1); ctx.drawImage(mid, 0, GROUND - mh + 6, mw, mh); }
+      else ctx.drawImage(mid, x, GROUND - mh + 6, mw, mh);
+      ctx.restore();
+    }
+    return;
+  }
   ell(820 - camX * 0.02, 90, 46, 46, 'rgba(255,240,180,.9)');
   // nuvens
   for (let i = 0; i < 8; i++) {
@@ -331,8 +371,11 @@ function drawBackground() {
 
 function drawWorld() {
   // chão
-  for (const [x, w] of grounds) {
-    const sx = x - camX; if (sx > W || sx + w < 0) continue;
+  const arenaImg = img('arena');
+  ctx.fillStyle = '#3b2a22'; ctx.fillRect(0, GROUND + 20, W, H); // fundo dos buracos
+  for (const [x, w0] of grounds) {
+    const w = arenaImg ? Math.min(w0, ARENA_X - x) : w0;
+    const sx = x - camX; if (w <= 0 || sx > W || sx + w < 0) continue;
     ctx.fillStyle = '#c98a55'; ctx.fillRect(sx, GROUND, w, H - GROUND);
     ctx.fillStyle = '#b5764a';
     for (let px = Math.ceil(x / 80) * 80; px < x + w; px += 80) ctx.fillRect(px - camX, GROUND, 3, H - GROUND);
@@ -348,7 +391,15 @@ function drawWorld() {
   }
   // parquinho
   const ax = ARENA_X - camX;
-  if (ax < W + 50) {
+  if (ax < W + 50 && arenaImg) {
+    // cenário do parquinho gerado; o chão de areia fica nos 15% de baixo
+    const ah = W * arenaImg.naturalHeight / arenaImg.naturalWidth;
+    ctx.drawImage(arenaImg, ax, GROUND - ah * 0.86, W, ah);
+    ctx.fillStyle = '#d9b07a'; ctx.fillRect(ax, GROUND - ah * 0.86 + ah, W, H);
+    ctx.fillStyle = '#6b4226'; ctx.fillRect(ax - 90, GROUND - 120, 8, 120);
+    ctx.fillStyle = '#fff6e0'; roundRect(ax - 160, GROUND - 160, 150, 50, 8); ctx.fill();
+    ctx.fillStyle = '#6b4226'; ctx.font = 'bold 20px system-ui'; ctx.textAlign = 'center'; ctx.fillText('PARQUINHO', ax - 85, GROUND - 128);
+  } else if (ax < W + 50) {
     ctx.fillStyle = '#f7d36b'; ctx.fillRect(ax, GROUND, W, H - GROUND);
     ctx.fillStyle = '#e8c055'; for (let i = 0; i < 30; i++) ell(ax + (i * 97) % W, GROUND + 20 + (i * 31) % 60, 10, 3, '#e8c055');
     // escorregador
@@ -371,6 +422,7 @@ function drawWorld() {
 }
 
 function drawCookie(x, y) {
+  if (spr('cookie', x, y + 13, 26, false, 0, 1, Math.sin(time * 3 + x) * 0.15)) return;
   ctx.save(); ctx.translate(x, y); ctx.rotate(Math.sin(time * 3 + x) * 0.15);
   ctx.fillStyle = '#c27c3a';
   [[-12, -5], [-12, 5], [12, -5], [12, 5]].forEach(([dx, dy]) => { ctx.beginPath(); ctx.arc(dx, dy, 7, 0, 7); ctx.fill(); });
@@ -379,6 +431,7 @@ function drawCookie(x, y) {
   ctx.restore();
 }
 function drawBanana(x, y) {
+  if (spr('banana', x, y + 22, 44, false, 0, 1, Math.sin(time * 3) * 0.12)) return;
   ctx.save(); ctx.translate(x, y); ctx.rotate(-0.4 + Math.sin(time * 3) * 0.1);
   ctx.fillStyle = '#ffd93b'; ctx.strokeStyle = '#c99a12'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(0, -14, 26, Math.PI * 0.2, Math.PI * 0.85); ctx.arc(-2, -30, 32, Math.PI * 0.78, Math.PI * 0.27, true); ctx.closePath(); ctx.fill(); ctx.stroke();
@@ -390,6 +443,7 @@ function drawBanana(x, y) {
 function drawMonkey(x, y) {
   ctx.save(); ctx.translate(x, y + Math.sin(time * 5) * 2);
   ctx.fillStyle = 'rgba(255,160,60,.25)'; ctx.beginPath(); ctx.arc(0, 0, 30 + Math.sin(time * 6) * 3, 0, 7); ctx.fill();
+  if (spr('monkey', 0, 26, 52)) { ctx.restore(); return; }
   ell(-20, -2, 9, 9, '#7a4a2a'); ell(20, -2, 9, 9, '#7a4a2a'); ell(-20, -2, 5, 5, '#e8b88a'); ell(20, -2, 5, 5, '#e8b88a');
   ell(0, 0, 19, 18, '#8a5530'); ell(0, 5, 13, 11, '#efc79b'); ell(-6, -5, 6, 6, '#efc79b'); ell(6, -5, 6, 6, '#efc79b');
   ell(-6, -4, 2.6, 3, '#1c1c1c'); ell(6, -4, 2.6, 3, '#1c1c1c');
@@ -400,6 +454,11 @@ function drawMonkey(x, y) {
 function drawPigeon(e) {
   const x = e.x - camX, y = e.y;
   if (x < -60 || x > W + 60) return;
+  if (img('pigeon')) {
+    if (e.alive) spr('pigeon', x + e.w / 2, y + e.h + 2 - Math.abs(Math.sin(e.t * 12)) * 3, 46, e.dir > 0);
+    else spr('pigeon', x + e.w / 2, y, 46, e.dir > 0, 0, 1, Math.PI);
+    return;
+  }
   ctx.save(); ctx.translate(x + e.w / 2, y + e.h / 2); ctx.scale(e.dir, 1);
   if (!e.alive) ctx.rotate(Math.PI);
   const bob = Math.sin(e.t * 12) * 2;
@@ -420,6 +479,21 @@ function drawTintim() {
   const moving = Math.abs(p.vx) > 20 && p.onGround;
   const run = moving ? time * (p.fast > 0 || p.mega > 0 ? 22 : 16) : 0;
   const squash = p.landT > 0 ? 1 - p.landT * 0.8 : (!p.onGround ? 1.06 : 1 + Math.sin(time * 3) * 0.015);
+  if (img('tintim-idle')) {
+    ctx.save(); ctx.translate(x, y);
+    ell(0, 2, 30, 6, 'rgba(0,0,0,.18)');
+    if (p.mega > 0) { ctx.fillStyle = `hsla(${(time * 300) % 360},100%,60%,.35)`; ctx.beginPath(); ctx.arc(0, -38, 52, 0, 7); ctx.fill(); }
+    ctx.scale(2 - squash, squash);
+    const fast = p.fast > 0 || p.mega > 0;
+    let name = 'tintim-idle', h = 80, fr = 0, nf = 1;
+    if (p.won) { name = 'tintim-win'; h = 92; }
+    else if (p.inv > 1.1) { name = 'tintim-hurt'; h = 80; }
+    else if (!p.onGround) { if (p.vy < 0) { name = 'tintim-jump'; h = 66; } else { name = 'tintim-fall'; h = 78; } }
+    else if (moving) { name = 'tintim-run'; h = 72; nf = 4; fr = Math.floor(time * (fast ? 16 : 11)) % 4; }
+    spr(name, 0, 2, h, p.face < 0, fr, nf);
+    ctx.restore();
+    return;
+  }
   ctx.save(); ctx.translate(x, y);
   ell(0, 2, 30, 6, 'rgba(0,0,0,.18)');
   ctx.scale(p.face * (2 - squash), squash);
@@ -478,6 +552,24 @@ function drawTintim() {
 function drawPug(g) {
   const x = g.x - camX + g.w / 2, y = g.y + g.h;
   if (g.hurt > 0 && Math.floor(time * 30) % 2) return;
+  if (img('pug-walk')) {
+    ell(x, y + 2, 38, 7, 'rgba(0,0,0,.2)');
+    if (g.name === 'Pug 2') ctx.filter = 'brightness(0.82) saturate(1.25)'; // segundo pug um pouco mais escuro
+    const flip = g.dir > 0; // os sprites olham para a esquerda
+    if (g.hp <= 0) spr('pug-stun', x, y - 56, 56, flip, 0, 1, Math.PI);
+    else if (g.stun > 0) spr('pug-stun', x, y + 4, 56, flip);
+    else if (g.y + g.h < GROUND - 4 || Math.abs(g.vx) > 200) spr('pug-charge', x, y + 4, 86, flip);
+    else spr('pug-walk', x, y + 4 - Math.abs(Math.sin(time * 10)) * 3, 86, flip);
+    ctx.filter = 'none';
+    if (g.stun > 0 && g.hp > 0) {
+      for (let i = 0; i < 3; i++) {
+        const a = time * 6 + i * 2.1;
+        ctx.fillStyle = '#ffd23f'; ctx.font = '18px system-ui'; ctx.textAlign = 'center';
+        ctx.fillText('★', x - g.dir * 30 + Math.cos(a) * 20, y - 58 + Math.sin(a) * 6);
+      }
+    }
+    return;
+  }
   ctx.save(); ctx.translate(x, y);
   ell(0, 2, 34, 6, 'rgba(0,0,0,.2)');
   ctx.scale(g.dir, g.stun > 0 ? 0.82 : 1);
@@ -525,6 +617,9 @@ function drawPug(g) {
 }
 
 function drawHUD() {
+  ctx.fillStyle = 'rgba(255,248,235,.78)';
+  roundRect(10, 12, (player.fast > 0 ? 90 : 0) + (player.mega > 0 ? 90 : 0) + 210, 52, 14); ctx.fill();
+  roundRect(W - 262, 12, 250, arena ? 62 : 54, 14); ctx.fill();
   ctx.textAlign = 'left'; ctx.font = 'bold 22px system-ui';
   for (let i = 0; i < 3; i++) {
     ctx.fillStyle = i < player.hp ? '#ff3b5c' : 'rgba(0,0,0,.25)';
@@ -586,7 +681,7 @@ function start() {
 function endGame(win) {
   if (state !== 'play') return;
   state = 'end';
-  if (win) sfx.win();
+  if (win) { sfx.win(); player.won = true; player.vx = 0; }
   setTimeout(() => {
     document.getElementById('endTitle').textContent = win ? 'Tintim venceu!' : 'Ah não!';
     document.getElementById('endText').textContent = win
