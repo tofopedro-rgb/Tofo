@@ -8,7 +8,7 @@ Jogo de plataforma 2.5D curtinho com o Tintim de protagonista: ele atravessa o p
 - 🍪 Biscoito: pontos · 🍌 Banana de pelúcia: turbo por 7s · 🐒 Macaco de pelúcia: invencível por 8s e +1 coração
 - 🐶 Amigos chihuahuas: os dois esperam no caminho e, quando o Tintim chega perto, jogam um biscoito de presente (+3 biscoitos e +1 coração)
 - Pombos: pise por cima. Chefões: 3 pisões em cada pug; o último fica mais bravo.
-- Estrelas: 1 por vencer, 1 por pegar 80% dos biscoitos, 1 por não perder coração.
+- Estrelas: 1 por vencer, 1 por pegar 80% dos biscoitos, 1 por achar os 3 biscoitos dourados (só o pulo duplo alcança).
 
 ## Rodar
 O jogo usa WebGL, então precisa de um servidor (abrir o arquivo direto não carrega as imagens):

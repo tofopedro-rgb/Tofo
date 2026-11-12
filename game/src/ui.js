@@ -86,6 +86,14 @@ const banner = $('banner');
 TT.on('banner', e => { banner.textContent = e.text; banner.classList.remove('show'); void banner.offsetWidth; banner.classList.add('show'); });
 TT.on('hurt', () => { const h = hearts[Math.max(0, S.player.hp)]; if (h) { h.classList.remove('hit'); void h.offsetWidth; h.classList.add('hit'); } });
 TT.on('start', () => { show(null); $('hud').classList.add('on'); stage.classList.remove('cine'); $('bossCard').classList.remove('show'); $('cookieT').textContent = '/' + S.totalCookies; irisOpenFromBlack(); });
+// história: segunda fala da abertura e o balão dos amigos
+TT.on('start', e => { if (!e.retry) setTimeout(() => { if (S.mode === 'play' && !S.arena) TT.emit('banner', { text: 'Vai lá, Tintim: traga ele de volta!' }); }, 3200); });
+const say = $('say'), LINES = ['Vai lá, Tintim!', 'Mostra pra eles!']; let sayF = null, sayEnd = 0;
+TT.on('friend', e => { sayF = S.friends.reduce((a, f) => Math.abs(f.x - e.x) < Math.abs(a.x - e.x) ? f : a); say.textContent = LINES[S.friends.indexOf(sayF) % 2]; sayEnd = performance.now() + 2600; say.classList.add('on'); });
+const uiFrame0 = TT.uiFrame;
+TT.uiFrame = () => { uiFrame0(); if (!sayF) return;
+  if (performance.now() > sayEnd || S.mode === 'lose') { say.classList.remove('on'); sayF = null; return; }
+  const at = TT.R.toScreen(sayF.x, C.GROUND - 118); say.style.left = (at.x * 100).toFixed(2) + '%'; say.style.top = (at.y * 100).toFixed(2) + '%'; };
 TT.on('pause', () => show('pause'));
 TT.on('resume', () => show(null));
 TT.on('bossIntro', () => { stage.classList.add('cine'); setTimeout(() => $('bossCard').classList.add('show'), 650); });
@@ -98,14 +106,14 @@ TT.on('win', st => {
   if (!best || st.stars > best.stars || (st.stars === best.stars && st.time < best.time)) { best = { stars: st.stars, time: st.time }; try { localStorage.setItem('tintim-best', JSON.stringify(best)); } catch (_) {} }
   showBest();
   $('stCookies').firstElementChild.textContent = `${st.cookies}/${st.total}`; $('stCookies').classList.toggle('ok', st.allCookies);
-  $('stHearts').firstElementChild.textContent = st.hpLost; $('stHearts').classList.toggle('ok', st.noHit);
+  $('stHearts').firstElementChild.textContent = st.gold + '/3'; $('stHearts').classList.toggle('ok', st.allGold);
   $('stTime').firstElementChild.textContent = st.time.toFixed(1) + 's';
   const stars = [...document.querySelectorAll('.star')]; stars.forEach(s => s.classList.remove('got'));
   const p = S.player, at = TT.R && TT.R.toScreen ? TT.R.toScreen(p.x + p.w / 2, p.y + 10) : { x: 0.5, y: 0.6 };
   setTimeout(() => irisTo(true, at), 900);
   setTimeout(() => { if (S.mode !== 'win') return; show('win'); $('hud').classList.remove('on'); irisTo(false);
-    // estrelas na ordem: vencer, biscoitos, sem perder coração
-    [true, st.allCookies, st.noHit].forEach((ok, i) => { if (ok) setTimeout(() => { stars[i].style.animationDelay = '0s'; stars[i].classList.add('got'); TT.sfx('star'); }, 500 + i * 380); });
+    // estrelas na ordem: vencer, biscoitos, os três dourados
+    [true, st.allCookies, st.allGold].forEach((ok, i) => { if (ok) setTimeout(() => { stars[i].style.animationDelay = '0s'; stars[i].classList.add('got'); TT.sfx('star'); }, 500 + i * 380); });
   }, 1900);
 });
 TT.on('assetsReady', () => $('msg').classList.add('hide'));

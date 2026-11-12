@@ -35,7 +35,7 @@ const { chromium } = require('playwright');
   check(await until(() => __tintim.state === 'lose'), 'cair no buraco sem corações perde');
   await pg.waitForSelector('#lose.on', { timeout: 20000 }); await pg.waitForTimeout(700); await pg.click('#btnRetry');
   check(await until(() => __tintim.state === 'play' && __tintim.player.x > 3500 && __tintim.player.hp === 3), 'tentar de novo volta ao checkpoint com 3 corações');
-  await ev(() => { const p = __tintim.player; p.x = 6000; p.y = 300; });
+  await ev(() => { const p = __tintim.player; p.x = 8800; p.y = 300; });
   await pg.keyboard.down('ArrowRight');
   check(await until(() => !!__tintim.S.cine), 'cena de introdução dos pugs');
   await pg.keyboard.up('ArrowRight');

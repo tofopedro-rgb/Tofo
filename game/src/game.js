@@ -5,14 +5,16 @@ const TT = window.TT = window.TT || {};
 
 const C = TT.C = {
   W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 290, FAST: 440,
-  LEVEL_END: 7000, ARENA_X: 6040,
-  grounds: [[0, 1250], [1400, 1000], [2520, 820], [3480, 1100], [4740, 2260]],
+  LEVEL_END: 9800, ARENA_X: 8840,
+  grounds: [[0, 1250], [1400, 1000], [2520, 820], [3480, 1100], [4740, 900], [5830, 760], [6820, 700], [7680, 2120]],
   plats: [
     [520, 340, 160], [820, 270, 140], [1180, 330, 150], [1700, 330, 180], [1960, 250, 140],
     [2380, 330, 160], [2850, 320, 140], [3100, 240, 160], [3330, 330, 120], [3800, 320, 200],
     [4150, 250, 160], [4400, 330, 150], [4620, 300, 120], [5150, 320, 180], [5480, 250, 140],
+    [5700, 300, 110], [5950, 320, 170], [6230, 230, 150], [6470, 140, 130], [6660, 300, 110], [6950, 320, 160], [7200, 235, 140],
+    [7420, 150, 130], [7560, 300, 100], [7900, 320, 180], [8200, 250, 140],
   ],
-  checkpoints: [3560, 5880],
+  checkpoints: [3560, 5880, 8660],
   // amigos chihuahuas que esperam no caminho e entregam biscoito
   friends: [{ x: 1452, kind: 'chi-pb' }, { x: 4792, kind: 'chi-br' }], GIFT: 3,
 };
@@ -40,13 +42,20 @@ function makeItems() {
   cookie(4220, 210); cookie(4680, 260);
   for (let x = 4850; x <= 5050; x += 50) cookie(x, GROUND - 40);
   [5520, 5570].forEach(x => cookie(x, 210));
+  cookie(5755, 260); [5990, 6040, 6090].forEach(x => cookie(x, 280)); cookie(6300, 190); cookie(6535, 100); cookie(6715, 260);
+  for (let x = 6880; x <= 7080; x += 50) cookie(x, GROUND - 40);
+  cookie(7270, 195); cookie(7485, 110); [7950, 8000, 8050].forEach(x => cookie(x, 280)); cookie(8270, 210);
+  for (let x = 8350; x <= 8550; x += 50) cookie(x, GROUND - 40);
+  // biscoitos dourados: só o pulo duplo alcança
+  [[1325, 165], [3410, 70], [7610, 40]].forEach(([x, y]) => it.push({ type: 'gold', x, y, got: false }));
+  it.push({ type: 'banana', x: 7270, y: 150, got: false });
   it.push({ type: 'banana', x: 2010, y: 205, got: false });
   it.push({ type: 'monkey', x: 4220, y: 170, got: false });
   it.push({ type: 'banana', x: 5550, y: 160, got: false });
   return it;
 }
 function makeEnemies() {
-  return [[900, 700, 1150], [1700, 1570, 2300], [2700, 2560, 3300], [3700, 3520, 4500], [4300, 4150, 4300], [5100, 4930, 5900]]
+  return [[900, 700, 1150], [1700, 1570, 2300], [2700, 2560, 3300], [3700, 3520, 4500], [4300, 4150, 4300], [5100, 4930, 5600], [6100, 5860, 6560], [7100, 6840, 7500], [8100, 7700, 8700]]
     .map(([x, a, b]) => ({ x, y: GROUND - 30, w: 38, h: 30, a, b, dir: -1, alive: true, t: Math.random() * 6, dy: 0 }));
 }
 function makePugs() {
@@ -71,14 +80,14 @@ function reset() {
   Object.assign(S, {
     player: makePlayer(120), items: makeItems(), enemies: makeEnemies(), pugs: makePugs(),
     cam: { x: 0, y: 0, look: 0 }, time: 0, clock: 0, cookies: 0, arena: false, trauma: 0, hitstop: 0,
-    timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
+    gold: 0, timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
     friends: C.friends.map(f => ({ x: f.x, home: f.x, vx: 0, follow: 0, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
   });
   S.totalCookies = S.items.filter(i => i.type === 'cookie').length + C.friends.length * C.GIFT;
 }
 reset();
 
-TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'O parque ao entardecer' }); };
+TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'Os pugs da vizinha tomaram o parquinho…' }); };
 TT.retry = () => {
   if (S.checkpoint < 0) return TT.start();
   const x = C.checkpoints[S.checkpoint];
@@ -90,8 +99,8 @@ TT.pause = () => { if (S.mode === 'play') { S.mode = 'pause'; emit('pause'); } }
 TT.resume = () => { if (S.mode === 'pause') { S.mode = 'play'; emit('resume'); } };
 
 function stats() {
-  const allCookies = S.cookies >= Math.ceil(S.totalCookies * 0.8), noHit = S.hpLost === 0;
-  return { cookies: S.cookies, total: S.totalCookies, time: S.time, hpLost: S.hpLost, allCookies, noHit, stars: 1 + (allCookies ? 1 : 0) + (noHit ? 1 : 0) };
+  const allCookies = S.cookies >= Math.ceil(S.totalCookies * 0.8), noHit = S.hpLost === 0, allGold = S.gold >= 3;
+  return { cookies: S.cookies, total: S.totalCookies, time: S.time, hpLost: S.hpLost, gold: S.gold, allCookies, noHit, allGold, stars: 1 + (allCookies ? 1 : 0) + (allGold ? 1 : 0) };
 }
 
 function hurt() {
@@ -184,6 +193,7 @@ TT.update = (rdt) => {
       if (!overlap(p, box)) continue;
       it.got = true;
       if (it.type === 'cookie') { S.cookies++; emit('cookie', it); }
+      if (it.type === 'gold') { S.gold++; emit('power', it); emit('banner', { text: 'Biscoito dourado! ' + S.gold + ' de 3' }); }
       if (it.type === 'banana') { p.fast = 7; emit('power', it); emit('banner', { text: 'Banana de pelúcia: turbo!' }); }
       if (it.type === 'monkey') { p.mega = 8; p.hp = Math.min(3, p.hp + 1); emit('power', it); emit('banner', { text: 'Macaco de pelúcia: invencível!' }); }
     }
@@ -196,9 +206,9 @@ TT.update = (rdt) => {
     // corre ao encontro do Tintim, acompanha uns passos depois do presente e volta para o seu lugar
     const seen = playing && Math.abs(pcx - f.home) < 460, chase = seen && (!f.given || f.follow > 0);
     const goal = Math.max(f.home - 20, Math.min(f.home + 280, chase ? pcx - Math.sign(pcx - f.x) * 70 : f.home));
-    const want = f.hop > 0.35 || Math.abs(goal - f.x) < 10 ? 0 : Math.sign(goal - f.x) * (chase ? 250 : 130);
+    const want = f.hop > 0.35 || Math.abs(goal - f.x) < 10 ? 0 : Math.sign(goal - f.x) * (chase || !playing ? 260 : 130);
     f.vx += (want - f.vx) * Math.min(1, dt * 9); f.x += f.vx * dt;
-    if (Math.abs(f.vx) > 30) f.face = Math.sign(f.vx); else if (seen) f.face = pcx < f.x ? -1 : 1;
+    if (Math.abs(f.vx) > 30) f.face = Math.sign(f.vx); else if (seen || !playing) f.face = pcx < f.x ? -1 : 1;
     if (playing && !f.given && Math.abs(pcx - f.x) < 120) {
       f.given = true; f.hop = 0.9; f.follow = 3.2; S.gifts.push({ sx: f.x + f.face * 18, sy: GROUND - 58, x: f.x, y: GROUND - 58, t: 0 });
       emit('friend', { x: f.x, y: GROUND - 70 });
@@ -282,7 +292,8 @@ function updatePugs(dt, prevBottom, playing) {
       emit('stomp', { x: g.x + g.w / 2, y: g.y, boss: true, pug: g });
       if (g.hp <= 0) {
         g.vy = -620; g.vx = -g.dir * 260;
-        if (S.pugs.every(q => q.hp <= 0)) { S.mode = 'winning'; S.winT = 0; S.slowT = 0.75; emit('finalBlow', { x: g.x + g.w / 2, y: g.y }); }
+        if (S.pugs.every(q => q.hp <= 0)) { S.mode = 'winning'; S.winT = 0; S.slowT = 0.75;
+          S.friends.forEach((f, i) => { f.x = S.cam.x - 60 - i * 90; f.home = Math.max(ARENA_X + 60, p.x - 120 - i * 85) + (p.x < ARENA_X + 300 ? 330 : 0); f.vx = 0; }); emit('finalBlow', { x: g.x + g.w / 2, y: g.y }); }
         else emit('banner', { text: g.name + ' foi pra casa!' });
       }
     } else if (g.stun <= 0) {

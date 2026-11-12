@@ -216,6 +216,13 @@ const texPlay = canvasTex(2048, 1024, (x, w, h) => { // parquinho: balanço, esc
 // ---------------- geometria ----------------
 const planeGeo = new THREE.PlaneGeometry(1, 1).translate(0, 0.5, 0);           // âncora na base (pés)
 const planeGeoC = new THREE.PlaneGeometry(1, 1);                                // âncora no centro
+// plano com a fileira de baixo móvel: balançar esses vértices faz as patas darem passos
+const legGeo = () => { const g = new THREE.PlaneGeometry(1, 1, 4, 3).translate(0, 0.5, 0); g.userData.base = Float32Array.from(g.attributes.position.array); return g; };
+function legs(m, ph, amp) { const pos = m.geometry.attributes.position, b = m.geometry.userData.base;
+  for (let i = 0; i < pos.count; i++) { const bx = b[i * 3], by = b[i * 3 + 1]; if (by > 0.01) continue;
+    const a = ph + (bx < -0.3 ? 0 : bx < -0.05 ? 1.6 : bx > 0.3 ? Math.PI : bx > 0.05 ? Math.PI + 1.6 : 0.8), k = Math.abs(bx) < 0.05 ? 0.3 : 1;
+    pos.setX(i, bx + Math.sin(a) * amp * k); pos.setY(i, by + Math.max(0, Math.cos(a)) * amp * 0.55 * k); }
+  pos.needsUpdate = true; }
 const planeGeoTop = new THREE.PlaneGeometry(1, 1).translate(0, -0.5, 0);        // âncora no topo (coisas penduradas)
 function boxUV(w, h, d, tile) { // caixa com UVs proporcionais ao tamanho (textura não estica)
   const g = new THREE.BoxGeometry(w, h, d), uv = g.attributes.uv;
@@ -238,21 +245,21 @@ sky.scale.set(4700, 2700, 1); sky.position.set(0, 300, -3000);
   const r = rng(101);
   // camadas de árvores: a distância real dá o parallax; a cor mais clara ao longe dá a névoa
   const layer = (tex, z, y0, w, hgt) => { const m = flatMat(tex);
-    for (let x = -3400; x < 10400; x += w) { const q = new THREE.Mesh(planeGeo, m); q.scale.set(w + 2, hgt, 1); q.position.set(x + w / 2, y0, z); add(q); } };
+    for (let x = -3400; x < 13400; x += w) { const q = new THREE.Mesh(planeGeo, m); q.scale.set(w + 2, hgt, 1); q.position.set(x + w / 2, y0, z); add(q); } };
   layer(texTreesFar, -2200, -580, 3400, 1700, -24);
   layer(texTreesMid, -1300, -340, 2600, 1300, -20);
   layer(texTreesNear, -520, -160, 1900, 950, -16);
   layer(texHedge, -98, -6, 760, 190, -8);
   // névoa entre as camadas e fachos de luar
   [[-1750, -360, 900, 0xffa07a, 0.26, -22], [-900, -230, 620, 0xff8f78, 0.17, -18], [-300, -70, 330, 0xd9708a, 0.1, -12]].forEach(([z, y, hgt, c, op, order], i) => {
-    const m = add(new THREE.Mesh(planeGeo, addMat(texMist, c, op)), order); m.scale.set(16000, hgt, 1); m.position.set(3500, y, z); mists.push({ m, op, i }); });
-  for (let i = 0; i < 16; i++) { const near = i % 3 === 0, z = near ? -260 : -1050, k = near ? 1 : 1.9;
+    const m = add(new THREE.Mesh(planeGeo, addMat(texMist, c, op)), order); m.scale.set(20000, hgt, 1); m.position.set(5000, y, z); mists.push({ m, op, i }); });
+  for (let i = 0; i < 22; i++) { const near = i % 3 === 0, z = near ? -260 : -1050, k = near ? 1 : 1.9;
     const m = add(new THREE.Mesh(planeGeoTop, addMat(texShaft, i % 4 === 1 ? 0xffb0c0 : 0xffd9a0, 0.2)), near ? -11 : -19);
     m.scale.set((150 + r() * 190) * k, 1150 * k, 1); m.position.set(-400 + i * 560 + r() * 300, 760 * (near ? 1 : 1.25), z); m.rotation.z = -0.34 - r() * 0.1; shafts.push({ m, ph: r() * 6, op: near ? 0.12 : 0.2 }); }
   // abismo e fundação
   const dark = new THREE.MeshBasicMaterial({ color: 0x160a18, fog: false });
-  const pit = new THREE.Mesh(planeGeoC, dark); pit.scale.set(11000, 700, 1); pit.rotation.x = -Math.PI / 2; pit.position.set(3500, -300, 180); add(pit);
-  const found = new THREE.Mesh(planeGeoC, dark); found.scale.set(11000, 300, 1); found.position.set(3500, -150, -100); add(found);
+  const pit = new THREE.Mesh(planeGeoC, dark); pit.scale.set(16000, 700, 1); pit.rotation.x = -Math.PI / 2; pit.position.set(5000, -300, 180); add(pit);
+  const found = new THREE.Mesh(planeGeoC, dark); found.scale.set(16000, 300, 1); found.position.set(5000, -150, -100); add(found);
   // chão: cada trecho é um bloco de pedra coberto de grama; os buracos são vãos de verdade
   const side = new THREE.MeshLambertMaterial({ map: texRock });
   const grassM = flatMat(texGrass, { alphaTest: 0.35, side: THREE.DoubleSide });
@@ -270,7 +277,7 @@ sky.scale.set(4700, 2700, 1); sky.position.set(0, 300, -3000);
   const spans = [];
   C.grounds.forEach(([x, w], i) => {
     const x0 = i === 0 ? -1600 : x, x1 = x + w;
-    if (x1 > ARENA_X) { mk(x0, ARENA_X, texTurf); mk(ARENA_X, 8400, texSand, true); spans.push([x0, ARENA_X]); } else { mk(x0, x1, texTurf); spans.push([x0, x1]); }
+    if (x1 > ARENA_X) { mk(x0, ARENA_X, texTurf); mk(ARENA_X, ARENA_X + 2400, texSand, true); spans.push([x0, ARENA_X]); } else { mk(x0, x1, texTurf); spans.push([x0, x1]); }
   });
   const curb = new THREE.Mesh(boxUV(14, 10, FD, 60), side); curb.position.set(ARENA_X, 4, FZ); curb.receiveShadow = true; add(curb);
   // plataformas: lajes de pedra com musgo luminoso e raízes penduradas
@@ -366,14 +373,14 @@ const halo = add(new THREE.Mesh(planeGeoC, glowMat(0xfff2d0, 0.3)), 4);
 const aura = add(new THREE.Mesh(planeGeoC, glowMat(0xffaa33)), 5); aura.visible = false;
 const ghostM = [0, 1, 2, 3, 4, 5].map(() => { const m = add(new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({ map: TEX['tintim-jump'], color: 0xff9a50, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false })), 4); m.visible = false; return m; });
 const ghosts = []; let ghostT = 0;
-const pugM = [0, 1].map(i => { const m = sprite('pug-walk', 5, true, i ? 0xd8bcc4 : NIGHT);
+const pugM = [0, 1].map(i => { const m = sprite('pug-walk', 5, true, i ? 0xd8bcc4 : NIGHT); m.geometry = legGeo(); m.userData.ph = i * 2;
   m.userData.stars = [0, 1, 2].map(() => { const s = add(new THREE.Mesh(planeGeoC, new THREE.MeshBasicMaterial({ map: texStar, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false })), 7); s.scale.set(16, 16, 1); s.visible = false; return s; });
   return m; });
 const pigeonM = S.enemies.map(() => sprite('pigeon', 5, true, NIGHT));
-const itemM = S.items.map(it => { const m = sprite(it.type, 5, false, 0xfff4e0); m.geometry = planeGeoC;
-  m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(it.type === 'monkey' ? 0xff8a2a : it.type === 'banana' ? 0xffe14d : 0xffc76a)), 4);
+const itemM = S.items.map(it => { const m = sprite(it.type === 'gold' ? 'cookie' : it.type, 5, false, it.type === 'gold' ? 0xffd640 : 0xfff4e0); m.geometry = planeGeoC;
+  m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(it.type === 'monkey' ? 0xff8a2a : it.type === 'cookie' ? 0xffc76a : 0xffe14d)), 4);
   return m; });
-const friendM = S.friends.map(f => { const m = sprite(f.kind, 5, true, 0xfff6ec);
+const friendM = S.friends.map(f => { const m = sprite(f.kind, 5, true, 0xfff6ec); m.geometry = legGeo();
   m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(0xffd9a0, 0.3)), 4); return m; });
 const giftM = [0, 1].map(() => { const m = sprite('cookie', 7, false); m.geometry = planeGeoC; m.visible = false;
   m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(0xffd27a, 0.8)), 6); m.userData.glow.visible = false; return m; });
@@ -524,12 +531,14 @@ R.frame = (rdt) => {
   S.friends.forEach((f, i) => {
     const m = friendM[i], near = Math.abs(tx - f.x) < 420;
     const run = Math.abs(f.vx) > 40, gal = f.t * 15 + i;
-    const jump = f.hop > 0 ? Math.abs(Math.sin(f.hop * Math.PI / 0.3)) * 28 * Math.min(1, f.hop * 2.5) : 0;
+    const party = S.mode === 'winning' || S.mode === 'win';
+    const jump = f.hop > 0 ? Math.abs(Math.sin(f.hop * Math.PI / 0.3)) * 28 * Math.min(1, f.hop * 2.5) : party && !run ? Math.abs(Math.sin(f.t * 8 + i * 1.3)) * 24 : 0;
     const hop = jump + (run ? Math.abs(Math.sin(gal)) * 9 : near ? Math.abs(Math.sin(f.t * 7)) * 5 : 0);
     setAnim(m, run ? f.kind + '-run' : f.kind, run ? 54 : 62, f.face < 0);
     // galope: estica no ar e achata no chão; parado, respira; no pulo de alegria, estica
     const br = run ? 1 + Math.sin(gal * 2) * 0.07 : jump > 2 ? 1.1 : 1 + Math.sin(f.t * 3 + i) * 0.025; m.scale.x *= 2 - br; m.scale.y *= br;
     m.position.set(f.x, hop, -36 + (run || f.follow > 0 ? 14 : 0)); m.rotation.z = run ? Math.sin(gal) * 0.13 * -f.face : Math.sin(f.t * (near ? 9 : 2)) * (near ? 0.06 : 0.015);
+    legs(m, gal, run ? 0.1 : 0);
     const g = m.userData.glow; g.position.set(f.x, 30 + hop, -38); const s = 120 + Math.sin(f.t * 2.2) * 8; g.scale.set(s, s, 1); g.material.opacity = f.given ? 0.2 : 0.34;
   });
   giftM.forEach((m, i) => { const g = S.gifts[i], gl = m.userData.glow; m.visible = gl.visible = !!g; if (!g) return;
@@ -539,11 +548,11 @@ R.frame = (rdt) => {
   // pugs
   S.pugs.forEach((g, i) => {
     const m = pugM[i], x = g.x + g.w / 2, flip = g.dir > 0;
-    let n = 'pug-walk', ph = 86, y = Y(g.y + g.h) - 3;
+    let n = 'pug-walk', ph = 86, y = Y(g.y + g.h) - 3, walking = false;
     if (g.hp <= 0) { n = 'pug-stun'; ph = 56; }
     else if (g.stun > 0) { n = 'pug-stun'; ph = 56; }
     else if (g.y + g.h < GROUND - 4 || Math.abs(g.vx) > 200) n = 'pug-charge';
-    else y += Math.abs(Math.sin(clock * 10 + i)) * 3;
+    else { walking = Math.abs(g.vx) > 12 && g.wind <= 0; if (walking) { m.userData.ph += Math.abs(g.vx) * live / 11; y += Math.abs(Math.sin(m.userData.ph)) * 3.5; } }
     const turn = g.turnT > 0 ? g.turnT / 0.2 : 0; // ao virar, o corpo gira de lado em vez de espelhar de uma vez
     setAnim(m, n, ph, turn > 0.5 ? !flip : flip);
     let sy = 1, rot = 0, dx = 0;
@@ -557,7 +566,9 @@ R.frame = (rdt) => {
     }
     m.scale.x *= (2 - sy) * (turn > 0 ? Math.abs(1 - 2 * (1 - turn)) * 0.9 + 0.1 : 1); m.scale.y *= sy;
     if (g.stun > 0 && g.hp > 0) m.scale.y *= 0.85 + Math.min(0.15, (1.1 - g.stun) * 0.5);
-    m.position.set(x + dx, y, i * 1.5); m.rotation.z = g.hp <= 0 ? g.spin : rot;
+    m.position.set(x + dx, y, i * 1.5); m.rotation.z = g.hp <= 0 ? g.spin : rot + (walking ? Math.sin(m.userData.ph) * 0.045 : 0);
+    legs(m, m.userData.ph, walking ? 0.085 : 0); // passos: as patas da frente e de trás alternam
+    const stp = Math.floor(m.userData.ph / Math.PI); if (walking && stp !== m.userData.stp) { m.userData.stp = stp; spawn({ x: x + g.dir * 20, y: GROUND - 3, vx: -g.dir * 30, vy: -25, g: -30, life: 0.4, r: 3, grow: 5, color: 0xfff2c8 }); }
     m.visible = !(g.hurt > 0 && Math.floor(time * 30) % 2) && (S.arena || S.cam.x > ARENA_X - W - 200) && g.y < H + 300;
     m.userData.stars.forEach((s, k) => { s.visible = g.stun > 0 && g.hp > 0; if (s.visible) { const a = time * 6 + k * 2.1; s.position.set(x - g.dir * 26 + Math.cos(a) * 22, y + 62 + Math.sin(a) * 6, 4 + Math.sin(a)); s.rotation.z = a; } });
   });
@@ -571,8 +582,8 @@ R.frame = (rdt) => {
   S.items.forEach((it, i) => {
     const m = itemM[i]; m.visible = !it.got; const g = m.userData.glow; g.visible = !it.got;
     if (it.got) return;
-    const ck = it.type === 'cookie', hh = ck ? 27 : it.type === 'banana' ? 46 : 54, bob = Math.sin(clock * 3 + it.x * 0.05) * 5;
-    m.scale.set(hh * AR[it.type], hh, 1); m.position.set(it.x, Y(it.y) + bob, 0);
+    const ck = it.type === 'cookie', gd = it.type === 'gold', hh = ck ? 27 : gd ? 36 : it.type === 'banana' ? 46 : 54, bob = Math.sin(clock * 3 + it.x * 0.05) * 5;
+    m.scale.set(hh * AR[gd ? 'cookie' : it.type], hh, 1); m.position.set(it.x, Y(it.y) + bob, 0);
     m.rotation.y = Math.sin(clock * 2.2 + it.x * 0.01) * (ck ? 0.75 : 0.4); m.rotation.z = Math.sin(clock * 3 + it.x) * 0.12;
     const s = (ck ? 62 : 104) + Math.sin(clock * 5 + it.x * 0.03) * (ck ? 8 : 12); g.scale.set(s, s, 1); g.position.set(it.x, Y(it.y) + bob, -2); g.material.opacity = ck ? 0.5 : 0.6;
   });
@@ -581,7 +592,7 @@ R.frame = (rdt) => {
     f.halo.scale.set(s, s, 1); f.halo.material.color.set(f.on ? 0xffc27a : 0xc8a8b0); f.halo.material.opacity = 0.15 + f.up * 0.6; f.core.scale.set(22 + f.up * 14, 22 + f.up * 14, 1); f.core.material.opacity = 0.3 + f.up * 0.7; });
   for (const q of pulses) q.m.material.opacity = q.base * (0.78 + 0.22 * Math.sin(time * (q.slow ? 0.9 : 1.9) + q.ph));
   for (const q of shafts) q.m.material.opacity = q.op * (0.55 + 0.45 * Math.sin(time * 0.35 + q.ph));
-  for (const q of mists) { q.m.material.opacity = q.op * (0.85 + 0.15 * Math.sin(time * 0.25 + q.i * 2)); q.m.position.x = 3500 + Math.sin(time * 0.05 + q.i) * 120; }
+  for (const q of mists) { q.m.material.opacity = q.op * (0.85 + 0.15 * Math.sin(time * 0.25 + q.i * 2)); q.m.position.x = 5000 + Math.sin(time * 0.05 + q.i) * 120; }
 
   // partículas
   if (confettiT > 0) { confettiT -= rdt; for (let k = 0; k < 2; k++) spawn({ x: S.cam.x + Math.random() * W, y: -20, vx: (Math.random() - 0.5) * 120, vy: 60 + Math.random() * 120, g: 60, life: 3.2, r: 3 + Math.random() * 3,
