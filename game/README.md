@@ -1,6 +1,6 @@
 # Timtim e os Pugs da Bruxa
 
-Jogo de plataforma 2.5D curtinho: a vizinha bruxa mandou seus dois pugs infernizarem a Reserva Alpha Village, e só o Timtim pode derrotá-los. Os dois amigos chihuahuas esperam no caminho e dão poderes (turbo e invencibilidade). Cada partida dura no máximo 2 minutos.
+Jogo de plataforma 2.5D curtinho: a vizinha bruxa mandou seus dois pugs infernizarem a Reserva Alpha Village, e só o Timtim pode derrotá-los. Os dois amigos chihuahuas esperam no caminho e dão poderes (turbo e invencibilidade). Uma partida leva em torno de 2 minutos.
 
 ## Como jogar
 - ← → / A D: andar · Espaço / ↑ / W: pular (segure para pular mais alto; aperte de novo no ar para a pirueta, um pulo duplo) · P ou Esc: pausa · M: som

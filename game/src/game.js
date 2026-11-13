@@ -4,7 +4,7 @@
 const TT = window.TT = window.TT || {};
 
 const C = TT.C = {
-  W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 310, TIME: 120, FAST: 440,
+  W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 310, FAST: 440,
   LEVEL_END: 9800, ARENA_X: 8840,
   grounds: [[0, 1250], [1400, 1000], [2520, 820], [3480, 1100], [4740, 900], [5830, 760], [6820, 700], [7680, 2120]],
   plats: [
@@ -80,7 +80,7 @@ function reset() {
   Object.assign(S, {
     player: makePlayer(120), items: makeItems(), enemies: makeEnemies(), pugs: makePugs(),
     cam: { x: 0, y: 0, look: 0 }, time: 0, clock: 0, cookies: 0, arena: false, trauma: 0, hitstop: 0,
-    gold: 0, timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0, ckTime: 0, timeout: false,
+    gold: 0, timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
     friends: C.friends.map(f => ({ x: f.x, home: f.x, vx: 0, follow: 0, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
   });
   S.totalCookies = S.items.filter(i => i.type === 'cookie').length + C.friends.length * C.GIFT;
@@ -92,7 +92,7 @@ TT.retry = () => {
   if (S.checkpoint < 0) return TT.start();
   const x = C.checkpoints[S.checkpoint];
   S.player = makePlayer(x); S.player.inv = 1.6; S.pugs = makePugs(); S.arena = false; S.cine = null; S.timeScale = 1; S.slowT = 0; S.hitstop = 0; S.gifts = [];
-  S.cam.x = Math.max(0, x - W * 0.4); S.cam.look = 0; S.mode = 'play'; S.timeout = false; S.time = Math.min(S.ckTime, C.TIME - 45);
+  S.cam.x = Math.max(0, x - W * 0.4); S.cam.look = 0; S.mode = 'play';
   emit('start', { retry: true }); emit('banner', { text: 'De volta ao checkpoint!' });
 };
 TT.pause = () => { if (S.mode === 'play') { S.mode = 'pause'; emit('pause'); } };
@@ -123,7 +123,6 @@ TT.update = (rdt) => {
   if (S.cine) { S.cine.t += rdt; if (S.cine.t >= S.cine.dur) { S.cine = null; emit('cineEnd'); } }
   const playing = S.mode === 'play', locked = !playing || !!S.cine;
   if (playing && !S.cine) S.time += dt;
-  if (playing && !S.winT && S.time >= C.TIME) { S.timeout = true; S.mode = 'lose'; emit('lose', stats()); return; }
   if (S.mode === 'winning') {
     S.winT += rdt;
     if (S.winT > 0.9 && S.player.onGround) S.player.won = true;
@@ -186,7 +185,7 @@ TT.update = (rdt) => {
 
   if (playing) {
     // checkpoints
-    C.checkpoints.forEach((cx, i) => { if (i > S.checkpoint && p.x > cx) { S.checkpoint = i; S.ckTime = S.time; emit('checkpoint', { index: i, x: cx }); } });
+    C.checkpoints.forEach((cx, i) => { if (i > S.checkpoint && p.x > cx) { S.checkpoint = i; emit('checkpoint', { index: i, x: cx }); } });
     // itens
     for (const it of S.items) {
       if (it.got) continue;

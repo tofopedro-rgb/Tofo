@@ -125,8 +125,6 @@
   @keyframes line { 0% { opacity: 0; transform: translateY(1.2cqw); filter: blur(.4cqw); } 14%, 84% { opacity: 1; transform: none; filter: none; } 100% { opacity: 0; transform: translateY(-.8cqw); } }
   #skip { position: absolute; right: 2.4cqw; bottom: 2.4cqw; font-size: 1.3cqw; letter-spacing: .2cqw; color: var(--dim); opacity: 0; transition: opacity .6s .8s; }
   #title.story #skip { opacity: 1; }
-  #clock { font-variant-numeric: tabular-nums; min-width: 4.2cqw; text-align: right; color: var(--text); }
-  #clock.low { color: var(--rose); animation: bump .5s var(--pop) infinite; }
   @keyframes float { 50% { transform: translateY(-.8cqw); } }
   .logo { margin: 0; font-family: var(--display); font-weight: 400; line-height: .9; }
   .logo b { display: block; font-weight: 400; font-size: 11.5cqw; letter-spacing: 1cqw; color: #fff;
@@ -181,7 +179,7 @@
       <svg class="heart" viewBox="0 0 24 22"><path d="M12 21C3 14 1 10.5 1 6.8 1 3.6 3.5 1.2 6.6 1.2c2 0 3.9 1 5.4 3 1.5-2 3.4-3 5.4-3 3.1 0 5.6 2.4 5.6 5.6 0 3.7-2 7.2-11 14.200z" fill="#e8323c" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>
       <svg class="heart" viewBox="0 0 24 22"><path d="M12 21C3 14 1 10.5 1 6.8 1 3.6 3.5 1.2 6.6 1.2c2 0 3.9 1 5.4 3 1.5-2 3.4-3 5.4-3 3.1 0 5.6 2.4 5.6 5.6 0 3.7-2 7.2-11 14.200z" fill="#e8323c" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>
       <svg class="heart" viewBox="0 0 24 22"><path d="M12 21C3 14 1 10.5 1 6.8 1 3.6 3.5 1.2 6.6 1.2c2 0 3.9 1 5.4 3 1.5-2 3.4-3 5.4-3 3.1 0 5.6 2.4 5.6 5.6 0 3.7-2 7.2-11 14.200z" fill="#e8323c" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>
-      <i class="sep"></i><span id="clock">2:00</span><i class="sep"></i>
+      <i class="sep"></i>
       <img id="cookieIc" src="assets/sprites/cookie.png" alt="Biscoitos"><span id="cookieN">0</span><span id="cookieT">/36</span>
       <span class="chip" id="chipFast"><i class="sep"></i><img src="assets/sprites/banana.png" alt="Turbo"><span>7</span></span>
       <span class="chip" id="chipMega"><i class="sep"></i><img src="assets/sprites/monkey.png" alt="Invencível"><span>8</span></span>
@@ -213,7 +211,7 @@
       <h1 class="logo"><b>TIMTIM</b><i>E OS PUGS DA BRUXA</i></h1>
       <div class="gap"></div>
       <button class="btn" id="btnStart">Jogar</button>
-      <p class="hint">← → andar · Espaço pula, de novo no ar dá a pirueta · os amigos chihuahuas dão poderes · derrote os 2 pugs em 2 minutos</p>
+      <p class="hint">← → andar · Espaço pula, de novo no ar dá a pirueta · os amigos chihuahuas dão poderes · derrote os 2 pugs da bruxa</p>
       <p id="best"></p>
     </div>
     <p id="storyLine"></p><span id="skip">toque para pular</span>
