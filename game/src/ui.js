@@ -56,7 +56,7 @@ function begin(fn) { TT.audioInit(); TT.sfx('ui'); irisTo(true, { x: 0.5, y: 0.5
 const titleEl = $('title'), STORY = ['A Vizinha Bruxa tirou a paz da Vila de Reserva com seus Pugs barulhentos.', 'Agora cabe ao Timtim…', '…com a ajuda de seus amigos Zara e Elvis, restaurar a paz e a harmonia deste lugar.'];
 const DUR = (TT.intro && TT.intro.durations) || [3.1, 3.1, 3.1];
 let storyTimer = null, storyAt = 0;
-function storyLine(i) { if (i >= STORY.length) return endStory(); if (TT.intro) TT.intro.scene(i); const l = $('storyLine'); l.textContent = STORY[i]; l.style.setProperty('--d', DUR[i] + 's'); l.classList.remove('show'); void l.offsetWidth; l.classList.add('show'); storyTimer = setTimeout(() => storyLine(i + 1), DUR[i] * 1000); }
+function storyLine(i) { if (i >= STORY.length) return endStory(); if (TT.intro) TT.intro.scene(i); const l = $('storyLine'); l.textContent = STORY[i]; l.dataset.pos = $('introScrim').dataset.pos = (TT.intro && TT.intro.textPos[i]) || ''; l.style.setProperty('--d', DUR[i] + 's'); l.classList.remove('show'); void l.offsetWidth; l.classList.add('show'); storyTimer = setTimeout(() => storyLine(i + 1), DUR[i] * 1000); }
 function endStory() { if (!titleEl.classList.contains('story') || titleEl.classList.contains('leaving')) return; clearTimeout(storyTimer); titleEl.classList.add('leaving'); begin(TT.start); }
 $('btnStart').onclick = () => { if (titleEl.classList.contains('story')) return endStory(); TT.audioInit(); TT.sfx('ui'); TT.music('title'); titleEl.classList.add('story'); storyAt = performance.now(); storyLine(0); };
 titleEl.addEventListener('pointerdown', () => { if (titleEl.classList.contains('story') && performance.now() - storyAt > 500) endStory(); });

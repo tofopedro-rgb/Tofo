@@ -12,7 +12,7 @@ const load = src => { const i = new Image(); i.src = src; return i; };
 
 // zoom: escala inicial → final em torno de um ponto; wind: regiões de pelo (ring = rosto parado, só a borda mexe)
 const SCENES = [
-  { img: load('assets/intro/1-bruxa.jpg'), dur: 4.6, zoom: [1.0, 1.1], at: [700, 380],
+  { img: load('assets/intro/1-bruxa.jpg'), text: 'tl', dur: 4.6, zoom: [1.0, 1.1], at: [700, 380],
     wind: [ { x: 935, y: 275, rx: 95, ry: 60, amp: 2.2, speed: 5, freq: 0.08 },               // capa da bruxa
             { x: 416, y: 560, rx: 120, ry: 85, amp: 1.4, speed: 38, freq: 0.5, jitter: 1 },  // pugs latindo tremem
             { x: 600, y: 536, rx: 115, ry: 85, amp: 1.4, speed: 41, freq: 0.5, jitter: 1 } ],
@@ -20,14 +20,14 @@ const SCENES = [
             { x: 720, y: 500, r: 70, c: '255,220,120', a: 0.35, pulse: 7 },
             { x: 1104, y: 432, r: 70, c: '255,190,110', a: 0.25, pulse: 3, flicker: 1 } ],
     flies: 16, leaves: 0, fog: 1, windX: 30 },
-  { img: load('assets/intro/2-timtim.jpg'), dur: 4.4, zoom: [1.0, 1.12], at: [430, 330],
+  { img: load('assets/intro/2-timtim.jpg'), text: 'right', dur: 4.4, zoom: [1.0, 1.12], at: [430, 330],
     wind: [ { x: 430, y: 320, rx: 270, ry: 270, amp: 3.2, speed: 2.6, freq: 0.035, ring: 1 }, // juba e orelhas
             { x: 90, y: 520, rx: 130, ry: 170, amp: 5, speed: 2.2, freq: 0.03 },              // rabo
             { x: 200, y: 460, rx: 70, ry: 50, amp: 4, speed: 4.2, freq: 0.09 },               // ponta da bandana
             { x: 470, y: 600, rx: 160, ry: 100, amp: 2.4, speed: 3.4, freq: 0.06 } ],         // bandana
     glow: [ { x: 790, y: 360, r: 190, c: '255,170,80', a: 0.22, pulse: 1.4 } ],
     flies: 22, leaves: 7, fog: 0, windX: 70 },
-  { img: load('assets/intro/3-amigos.jpg'), dur: 5.4, zoom: [1.12, 1.0], at: [640, 430],
+  { img: load('assets/intro/3-amigos.jpg'), text: 'top', dur: 5.4, zoom: [1.12, 1.0], at: [640, 430],
     wind: [ { x: 432, y: 480, rx: 130, ry: 140, amp: 2.4, speed: 2.4, freq: 0.04, ring: 1 },
             { x: 624, y: 490, rx: 140, ry: 160, amp: 2.4, speed: 2.7, freq: 0.04, ring: 1 },
             { x: 832, y: 500, rx: 130, ry: 140, amp: 2.4, speed: 2.2, freq: 0.04, ring: 1 } ],
@@ -37,11 +37,12 @@ const SCENES = [
 
 // pedaços reaproveitados: canvas de trabalho e textura de névoa
 const off = document.createElement('canvas'), ox = off.getContext('2d');
-const fog = document.createElement('canvas'); fog.width = 1024; fog.height = 256;
+const fog = document.createElement('canvas'); fog.width = 1024; fog.height = 400;
 { const f = fog.getContext('2d'), r = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(7);
-  for (let i = 0; i < 26; i++) { const x = r() * 1024, y = 90 + r() * 110, s = 60 + r() * 120, g = f.createRadialGradient(x, y, 0, x, y, s);
-    g.addColorStop(0, 'rgba(200,230,255,.22)'); g.addColorStop(1, 'rgba(200,230,255,0)'); f.fillStyle = g; f.fillRect(x - s, y - s, s * 2, s * 2);
-    if (x < s) { f.save(); f.translate(1024, 0); f.fillRect(x - s, y - s, s * 2, s * 2); f.restore(); } } }
+  // manchas inteiras dentro da textura (sem bordas cortadas) e repetidas dos dois lados para emendar sem costura
+  for (let i = 0; i < 26; i++) { const s = 50 + r() * 140, x = r() * 1024, y = s + 10 + r() * (380 - 2 * s), g = f.createRadialGradient(x, y, 0, x, y, s);
+    g.addColorStop(0, 'rgba(200,230,255,.2)'); g.addColorStop(1, 'rgba(200,230,255,0)'); f.fillStyle = g;
+    for (const o of [-1024, 0, 1024]) { f.save(); f.translate(o, 0); f.fillRect(x - s, y - s, s * 2, s * 2); f.restore(); } } }
 
 // rajadas de vento: sempre um pouco, às vezes mais forte
 const gust = t => 0.55 + 0.3 * Math.sin(t * 1.1) + 0.15 * Math.sin(t * 2.7 + 1.3);
@@ -92,7 +93,7 @@ function drawScene(s, t, alpha) {
     const gr = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.r);
     gr.addColorStop(0, `rgba(${g.c},${a})`); gr.addColorStop(1, `rgba(${g.c},0)`); ctx.fillStyle = gr; ctx.fillRect(g.x - g.r, g.y - g.r, g.r * 2, g.r * 2);
   }
-  if (s.fog) { ctx.globalAlpha = alpha * 0.8; const fx = (t * 22) % 1024; for (let x = -fx; x < IW; x += 1024) ctx.drawImage(fog, x, IH - 300, 1024, 300); ctx.globalAlpha = alpha; }
+  if (s.fog) { ctx.globalAlpha = alpha * 0.8; const fx = (t * 22) % 1024; for (let x = -fx; x < IW; x += 1024) ctx.drawImage(fog, x, IH - 320, 1024, 320); ctx.globalAlpha = alpha; }
   for (const p of s.parts) {
     const gx = s.windX * gust(t + p.ph);
     if (p.k === 'fly') {
@@ -123,6 +124,7 @@ function frame(now) {
 }
 TT.intro = {
   durations: SCENES.map(s => s.dur),
+  textPos: SCENES.map(s => s.text), // onde a frase fica em cada quadro: sempre num canto livre, longe dos personagens
   scene(i) { const now = performance.now(); prev = cur; tp0 = t0; cur = i; t0 = now; SCENES[i].parts = makeParts(SCENES[i]); if (!raf) raf = requestAnimationFrame(frame); },
   stop() { cancelAnimationFrame(raf); raf = 0; cur = prev = -1; },
 };
