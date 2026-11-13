@@ -52,7 +52,16 @@ function irisTo(closed, at) {
 function irisOpenFromBlack() { iris.style.transition = 'none'; irisTo(true, { x: 0.3, y: 0.7 }); void iris.offsetWidth; iris.style.transition = ''; requestAnimationFrame(() => irisTo(false)); }
 
 function begin(fn) { TT.audioInit(); TT.sfx('ui'); irisTo(true, { x: 0.5, y: 0.5 }); setTimeout(() => { fn(); }, 520); }
-$('btnStart').onclick = () => begin(TT.start);
+// abertura: três frases sobre a arte do título, com a câmera avançando até a figueira. Qualquer toque pula.
+const titleEl = $('title'), STORY = ['A vizinha bruxa mandou seus dois pugs infernizarem a Reserva Alpha Village.', 'Só Timtim pode derrotá-los. Seus amigos chihuahuas esperam no caminho com poderes.', 'A paz da vila depende de você. Vai, Timtim!'];
+let storyTimer = null, storyAt = 0;
+function storyLine(i) { if (i >= STORY.length) return endStory(); const l = $('storyLine'); l.textContent = STORY[i]; l.classList.remove('show'); void l.offsetWidth; l.classList.add('show'); storyTimer = setTimeout(() => storyLine(i + 1), 3100); }
+function endStory() { if (!titleEl.classList.contains('story') || titleEl.classList.contains('leaving')) return; clearTimeout(storyTimer); titleEl.classList.add('leaving'); begin(TT.start); }
+$('btnStart').onclick = () => { if (titleEl.classList.contains('story')) return endStory(); TT.audioInit(); TT.sfx('ui'); TT.music('title'); titleEl.classList.add('story'); storyAt = performance.now(); storyLine(0); };
+titleEl.addEventListener('pointerdown', () => { if (titleEl.classList.contains('story') && performance.now() - storyAt > 500) endStory(); });
+const firstTouch = () => { if (S.mode === 'title') { TT.audioInit(); TT.music('title'); } removeEventListener('pointerdown', firstTouch); removeEventListener('keydown', firstTouch); };
+addEventListener('pointerdown', firstTouch); addEventListener('keydown', firstTouch);
+TT.on('start', () => setTimeout(() => titleEl.classList.remove('story', 'leaving'), 600));
 $('btnAgain').onclick = () => begin(TT.start);
 $('btnRestart').onclick = () => begin(TT.start);
 $('btnLoseRestart').onclick = () => begin(TT.start);
@@ -77,6 +86,7 @@ TT.uiFrame = () => {
   setIf('ck', S.cookies, v => { const n = $('cookieN'); n.textContent = v; n.classList.remove('bump'); void n.offsetWidth; n.classList.add('bump'); });
   setIf('fast', Math.ceil(p.fast), v => { $('chipFast').classList.toggle('on', v > 0); $('chipFast').lastElementChild.textContent = v; });
   setIf('mega', Math.ceil(p.mega), v => { $('chipMega').classList.toggle('on', v > 0); $('chipMega').lastElementChild.textContent = v; });
+  setIf('clk', Math.max(0, Math.ceil(C.TIME - S.time)), v => { const c = $('clock'); c.textContent = Math.floor(v / 60) + ':' + String(v % 60).padStart(2, '0'); c.classList.toggle('low', v <= 20); });
   setIf('boss', S.arena, v => $('hr').classList.toggle('boss', v));
   if (!S.arena) setIf('prog', Math.round(Math.min(1, p.x / C.ARENA_X) * 200) / 2, v => { $('progFill').style.width = v + '%'; $('progDog').style.left = v + '%'; });
   else S.pugs.forEach((g, i) => setIf('pug' + i, g.hp, v => segs[i].forEach((s, k) => s.classList.toggle('off', k >= v))));
@@ -87,8 +97,8 @@ TT.on('banner', e => { banner.textContent = e.text; banner.classList.remove('sho
 TT.on('hurt', () => { const h = hearts[Math.max(0, S.player.hp)]; if (h) { h.classList.remove('hit'); void h.offsetWidth; h.classList.add('hit'); } });
 TT.on('start', () => { show(null); $('hud').classList.add('on'); stage.classList.remove('cine'); $('bossCard').classList.remove('show'); $('cookieT').textContent = '/' + S.totalCookies; irisOpenFromBlack(); });
 // história: segunda fala da abertura e o balão dos amigos
-TT.on('start', e => { if (!e.retry) setTimeout(() => { if (S.mode === 'play' && !S.arena) TT.emit('banner', { text: 'Vai lá, Tintim: traga ele de volta!' }); }, 3200); });
-const say = $('say'), LINES = ['Vai lá, Tintim!', 'Mostra pra eles!']; let sayF = null, sayEnd = 0;
+TT.on('start', e => { if (!e.retry) setTimeout(() => { if (S.mode === 'play' && !S.arena) TT.emit('banner', { text: 'Derrote os dois pugs em 2 minutos!' }); }, 3200); });
+const say = $('say'), LINES = ['Toma um turbo, Timtim!', 'Fica invencível, Timtim!']; let sayF = null, sayEnd = 0;
 TT.on('friend', e => { sayF = S.friends.reduce((a, f) => Math.abs(f.x - e.x) < Math.abs(a.x - e.x) ? f : a); say.textContent = LINES[S.friends.indexOf(sayF) % 2]; sayEnd = performance.now() + 2600; say.classList.add('on'); });
 const uiFrame0 = TT.uiFrame;
 TT.uiFrame = () => { uiFrame0(); if (!sayF) return;
@@ -99,7 +109,8 @@ TT.on('resume', () => show(null));
 TT.on('bossIntro', () => { stage.classList.add('cine'); setTimeout(() => $('bossCard').classList.add('show'), 650); });
 TT.on('cineEnd', () => { stage.classList.remove('cine'); $('bossCard').classList.remove('show'); });
 TT.on('lose', () => {
-  $('loseText').textContent = S.checkpoint >= 0 ? 'Você volta do último checkpoint com os corações cheios.' : 'Cuidado com os buracos e pise nos pombos por cima.';
+  $('loseTitle').textContent = S.timeout ? 'O tempo acabou!' : 'Ah, não!';
+  $('loseText').textContent = S.timeout ? 'Os pugs seguem infernizando a vila. Você volta com tempo extra.' : S.checkpoint >= 0 ? 'Você volta do último checkpoint com os corações cheios.' : 'Cuidado com os buracos e pise nos pombos por cima.';
   setTimeout(() => { if (S.mode === 'lose') show('lose'); }, 1100);
 });
 TT.on('win', st => {

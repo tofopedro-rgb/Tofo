@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Tintim e os Pugs</title>
+<title>Timtim e os Pugs da Bruxa</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@500;600;700;800&display=swap">
 <style>
   /* Sistema visual: entardecer no parque. Vidro cor de vinho, contornos finos de luz, texto que brilha. */
@@ -105,12 +105,33 @@
   .btn.ghost:hover { color: #fff; border-color: var(--glow); }
   .row { display: flex; gap: 1.6cqw; align-items: center; justify-content: center; flex-wrap: wrap; }
 
-  #title { grid-template-columns: auto auto; gap: 6cqw; align-content: center; justify-content: center; }
+  /* título: a arte pintada respira (zoom lento), o coração da figueira pulsa, vaga-lumes sobem */
+  #title { display: block; background: #060a18; overflow: hidden; }
+  #title .tbg { position: absolute; inset: -2%; background: url(assets/title.jpg) center / cover; transform-origin: 62% 52%; animation: breathe 22s ease-in-out infinite alternate; transition: transform 9s cubic-bezier(.3, 0, .2, 1), filter 2s; }
+  @keyframes breathe { from { scale: 1; translate: 0 0; } to { scale: 1.07; translate: -1.2% .6%; } }
+  #title .emberglow { position: absolute; left: 62%; top: 52%; width: 34cqw; height: 34cqw; translate: -50% -50%; border-radius: 50%; mix-blend-mode: screen; pointer-events: none;
+    background: radial-gradient(circle, rgba(255, 190, 90, .5), rgba(255, 130, 50, .16) 40%, transparent 68%); animation: ember 3.4s ease-in-out infinite; }
+  @keyframes ember { 0%, 100% { opacity: .55; scale: 1; } 40% { opacity: 1; scale: 1.08; } 62% { opacity: .7; scale: .98; } }
+  .fly { position: absolute; width: .5cqw; height: .5cqw; border-radius: 50%; background: #ffe9a8; box-shadow: 0 0 1.2cqw .3cqw rgba(255, 210, 120, .8); animation: fly 9s ease-in-out infinite; opacity: 0; }
+  @keyframes fly { 0% { opacity: 0; translate: 0 0; } 20% { opacity: 1; } 50% { translate: 2cqw -5cqw; opacity: .5; } 80% { opacity: 1; } 100% { translate: -1.5cqw -11cqw; opacity: 0; } }
+  #title .vig { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 10, 24, .5), transparent 34%, transparent 62%, rgba(6, 10, 24, .82)); transition: background 1.2s; }
+  #title .on-anim { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 4.5cqw 4cqw 3cqw; transition: opacity .8s; }
+  #title .on-anim .gap { flex: 1; }
+  #title.story .on-anim { opacity: 0; pointer-events: none; }
+  #title.story .tbg { transform: scale(1.5); filter: brightness(.62); }
+  #storyLine { position: absolute; left: 10%; right: 10%; bottom: 13%; text-align: center; font-family: var(--display); font-size: 3.1cqw; line-height: 1.35; letter-spacing: .12cqw; color: #fff4dc; opacity: 0; text-wrap: balance;
+    text-shadow: 0 0 1.4cqw rgba(255, 190, 110, .7), 0 .2cqw .8cqw rgba(0, 4, 14, .95); }
+  #title.story #storyLine.show { animation: line 3.1s var(--out) both; }
+  @keyframes line { 0% { opacity: 0; transform: translateY(1.2cqw); filter: blur(.4cqw); } 14%, 84% { opacity: 1; transform: none; filter: none; } 100% { opacity: 0; transform: translateY(-.8cqw); } }
+  #skip { position: absolute; right: 2.4cqw; bottom: 2.4cqw; font-size: 1.3cqw; letter-spacing: .2cqw; color: var(--dim); opacity: 0; transition: opacity .6s .8s; }
+  #title.story #skip { opacity: 1; }
+  #clock { font-variant-numeric: tabular-nums; min-width: 4.2cqw; text-align: right; color: var(--text); }
+  #clock.low { color: var(--rose); animation: bump .5s var(--pop) infinite; }
   @keyframes float { 50% { transform: translateY(-.8cqw); } }
   .logo { margin: 0; font-family: var(--display); font-weight: 400; line-height: .9; }
   .logo b { display: block; font-weight: 400; font-size: 11.5cqw; letter-spacing: 1cqw; color: #fff;
     text-shadow: 0 0 1.6cqw rgba(255, 214, 160, .95), 0 0 5cqw rgba(255, 130, 90, .85), 0 0 12cqw rgba(230, 90, 120, .6); }
-  .logo i { display: block; font-style: normal; font-size: 2.7cqw; letter-spacing: .5cqw; color: var(--gold); margin-top: 1.4cqw; text-shadow: 0 0 1.4cqw rgba(255, 200, 110, .7); }
+  .logo i { display: block; font-style: normal; font-size: 2.5cqw; letter-spacing: .9cqw; color: var(--gold); margin-top: 1.4cqw; text-shadow: 0 0 1.4cqw rgba(255, 200, 110, .7); }
   #title .on-anim > * { animation: rise 1s var(--out) both; }
   #title .on-anim > *:nth-child(2) { animation-delay: .15s; } #title .on-anim > *:nth-child(3) { animation-delay: .3s; } #title .on-anim > *:nth-child(4) { animation-delay: .45s; }
   @keyframes rise { from { opacity: 0; transform: translateY(1.6cqw); filter: blur(.4cqw); } }
@@ -118,7 +139,7 @@
   .how span { display: flex; align-items: center; gap: .6cqw; background: var(--glass); color: var(--text); border-radius: 9cqw; padding: .35cqw 1.3cqw .35cqw .7cqw; font-size: 1.45cqw; font-weight: 600; border: .1cqw solid var(--line); }
   .how img { height: 2.1cqw; filter: drop-shadow(0 0 .5cqw rgba(255, 210, 120, .7)); }
   .how .key { color: var(--glow); font-weight: 800; padding: 0 .3cqw; }
-  .hint { font-size: 1.4cqw; font-weight: 500; color: var(--dim); margin: 1.8cqw 0 0; }
+  .hint { font-size: 1.4cqw; font-weight: 600; color: rgba(255, 246, 234, .82); margin: 1.6cqw 0 0; text-shadow: 0 .1cqw .6cqw rgba(0, 4, 14, .9); }
   #best { font-size: 1.5cqw; font-weight: 700; color: var(--gold); margin: 1cqw 0 0; min-height: 2cqw; }
 
   .card { background: rgba(40, 16, 36, .72); color: var(--text); border: .12cqw solid var(--line); border-radius: 2.4cqw; padding: 3cqw 5cqw 3.2cqw; text-align: center;
@@ -160,7 +181,7 @@
       <svg class="heart" viewBox="0 0 24 22"><path d="M12 21C3 14 1 10.5 1 6.8 1 3.6 3.5 1.2 6.6 1.2c2 0 3.9 1 5.4 3 1.5-2 3.4-3 5.4-3 3.1 0 5.6 2.4 5.6 5.6 0 3.7-2 7.2-11 14.200z" fill="#e8323c" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>
       <svg class="heart" viewBox="0 0 24 22"><path d="M12 21C3 14 1 10.5 1 6.8 1 3.6 3.5 1.2 6.6 1.2c2 0 3.9 1 5.4 3 1.5-2 3.4-3 5.4-3 3.1 0 5.6 2.4 5.6 5.6 0 3.7-2 7.2-11 14.200z" fill="#e8323c" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>
       <svg class="heart" viewBox="0 0 24 22"><path d="M12 21C3 14 1 10.5 1 6.8 1 3.6 3.5 1.2 6.6 1.2c2 0 3.9 1 5.4 3 1.5-2 3.4-3 5.4-3 3.1 0 5.6 2.4 5.6 5.6 0 3.7-2 7.2-11 14.200z" fill="#e8323c" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>
-      <i class="sep"></i>
+      <i class="sep"></i><span id="clock">2:00</span><i class="sep"></i>
       <img id="cookieIc" src="assets/sprites/cookie.png" alt="Biscoitos"><span id="cookieN">0</span><span id="cookieT">/36</span>
       <span class="chip" id="chipFast"><i class="sep"></i><img src="assets/sprites/banana.png" alt="Turbo"><span>7</span></span>
       <span class="chip" id="chipMega"><i class="sep"></i><img src="assets/sprites/monkey.png" alt="Invencível"><span>8</span></span>
@@ -183,39 +204,33 @@
     <button class="tbtn" id="tJ" data-k="jump" aria-label="Pular">▲</button>
   </div>
   <div class="bar" id="barT"></div><div class="bar" id="barB"></div>
-  <div id="bossCard"><small>CHEFÕES</small><h2>OS PUGS<br>DA VIZINHA</h2><p>bem chatinhos. Pise 3 vezes em cada um!</p></div>
+  <div id="bossCard"><small>CHEFÕES</small><h2>OS PUGS<br>DA BRUXA</h2><p>mandados pela vizinha. Pise 3 vezes em cada um!</p></div>
   <div id="iris" class="layer"></div>
 
-  <section id="title" class="screen scrim on">
-    <div class="hero"><img src="assets/sprites/tintim-win.png" alt="Tintim"><span>Tintim, o herói</span></div>
+  <section id="title" class="screen on">
+    <div class="tbg"></div><div class="emberglow"></div><i class="fly" style="left:18%;top:62%;animation-delay:-0s"></i><i class="fly" style="left:31%;top:48%;animation-delay:-3s"></i><i class="fly" style="left:44%;top:70%;animation-delay:-6s"></i><i class="fly" style="left:52%;top:40%;animation-delay:-1.5s"></i><i class="fly" style="left:70%;top:66%;animation-delay:-4.5s"></i><i class="fly" style="left:78%;top:44%;animation-delay:-7s"></i><i class="fly" style="left:88%;top:58%;animation-delay:-2.5s"></i><i class="fly" style="left:25%;top:30%;animation-delay:-5.5s"></i><div class="vig"></div>
     <div class="on-anim">
-      <h1 class="logo"><b>TINTIM</b><i>e os Pugs do Parquinho</i></h1>
-      <div class="how">
-        <span><img src="assets/sprites/cookie.png" alt="">Biscoito: pontos</span>
-        <span><img src="assets/sprites/cookie.png" alt="" style="filter:sepia(1) saturate(6) brightness(1.25)">3 dourados escondidos: 3ª estrela</span>
-        <span><img src="assets/sprites/banana.png" alt="">Banana: turbo</span>
-        <span><img src="assets/sprites/monkey.png" alt="">Macaco: invencível</span>
-        <span><b class="key">Pulo no ar</b>pirueta (pulo duplo)</span>
-        <span><img src="assets/sprites/chi-br.png" alt="">Amigos dão biscoito e coração</span>
-      </div>
-      <div class="row" style="justify-content:flex-start"><button class="btn" id="btnStart">Jogar</button></div>
-      <p class="hint">← → para andar · Espaço para pular, de novo no ar para a pirueta · P pausa</p>
+      <h1 class="logo"><b>TIMTIM</b><i>E OS PUGS DA BRUXA</i></h1>
+      <div class="gap"></div>
+      <button class="btn" id="btnStart">Jogar</button>
+      <p class="hint">← → andar · Espaço pula, de novo no ar dá a pirueta · os amigos chihuahuas dão poderes · derrote os 2 pugs em 2 minutos</p>
       <p id="best"></p>
     </div>
+    <p id="storyLine"></p><span id="skip">toque para pular</span>
   </section>
 
   <section id="pause" class="screen scrim"><div class="card">
-    <h2>Pausa</h2><p>O Tintim está olhando o pôr do sol.</p>
+    <h2>Pausa</h2><p>O Timtim está olhando o pôr do sol.</p>
     <div class="row"><button class="btn" id="btnResume">Continuar</button><button class="btn ghost" id="btnRestart">Recomeçar</button></div>
   </div></section>
 
   <section id="lose" class="screen scrim"><div class="card">
-    <h2>Ah, não!</h2><p id="loseText">Não foi dessa vez.</p>
+    <h2 id="loseTitle">Ah, não!</h2><p id="loseText">Não foi dessa vez.</p>
     <div class="row"><button class="btn" id="btnRetry">Tentar de novo</button><button class="btn ghost" id="btnLoseRestart">Do início</button></div>
   </div></section>
 
   <section id="win" class="screen scrim"><div class="card">
-    <h2>O parquinho é do Tintim!</h2><p style="margin:.6cqw 0 0">Os pugs voltaram pra casa e os amigos vieram comemorar.</p>
+    <h2>A paz voltou à vila!</h2><p style="margin:.6cqw 0 0">Timtim mandou os pugs de volta pra bruxa. Reserva Alpha Village está em harmonia.</p>
     <div class="stars">
       <svg class="star" viewBox="0 0 48 46"><path d="M24 2l6.6 13.6 15 2-11 10.4 2.8 14.8L24 35.6l-13.4 7.2 2.800-14.800-11-10.400 15-2z" fill="#ffd23f" stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"/></svg>
       <svg class="star" viewBox="0 0 48 46"><path d="M24 2l6.6 13.6 15 2-11 10.4 2.8 14.8L24 35.6l-13.4 7.2 2.800-14.800-11-10.400 15-2z" fill="#ffd23f" stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"/></svg>
@@ -230,7 +245,7 @@
     <div class="row"><button class="btn" id="btnAgain">Jogar de novo</button></div>
   </div></section>
 
-  <div id="msg">O sol se pondo no parque…</div>
+  <div id="msg">Reserva Alpha Village…</div>
 </div></div>
 
 <script src="vendor/three.min.js"></script>

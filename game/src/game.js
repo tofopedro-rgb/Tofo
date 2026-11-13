@@ -1,10 +1,10 @@
-// Tintim e os Pugs — regras do jogo (física, inimigos, chefão, fluxo). Sem nada de desenho aqui.
+// Timtim e os Pugs — regras do jogo (física, inimigos, chefão, fluxo). Sem nada de desenho aqui.
 (() => {
 'use strict';
 const TT = window.TT = window.TT || {};
 
 const C = TT.C = {
-  W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 290, FAST: 440,
+  W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 310, TIME: 120, FAST: 440,
   LEVEL_END: 9800, ARENA_X: 8840,
   grounds: [[0, 1250], [1400, 1000], [2520, 820], [3480, 1100], [4740, 900], [5830, 760], [6820, 700], [7680, 2120]],
   plats: [
@@ -80,19 +80,19 @@ function reset() {
   Object.assign(S, {
     player: makePlayer(120), items: makeItems(), enemies: makeEnemies(), pugs: makePugs(),
     cam: { x: 0, y: 0, look: 0 }, time: 0, clock: 0, cookies: 0, arena: false, trauma: 0, hitstop: 0,
-    gold: 0, timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
+    gold: 0, timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0, ckTime: 0, timeout: false,
     friends: C.friends.map(f => ({ x: f.x, home: f.x, vx: 0, follow: 0, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
   });
   S.totalCookies = S.items.filter(i => i.type === 'cookie').length + C.friends.length * C.GIFT;
 }
 reset();
 
-TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'Os pugs da vizinha tomaram o parquinho…' }); };
+TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'Os pugs da bruxa estão infernizando a vila…' }); };
 TT.retry = () => {
   if (S.checkpoint < 0) return TT.start();
   const x = C.checkpoints[S.checkpoint];
-  S.player = makePlayer(x); S.pugs = makePugs(); S.arena = false; S.cine = null; S.timeScale = 1; S.slowT = 0; S.hitstop = 0; S.gifts = [];
-  S.cam.x = Math.max(0, x - W * 0.4); S.cam.look = 0; S.mode = 'play';
+  S.player = makePlayer(x); S.player.inv = 1.6; S.pugs = makePugs(); S.arena = false; S.cine = null; S.timeScale = 1; S.slowT = 0; S.hitstop = 0; S.gifts = [];
+  S.cam.x = Math.max(0, x - W * 0.4); S.cam.look = 0; S.mode = 'play'; S.timeout = false; S.time = Math.min(S.ckTime, C.TIME - 45);
   emit('start', { retry: true }); emit('banner', { text: 'De volta ao checkpoint!' });
 };
 TT.pause = () => { if (S.mode === 'play') { S.mode = 'pause'; emit('pause'); } };
@@ -123,6 +123,7 @@ TT.update = (rdt) => {
   if (S.cine) { S.cine.t += rdt; if (S.cine.t >= S.cine.dur) { S.cine = null; emit('cineEnd'); } }
   const playing = S.mode === 'play', locked = !playing || !!S.cine;
   if (playing && !S.cine) S.time += dt;
+  if (playing && !S.winT && S.time >= C.TIME) { S.timeout = true; S.mode = 'lose'; emit('lose', stats()); return; }
   if (S.mode === 'winning') {
     S.winT += rdt;
     if (S.winT > 0.9 && S.player.onGround) S.player.won = true;
@@ -185,7 +186,7 @@ TT.update = (rdt) => {
 
   if (playing) {
     // checkpoints
-    C.checkpoints.forEach((cx, i) => { if (i > S.checkpoint && p.x > cx) { S.checkpoint = i; emit('checkpoint', { index: i, x: cx }); } });
+    C.checkpoints.forEach((cx, i) => { if (i > S.checkpoint && p.x > cx) { S.checkpoint = i; S.ckTime = S.time; emit('checkpoint', { index: i, x: cx }); } });
     // itens
     for (const it of S.items) {
       if (it.got) continue;
@@ -199,18 +200,18 @@ TT.update = (rdt) => {
     }
   }
 
-  // amigos: quando o Tintim chega perto, dão um pulinho e jogam um biscoito de presente
+  // amigos: quando o Timtim chega perto, dão um pulinho e jogam um biscoito de presente
   const pcx = p.x + p.w / 2;
   for (const f of S.friends) {
     f.t += dt; f.hop = Math.max(0, f.hop - dt); f.follow = Math.max(0, f.follow - dt);
-    // corre ao encontro do Tintim, acompanha uns passos depois do presente e volta para o seu lugar
+    // corre ao encontro do Timtim, acompanha uns passos depois do presente e volta para o seu lugar
     const seen = playing && Math.abs(pcx - f.home) < 460, chase = seen && (!f.given || f.follow > 0);
     const goal = Math.max(f.home - 20, Math.min(f.home + 280, chase ? pcx - Math.sign(pcx - f.x) * 70 : f.home));
     const want = f.hop > 0.35 || Math.abs(goal - f.x) < 10 ? 0 : Math.sign(goal - f.x) * (chase || !playing ? 260 : 130);
     f.vx += (want - f.vx) * Math.min(1, dt * 9); f.x += f.vx * dt;
     if (Math.abs(f.vx) > 30) f.face = Math.sign(f.vx); else if (seen || !playing) f.face = pcx < f.x ? -1 : 1;
     if (playing && !f.given && Math.abs(pcx - f.x) < 120) {
-      f.given = true; f.hop = 0.9; f.follow = 3.2; S.gifts.push({ sx: f.x + f.face * 18, sy: GROUND - 58, x: f.x, y: GROUND - 58, t: 0 });
+      f.given = true; f.hop = 0.9; f.follow = 3.2; S.gifts.push({ sx: f.x + f.face * 18, sy: GROUND - 58, x: f.x, y: GROUND - 58, t: 0, kind: S.friends.indexOf(f) });
       emit('friend', { x: f.x, y: GROUND - 70 });
     }
   }
@@ -219,7 +220,8 @@ TT.update = (rdt) => {
     g.x = g.sx + (pcx - g.sx) * e; g.y = g.sy + (p.y + p.h / 2 - g.sy) * e - Math.sin(k * Math.PI) * 110;
     if (k >= 1) {
       S.gifts.splice(i, 1); S.cookies += C.GIFT; p.hp = Math.min(3, p.hp + 1);
-      emit('gift', { x: g.x, y: g.y }); emit('banner', { text: 'Biscoito de presente! +1 coração' });
+      if (g.kind === 0) p.fast = 8; else p.mega = 9;
+      emit('gift', { x: g.x, y: g.y }); emit('power', g); emit('banner', { text: g.kind === 0 ? 'Poder do amigo: turbo!' : 'Poder do amigo: invencível!' });
     }
   }
 

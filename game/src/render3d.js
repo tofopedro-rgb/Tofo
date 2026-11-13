@@ -305,7 +305,7 @@ sky.scale.set(4700, 2700, 1); sky.position.set(0, 300, -3000);
     const pool = add(new THREE.Mesh(planeGeoC, glowMat(PAL.warm, 0.2)), 0); pool.rotation.x = -Math.PI / 2; pool.scale.set(420, 230, 1); pool.position.set(x, 1.2, -10);
     if (i % 2 === 0 && spans.some(([a, b]) => x + 150 > a + 60 && x + 150 < b - 60)) { const b = add(new THREE.Mesh(planeGeo, benchM)); b.scale.set(112, 56, 1); b.position.set(x + 150, 0, -78); }
   }
-  // varal de luzinhas nas cores da bandana do Tintim
+  // varal de luzinhas nas cores da bandana do Timtim
   const cols = [0xff7a2a, 0xffd23f, 0x35d68f, 0xff5a6e, 0x5aa2ff, 0xfff0d6].map(c => new THREE.Color(c));
   const pos = [], col = [], line = [];
   for (let x0 = 150; x0 < ARENA_X - 600; x0 += 760) {
@@ -353,7 +353,7 @@ const sun = new THREE.DirectionalLight(0xffb880, 0.7); sun.castShadow = true; //
 sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 1.5;
 Object.assign(sun.shadow.camera, { left: -900, right: 900, top: 620, bottom: -420, near: 100, far: 2200 });
 scene.add(sun); scene.add(sun.target);
-const heroLight = new THREE.PointLight(0xfff0d8, 0.5, 430, 1.5); scene.add(heroLight); // o Tintim ilumina o chão por onde passa
+const heroLight = new THREE.PointLight(0xfff0d8, 0.5, 430, 1.5); scene.add(heroLight); // o Timtim ilumina o chão por onde passa
 
 // ---------------- sprites ----------------
 function sprite(name, order = 5, shadow = true, tint = 0xffffff) {
@@ -367,7 +367,7 @@ function setAnim(m, name, h, flip, frame = 0, n = 1) {
   if (n > 1) TEX[name].offset.x = frame / n;
   m.scale.set(h * AR[name] * (flip ? -1 : 1), h, 1);
 }
-const NIGHT = 0xf2d8cc; // criaturas sob o luar; o Tintim e os amigos têm luz própria
+const NIGHT = 0xf2d8cc; // criaturas sob o luar; o Timtim e os amigos têm luz própria
 const tintim = sprite('tintim-idle', 6, true, 0xfffaf2);
 const halo = add(new THREE.Mesh(planeGeoC, glowMat(0xfff2d0, 0.3)), 4);
 const aura = add(new THREE.Mesh(planeGeoC, glowMat(0xffaa33)), 5); aura.visible = false;
@@ -491,7 +491,7 @@ R.frame = (rdt) => {
   time += rdt;
   const p = S.player, clock = S.clock, live = S.hitstop > 0 ? 0 : rdt * S.timeScale;
 
-  // Tintim: o corpo estica e achata com uma mola, inclina com a velocidade e dá uma pirueta no pulo duplo
+  // Timtim: o corpo estica e achata com uma mola, inclina com a velocidade e dá uma pirueta no pulo duplo
   const moving = Math.abs(p.vx) > 20 && p.onGround, fast = p.fast > 0 || p.mega > 0;
   if (moving) runPhase += Math.abs(p.vx) * live / 26; // passo acompanha a velocidade: as patas não patinam
   let name = 'tintim-idle', h = 80, fr = 0, nf = 1;
