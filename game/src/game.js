@@ -4,7 +4,7 @@
 const TT = window.TT = window.TT || {};
 
 const C = TT.C = {
-  W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 310, FAST: 440,
+  W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 310, FAST: 440, SLOW: 175,
   LEVEL_END: 9800, ARENA_X: 8840,
   grounds: [[0, 1250], [1400, 1000], [2520, 820], [3480, 1100], [4740, 900], [5830, 760], [6820, 700], [7680, 2120]],
   plats: [
@@ -48,6 +48,8 @@ function makeItems() {
   for (let x = 8350; x <= 8550; x += 50) cookie(x, GROUND - 40);
   // biscoitos dourados: só o pulo duplo alcança
   [[1325, 165], [3410, 70], [7610, 40]].forEach(([x, y]) => it.push({ type: 'gold', x, y, got: false }));
+  // chocolates no chão: cachorro não pode! Dá dor de barriga e ele anda devagar por um tempo. Dá para pular por cima.
+  [1080, 2240, 3900, 5370, 6330, 7830].forEach(x => it.push({ type: 'choco', x, y: GROUND - 34, got: false }));
   it.push({ type: 'banana', x: 7270, y: 150, got: false });
   it.push({ type: 'banana', x: 2010, y: 205, got: false });
   it.push({ type: 'monkey', x: 4220, y: 170, got: false });
@@ -65,7 +67,7 @@ function makePugs() {
   ];
 }
 function makePlayer(x) {
-  return { x, y: GROUND - 60, w: 54, h: 50, vx: 0, vy: 0, onGround: false, face: 1, hp: 3, inv: 0, fast: 0, mega: 0,
+  return { x, y: GROUND - 60, w: 54, h: 50, vx: 0, vy: 0, onGround: false, face: 1, hp: 3, inv: 0, fast: 0, mega: 0, slow: 0,
     safeX: x, coyote: 0, buffer: 0, landT: 0, won: false, hurtT: 0, dj: true, djT: 0 };
 }
 
@@ -130,10 +132,10 @@ TT.update = (rdt) => {
   }
 
   const p = S.player, I = TT.input;
-  p.inv = Math.max(0, p.inv - dt); p.fast = Math.max(0, p.fast - dt); p.mega = Math.max(0, p.mega - dt);
+  p.inv = Math.max(0, p.inv - dt); p.fast = Math.max(0, p.fast - dt); p.mega = Math.max(0, p.mega - dt); p.slow = Math.max(0, p.slow - dt);
   p.hurtT = Math.max(0, p.hurtT - dt);
 
-  const speed = p.fast > 0 || p.mega > 0 ? FAST : RUN;
+  const speed = p.fast > 0 || p.mega > 0 ? FAST : p.slow > 0 ? C.SLOW : RUN;
   const dir = locked ? 0 : (I.right ? 1 : 0) - (I.left ? 1 : 0);
   const target = dir * speed, accel = p.onGround ? 2600 : 1900;
   if (p.vx < target) p.vx = Math.min(target, p.vx + accel * dt);
@@ -194,7 +196,8 @@ TT.update = (rdt) => {
       it.got = true;
       if (it.type === 'cookie') { S.cookies++; emit('cookie', it); }
       if (it.type === 'gold') { S.gold++; emit('power', it); emit('banner', { text: 'Biscoito dourado! ' + S.gold + ' de 3' }); }
-      if (it.type === 'banana') { p.fast = 7; emit('power', it); emit('banner', { text: 'Banana de pelúcia: turbo!' }); }
+      if (it.type === 'choco') { if (p.mega > 0) emit('banner', { text: 'Invencível: nem chocolate faz mal!' }); else { p.slow = 5; p.fast = 0; emit('choco', it); emit('banner', { text: 'Chocolate! Deu dor de barriga…' }); } }
+      if (it.type === 'banana') { p.slow = 0; p.fast = 7; emit('power', it); emit('banner', { text: 'Banana de pelúcia: turbo!' }); }
       if (it.type === 'monkey') { p.mega = 8; p.hp = Math.min(3, p.hp + 1); emit('power', it); emit('banner', { text: 'Macaco de pelúcia: invencível!' }); }
     }
   }
@@ -219,7 +222,7 @@ TT.update = (rdt) => {
     g.x = g.sx + (pcx - g.sx) * e; g.y = g.sy + (p.y + p.h / 2 - g.sy) * e - Math.sin(k * Math.PI) * 110;
     if (k >= 1) {
       S.gifts.splice(i, 1); S.cookies += C.GIFT; p.hp = Math.min(3, p.hp + 1);
-      if (g.kind === 0) p.fast = 8; else p.mega = 9;
+      p.slow = 0; if (g.kind === 0) p.fast = 8; else p.mega = 9;
       emit('gift', { x: g.x, y: g.y }); emit('power', g); emit('banner', { text: g.kind === 0 ? 'Poder do amigo: turbo!' : 'Poder do amigo: invencível!' });
     }
   }

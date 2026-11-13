@@ -6,6 +6,7 @@ Jogo de plataforma 2.5D curtinho: a vizinha bruxa mandou seus dois pugs inferniz
 - ← → / A D: andar · Espaço / ↑ / W: pular (segure para pular mais alto; aperte de novo no ar para a pirueta, um pulo duplo) · P ou Esc: pausa · M: som
 - Celular: botões na tela. Controle (gamepad): direcional + botão A.
 - 🍪 Biscoito: pontos · 🍌 Banana de pelúcia: turbo por 7s · 🐒 Macaco de pelúcia: invencível por 8s e +1 coração
+- 🍫 Chocolate: dá dor de barriga e deixa o Timtim lento por 5s (pule por cima)
 - 🐶 Amigos chihuahuas: os dois esperam no caminho e, quando o Timtim chega perto, jogam um biscoito de presente (+3 biscoitos e +1 coração)
 - Pombos: pise por cima. Chefões: 3 pisões em cada pug; o último fica mais bravo.
 - Estrelas: 1 por vencer, 1 por pegar 80% dos biscoitos, 1 por achar os 3 biscoitos dourados (só o pulo duplo alcança).

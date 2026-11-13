@@ -67,6 +67,7 @@ const sfx = {
   lose: t => [392, 349, 311, 262].forEach((f, i) => tone(f, t + i * 0.18, 0.35, { vol: 0.16, type: 'sine' })),
   star: t => { tone(1318, t, 0.1, { vol: 0.16 }); tone(1976, t + 0.07, 0.25, { vol: 0.14 }); },
   ui: t => tone(880, t, 0.05, { vol: 0.1 }),
+  choco: t => { [330, 277, 233, 185].forEach((f, i) => tone(f, t + i * 0.12, 0.22, { type: 'sawtooth', vol: 0.1, slide: 0.85 })); tone(90, t + 0.5, 0.5, { type: 'sine', vol: 0.25, slide: 0.6 }); },
 };
 TT.sfx = name => { if (!init() || !sfx[name]) return; sfx[name](ctx.currentTime); };
 

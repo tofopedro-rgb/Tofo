@@ -85,6 +85,7 @@ TT.uiFrame = () => {
   setIf('hp', p.hp, v => hearts.forEach((h, i) => h.classList.toggle('off', i >= v)));
   setIf('ck', S.cookies, v => { const n = $('cookieN'); n.textContent = v; n.classList.remove('bump'); void n.offsetWidth; n.classList.add('bump'); });
   setIf('fast', Math.ceil(p.fast), v => { $('chipFast').classList.toggle('on', v > 0); $('chipFast').lastElementChild.textContent = v; });
+  setIf('slow', Math.ceil(p.slow), v => { $('chipSlow').classList.toggle('on', v > 0); $('chipSlow').lastElementChild.textContent = v; });
   setIf('mega', Math.ceil(p.mega), v => { $('chipMega').classList.toggle('on', v > 0); $('chipMega').lastElementChild.textContent = v; });
   setIf('boss', S.arena, v => $('hr').classList.toggle('boss', v));
   if (!S.arena) setIf('prog', Math.round(Math.min(1, p.x / C.ARENA_X) * 200) / 2, v => { $('progFill').style.width = v + '%'; $('progDog').style.left = v + '%'; });

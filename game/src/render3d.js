@@ -30,7 +30,8 @@ const AR = { 'tintim-idle': 232 / 220, 'tintim-run': 1.2143, 'tintim-jump': 270 
   'tintim-win': 189 / 240, 'pug-walk': 1.2286, 'pug-charge': 309 / 200, 'pug-stun': 313 / 130, pigeon: 1.1381, monkey: 126 / 140,
   banana: 1, cookie: 129 / 90, 'chi-pb': 245 / 300, 'chi-br': 223 / 300 };
 const TEX = {};
-for (const k in AR) TEX[k] = load('sprites/' + k + '.png');
+AR.choco = 1.25;
+for (const k in AR) if (k !== 'choco') TEX[k] = load('sprites/' + k + '.png');
 // tiras de quadros desenhados: corrida do Timtim (8), corrida dos chihuahuas, andar do pug e do pombo (4 cada)
 const FRAMES = { 'tintim-run': 8, 'chi-pb-run': 4, 'chi-br-run': 4, 'pug-walk': 4, pigeon: 4 };
 for (const k in FRAMES) if (TEX[k]) TEX[k].repeat.set(1 / FRAMES[k], 1);
@@ -393,8 +394,15 @@ const pugM = [0, 1].map(i => { const m = sprite('pug-walk', 5, true, i ? 0x9aa6c
   m.userData.stars = [0, 1, 2].map(() => { const s = add(new THREE.Mesh(planeGeoC, new THREE.MeshBasicMaterial({ map: texStar, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false })), 7); s.scale.set(16, 16, 1); s.visible = false; return s; });
   return m; });
 const pigeonM = S.enemies.map(() => { const m = sprite('pigeon', 5, true, 0xffffff); m.geometry = legGeo(); m.userData.warn = add(new THREE.Mesh(planeGeoC, glowMat(0xff2a55, 0.8)), 6); m.material.color.setRGB(1.75, 1.6, 1.85); m.userData.own = { pigeon: ownTex('pigeon') }; m.material.map = m.customDepthMaterial.map = m.userData.own.pigeon; return m; });
+// barra de chocolate meio desembrulhada, desenhada por código
+TEX.choco = canvasTex(160, 128, x => { x.translate(80, 64); x.rotate(-0.18);
+  x.fillStyle = '#3a1c10'; x.beginPath(); x.roundRect(-62, -40, 124, 80, 8); x.fill();
+  for (let j = 0; j < 2; j++) for (let i = 0; i < 3; i++) { const px = -56 + i * 38, py = -34 + j * 35; x.fillStyle = '#7a4424'; x.beginPath(); x.roundRect(px, py, 34, 31, 5); x.fill();
+    x.fillStyle = '#a8683a'; x.beginPath(); x.roundRect(px + 3, py + 3, 28, 9, 4); x.fill(); x.fillStyle = '#54290f'; x.fillRect(px + 3, py + 25, 28, 4); }
+  x.fillStyle = '#d9344f'; x.beginPath(); x.moveTo(-66, -44); x.lineTo(-8, -44); x.lineTo(-20, 44); x.lineTo(-66, 44); x.closePath(); x.fill();
+  x.fillStyle = '#ffd98a'; x.fillRect(-66, -10, 52, 20); x.strokeStyle = '#fff3d6'; x.lineWidth = 3; x.beginPath(); x.moveTo(-8, -44); x.lineTo(-14, -20); x.lineTo(-6, 0); x.lineTo(-16, 22); x.lineTo(-20, 44); x.stroke(); });
 const itemM = S.items.map(it => { const m = sprite(it.type === 'gold' ? 'cookie' : it.type, 5, false, it.type === 'gold' ? 0xffd640 : 0xfff4e0); m.geometry = planeGeoC;
-  m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(it.type === 'monkey' ? 0xff8a2a : it.type === 'cookie' ? 0xffc76a : 0xffe14d)), 4);
+  m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(it.type === 'choco' ? 0x9dff4a : it.type === 'monkey' ? 0xff8a2a : it.type === 'cookie' ? 0xffc76a : 0xffe14d)), 4);
   return m; });
 const friendM = S.friends.map(f => { const m = sprite(f.kind, 5, true, 0xfff6ec); m.geometry = legGeo();
   m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(0xffd9a0, 0.3)), 4); return m; });
@@ -418,6 +426,7 @@ TT.on('pugLand', e => dustPuff(e.x, e.y, 9, 320));
 TT.on('jump', e => { dustPuff(e.x, e.y, 5, 120); sqV += 3.4; });
 TT.on('jump2', e => { sqV += 3; for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28; spawn({ x: e.x + Math.cos(a) * 20, y: e.y + Math.sin(a) * 14, vx: Math.cos(a) * 190, vy: Math.sin(a) * 120, g: 0, life: 0.4, r: 4, grow: -4, color: MOTE[i % 3], hard: true }); } });
 TT.on('cookie', e => burst(e.x, e.y, [0xffd98a, 0xffb65a, 0xfff2c8], 8, 170));
+TT.on('choco', e => { burst(e.x, e.y, [0x7a4424, 0x9dff4a, 0x3a1c10], 16, 220); sqV -= 4; });
 TT.on('power', e => burst(e.x, e.y, [0xffe14d, 0xff8a2a, 0xffffff], 24, 320));
 TT.on('hurt', e => burst(e.x, e.y + 20, [0xff5a7e, 0xffc0d0], 12, 240));
 TT.on('stomp', e => { burst(e.x, e.y, [0xfff2c8, 0x8fe9ff, 0xffffff], e.boss ? 22 : 12, e.boss ? 380 : 260); dustPuff(e.x, e.y + 40, 6, 300); });
@@ -536,6 +545,9 @@ R.frame = (rdt) => {
   const pivot = flip ? h * 0.5 : 0; // a pirueta gira em torno do meio do corpo, não dos pés
   tintim.position.set(tx + Math.sin(tintim.rotation.z) * pivot, ty + pivot - Math.cos(tintim.rotation.z) * pivot, 3);
   tintim.visible = !(p.inv > 0 && Math.floor(time * 20) % 2);
+  // dor de barriga: fica esverdeado, anda encolhido e solta bolhinhas
+  tintim.material.color.set(p.slow > 0 ? 0xbfe8a0 : 0xfffaf2); if (p.slow > 0) { tintim.scale.y *= 0.93;
+    if (Math.random() < live * 9) spawn({ x: tx - p.face * 14, y: p.y + 18, vx: (Math.random() - 0.5) * 30, vy: -50 - Math.random() * 40, g: -30, life: 0.9, r: 2.5 + Math.random() * 2.5, grow: 2, color: 0x9dff4a }); }
   const hs = 150 + Math.sin(time * 2.4) * 10 + (fast ? 30 : 0);
   halo.position.set(tx, ty + 34, 1); halo.scale.set(hs, hs * 0.9, 1); halo.material.opacity = (S.mode === 'lose' ? 0.12 : 0.4) + Math.sin(time * 3.1) * 0.04;
   heroLight.position.set(tx, ty + 46, 60); heroLight.intensity = S.mode === 'lose' ? 0.3 : 1.15 + Math.sin(time * 3.1) * 0.08;
@@ -614,7 +626,7 @@ R.frame = (rdt) => {
   S.items.forEach((it, i) => {
     const m = itemM[i]; m.visible = !it.got; const g = m.userData.glow; g.visible = !it.got;
     if (it.got) return;
-    const ck = it.type === 'cookie', gd = it.type === 'gold', hh = ck ? 27 : gd ? 36 : it.type === 'banana' ? 46 : 54, bob = Math.sin(clock * 3 + it.x * 0.05) * 5;
+    const ck = it.type === 'cookie', gd = it.type === 'gold', hh = ck ? 27 : gd ? 36 : it.type === 'choco' ? 40 : it.type === 'banana' ? 46 : 54, bob = Math.sin(clock * 3 + it.x * 0.05) * 5;
     m.scale.set(hh * AR[gd ? 'cookie' : it.type], hh, 1); m.position.set(it.x, Y(it.y) + bob, 0);
     m.rotation.y = Math.sin(clock * 2.2 + it.x * 0.01) * (ck ? 0.75 : 0.4); m.rotation.z = Math.sin(clock * 3 + it.x) * 0.12;
     const s = (ck ? 62 : 104) + Math.sin(clock * 5 + it.x * 0.03) * (ck ? 8 : 12); g.scale.set(s, s, 1); g.position.set(it.x, Y(it.y) + bob, -2); g.material.opacity = ck ? 0.5 : 0.6;
