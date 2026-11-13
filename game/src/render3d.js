@@ -26,14 +26,18 @@ const PAL = { far: '#14506a', mid: '#0b3447', near: '#06202d', back: '#04151d', 
 THREE.DefaultLoadingManager.onLoad = () => { R.ready = true; TT.emit('assetsReady'); };
 const TL = new THREE.TextureLoader();
 const load = p => { const t = TL.load('assets/' + p); t.anisotropy = 4; return t; };
-const AR = { 'tintim-idle': 232 / 220, 'tintim-run': 258 / 200, 'tintim-jump': 270 / 200, 'tintim-fall': 240 / 220, 'tintim-hurt': 218 / 220,
-  'tintim-win': 189 / 240, 'pug-walk': 269 / 200, 'pug-charge': 309 / 200, 'pug-stun': 313 / 130, pigeon: 138 / 120, monkey: 126 / 140,
+const AR = { 'tintim-idle': 232 / 220, 'tintim-run': 1.2143, 'tintim-jump': 270 / 200, 'tintim-fall': 240 / 220, 'tintim-hurt': 218 / 220,
+  'tintim-win': 189 / 240, 'pug-walk': 1.2286, 'pug-charge': 309 / 200, 'pug-stun': 313 / 130, pigeon: 1.1381, monkey: 126 / 140,
   banana: 1, cookie: 129 / 90, 'chi-pb': 245 / 300, 'chi-br': 223 / 300 };
 const TEX = {};
 for (const k in AR) TEX[k] = load('sprites/' + k + '.png');
-TEX['tintim-run'].repeat.set(0.25, 1);
+// tiras de quadros desenhados: corrida do Timtim (8), corrida dos chihuahuas, andar do pug e do pombo (4 cada)
+const FRAMES = { 'tintim-run': 8, 'chi-pb-run': 4, 'chi-br-run': 4, 'pug-walk': 4, pigeon: 4 };
+for (const k in FRAMES) if (TEX[k]) TEX[k].repeat.set(1 / FRAMES[k], 1);
+// cada personagem tem a sua cópia da tira, para que dois pugs (ou nove pombos) possam estar em quadros diferentes
+const ownTex = k => { const t = load('sprites/' + k + '.png'); t.repeat.set(1 / FRAMES[k], 1); return t; };
 // perfis dos chihuahuas (para quando correm); a proporção vem da própria imagem
-['chi-pb-run', 'chi-br-run'].forEach(k => { AR[k] = 1.2; TEX[k] = TL.load('assets/sprites/' + k + '.png', t => { AR[k] = t.image.width / t.image.height; }); TEX[k].anisotropy = 4; });
+AR['chi-pb-run'] = 1.3143; AR['chi-br-run'] = 1.3095; ['chi-pb-run', 'chi-br-run'].forEach(k => { TEX[k] = load('sprites/' + k + '.png'); TEX[k].repeat.set(0.25, 1); });
 
 function rng(seed) { return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function canvasTex(w, h, draw, repeat) {
@@ -372,8 +376,9 @@ function sprite(name, order = 5, shadow = true, tint = 0xffffff) {
   m.userData.name = name; return add(m, order);
 }
 function setAnim(m, name, h, flip, frame = 0, n = 1) {
-  if (m.userData.name !== name) { m.material.map = TEX[name]; if (m.customDepthMaterial) m.customDepthMaterial.map = TEX[name]; m.userData.name = name; }
-  if (n > 1) TEX[name].offset.x = frame / n;
+  const t = (m.userData.own && m.userData.own[name]) || TEX[name];
+  if (m.material.map !== t) { m.material.map = t; if (m.customDepthMaterial) m.customDepthMaterial.map = t; }
+  m.userData.name = name; if (n > 1) t.offset.x = (frame % n) / n;
   m.scale.set(h * AR[name] * (flip ? -1 : 1), h, 1);
 }
 const NIGHT = 0x9db3da; // criaturas sob o luar; o Timtim e os amigos têm luz própria
@@ -384,10 +389,10 @@ const ghostM = [0, 1, 2, 3, 4, 5].map(() => { const m = add(new THREE.Mesh(plane
 tintim.geometry = legGeo();
 const tailX = { x: 0, v: 0 }, tailY = { x: 0, v: 0 }, earS = { x: 0, v: 0 }; let faceS = 1;
 const ghosts = []; let ghostT = 0;
-const pugM = [0, 1].map(i => { const m = sprite('pug-walk', 5, true, i ? 0x9aa6cc : NIGHT); m.geometry = legGeo(); m.userData.ph = i * 2;
+const pugM = [0, 1].map(i => { const m = sprite('pug-walk', 5, true, i ? 0x9aa6cc : NIGHT); m.geometry = legGeo(); m.userData.ph = i * 2; m.userData.own = { 'pug-walk': ownTex('pug-walk') }; m.material.map = m.customDepthMaterial.map = m.userData.own['pug-walk'];
   m.userData.stars = [0, 1, 2].map(() => { const s = add(new THREE.Mesh(planeGeoC, new THREE.MeshBasicMaterial({ map: texStar, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false })), 7); s.scale.set(16, 16, 1); s.visible = false; return s; });
   return m; });
-const pigeonM = S.enemies.map(() => { const m = sprite('pigeon', 5, true, NIGHT); m.geometry = legGeo(); return m; });
+const pigeonM = S.enemies.map(() => { const m = sprite('pigeon', 5, true, NIGHT); m.geometry = legGeo(); m.userData.own = { pigeon: ownTex('pigeon') }; m.material.map = m.customDepthMaterial.map = m.userData.own.pigeon; return m; });
 const itemM = S.items.map(it => { const m = sprite(it.type === 'gold' ? 'cookie' : it.type, 5, false, it.type === 'gold' ? 0xffd640 : 0xfff4e0); m.geometry = planeGeoC;
   m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(it.type === 'monkey' ? 0xff8a2a : it.type === 'cookie' ? 0xffc76a : 0xffe14d)), 4);
   return m; });
@@ -504,16 +509,16 @@ R.frame = (rdt) => {
 
   // Timtim: o corpo estica e achata com uma mola, inclina com a velocidade e dá uma pirueta no pulo duplo
   const moving = Math.abs(p.vx) > 20 && p.onGround, fast = p.fast > 0 || p.mega > 0;
-  if (moving) runPhase += Math.abs(p.vx) * live / 26; // passo acompanha a velocidade: as patas não patinam
+  if (moving) runPhase += Math.abs(p.vx) * live / 15; // passo acompanha a velocidade: as patas não patinam
   let name = 'tintim-idle', h = 80, fr = 0, nf = 1;
   if (p.won) { name = 'tintim-win'; h = 92; }
   else if (p.hurtT > 0 || S.mode === 'lose') name = 'tintim-hurt';
   else if (!p.onGround) { if (p.vy < 0 || p.djT > 0) { name = 'tintim-jump'; h = 66; } else { name = 'tintim-fall'; h = 78; } }
-  else if (moving) { name = 'tintim-run'; h = 72; nf = 4; fr = Math.floor(runPhase) % 4; }
+  else if (moving) { name = 'tintim-run'; h = 72; h = 76; nf = 8; fr = Math.floor(runPhase) % 8; }
   faceS += (p.face - faceS) * Math.min(1, rdt * 20); // vira o corpo num instante, em vez de espelhar de uma vez
   setAnim(tintim, name, h, faceS < 0, fr, nf); tintim.scale.x *= Math.max(0.25, Math.abs(faceS));
   { // rabo, orelhas e pelo seguem o corpo com atraso; parado, ele respira, abana o rabo e olha em volta
-    const air = !p.onGround, sp = Math.min(1, Math.abs(p.vx) / C.FAST), stride = runPhase * Math.PI / 2, idle = p.onGround && !moving && !p.won;
+    const air = !p.onGround, sp = Math.min(1, Math.abs(p.vx) / C.FAST), stride = runPhase * Math.PI / 4, idle = p.onGround && !moving && !p.won;
     const happy = idle ? Math.sin(time * 11) * (0.025 + 0.02 * Math.max(0, Math.sin(time * 0.7))) : p.won ? Math.sin(time * 16) * 0.05 : 0;
     const tX = spring(tailX, -sp * 0.07 + happy + (moving ? Math.sin(stride) * 0.02 : 0), sdtA(live));
     const tY = spring(tailY, (air ? Math.max(-0.1, Math.min(0.1, p.vy / 5000)) : 0) + (moving ? Math.cos(stride) * 0.03 : 0), sdtA(live), 120, 9);
@@ -523,7 +528,7 @@ R.frame = (rdt) => {
   sqV += (-(sq - 1) * 260 - sqV * 15) * sdt; sq = Math.max(0.72, Math.min(1.3, sq + sqV * sdt));
   const squash = sq * (p.onGround ? 1 + Math.sin(clock * 3) * 0.015 : 1 + Math.min(0.08, Math.abs(p.vy) / 9000));
   tintim.scale.x *= 2 - squash; tintim.scale.y *= squash;
-  const tx = p.x + p.w / 2, ty = Y(p.y + p.h) - 2 + (moving ? Math.abs(Math.sin(runPhase * Math.PI / 2)) * 3 : 0);
+  const tx = p.x + p.w / 2, ty = Y(p.y + p.h) - 2 + (moving ? Math.abs(Math.sin(runPhase * Math.PI / 8)) * 2 : 0);
   const rotT = p.won ? 0 : p.onGround ? -(p.vx / C.FAST) * 0.07 : -Math.max(-0.32, Math.min(0.32, p.vy / 2400)) * p.face;
   rotS += (rotT - rotS) * Math.min(1, rdt * 16);
   const flip = p.djT > 0 ? -p.face * Math.PI * 2 * ease(1 - p.djT / 0.42) : 0;
@@ -553,11 +558,11 @@ R.frame = (rdt) => {
     const party = S.mode === 'winning' || S.mode === 'win';
     const jump = f.hop > 0 ? Math.abs(Math.sin(f.hop * Math.PI / 0.3)) * 28 * Math.min(1, f.hop * 2.5) : party && !run ? Math.abs(Math.sin(f.t * 8 + i * 1.3)) * 24 : 0;
     const hop = jump + (run ? Math.abs(Math.sin(gal)) * 9 : near ? Math.abs(Math.sin(f.t * 7)) * 5 : 0);
-    setAnim(m, run ? f.kind + '-run' : f.kind, run ? 54 : 62, f.face < 0);
+    setAnim(m, run ? f.kind + '-run' : f.kind, run ? 56 : 62, f.face < 0, Math.floor(gal * 2 / Math.PI), run ? 4 : 1);
     // galope: estica no ar e achata no chão; parado, respira; no pulo de alegria, estica
     const br = run ? 1 + Math.sin(gal * 2) * 0.07 : jump > 2 ? 1.1 : 1 + Math.sin(f.t * 3 + i) * 0.025; m.scale.x *= 2 - br; m.scale.y *= br;
     m.position.set(f.x, hop, -36 + (run || f.follow > 0 ? 14 : 0)); m.rotation.z = run ? Math.sin(gal) * 0.13 * -f.face : Math.sin(f.t * (near ? 9 : 2)) * (near ? 0.06 : 0.015);
-    legs(m, gal, run ? 0.1 : 0, { f: 1, tailX: Math.sin(f.t * (near ? 15 : 5) + i) * (near || party ? 0.05 : 0.018), tailY: run ? Math.cos(gal) * 0.03 : 0,
+    legs(m, gal, 0, { f: 1, tailX: Math.sin(f.t * (near ? 15 : 5) + i) * (near || party ? 0.05 : 0.018), tailY: run ? Math.cos(gal) * 0.03 : 0,
       headX: run ? 0.01 : Math.sin(f.t * 1.1 + i * 2) * 0.014, headY: run ? -Math.cos(gal + 0.6) * 0.025 : Math.sin(f.t * 2.2 + i) * 0.012, breathe: run ? 0 : Math.sin(f.t * 3 + i) * 0.02, shear: 0 });
     const g = m.userData.glow; g.position.set(f.x, 30 + hop, -38); const s = 120 + Math.sin(f.t * 2.2) * 8; g.scale.set(s, s, 1); g.material.opacity = f.given ? 0.2 : 0.34;
   });
@@ -574,7 +579,7 @@ R.frame = (rdt) => {
     else if (g.y + g.h < GROUND - 4 || Math.abs(g.vx) > 200) n = 'pug-charge';
     else { walking = Math.abs(g.vx) > 12 && g.wind <= 0; if (walking) { m.userData.ph += Math.abs(g.vx) * live / 11; y += Math.abs(Math.sin(m.userData.ph)) * 3.5; } }
     const turn = g.turnT > 0 ? g.turnT / 0.2 : 0; // ao virar, o corpo gira de lado em vez de espelhar de uma vez
-    setAnim(m, n, ph, turn > 0.5 ? !flip : flip);
+    setAnim(m, n, ph, turn > 0.5 ? !flip : flip, walking ? Math.floor(m.userData.ph * 2 / Math.PI) : 1, n === 'pug-walk' ? 4 : 1);
     let sy = 1, rot = 0, dx = 0;
     if (g.hp > 0 && g.stun <= 0) {
       const air = g.y + g.h < GROUND - 4;
@@ -588,7 +593,7 @@ R.frame = (rdt) => {
     if (g.stun > 0 && g.hp > 0) m.scale.y *= 0.85 + Math.min(0.15, (1.1 - g.stun) * 0.5);
     m.position.set(x + dx, y, i * 1.5); m.rotation.z = g.hp <= 0 ? g.spin : rot + (walking ? Math.sin(m.userData.ph) * 0.045 : 0);
     const calm = g.hp > 0 && g.stun <= 0; // passos alternados, cabeça que acena no passo, rabinho enrolado que treme
-    legs(m, m.userData.ph, walking ? 0.085 : 0, { f: -1, tailX: calm ? Math.sin(clock * 13 + i * 2) * 0.02 : 0, tailY: walking ? Math.cos(m.userData.ph) * 0.02 : 0,
+    legs(m, m.userData.ph, 0, { f: -1, tailX: calm ? Math.sin(clock * 13 + i * 2) * 0.02 : 0, tailY: walking ? Math.cos(m.userData.ph) * 0.02 : 0,
       headX: g.wind > 0 ? -0.03 : 0, headY: g.wind > 0 ? -0.05 : walking ? Math.sin(m.userData.ph * 2) * 0.022 : calm ? Math.sin(clock * 2.3 + i) * 0.012 : 0, breathe: calm && !walking ? Math.sin(clock * 5 + i) * 0.02 : 0, shear: 0 });
     const stp = Math.floor(m.userData.ph / Math.PI); if (walking && stp !== m.userData.stp) { m.userData.stp = stp; spawn({ x: x + g.dir * 20, y: GROUND - 3, vx: -g.dir * 30, vy: -25, g: -30, life: 0.4, r: 3, grow: 5, color: 0xfff2c8 }); }
     m.visible = !(g.hurt > 0 && Math.floor(time * 30) % 2) && (S.arena || S.cam.x > ARENA_X - W - 200) && g.y < H + 300;
@@ -596,11 +601,11 @@ R.frame = (rdt) => {
   });
   // pombos
   S.enemies.forEach((e, i) => {
-    const m = pigeonM[i]; setAnim(m, 'pigeon', 46, e.dir > 0);
+    const m = pigeonM[i]; setAnim(m, 'pigeon', 48, e.dir > 0, e.alive ? Math.floor(e.t * 7) : 1, 4);
     m.position.set(e.x + e.w / 2, Y(e.y + e.h) - 2 + (e.alive ? Math.abs(Math.sin(e.t * 12)) * 3 : 0), 0);
     m.rotation.z = e.alive ? 0 : Math.PI; m.visible = e.y < H + 200; m.castShadow = e.alive;
     // pombo anda como pombo: a cabeça vai e volta a cada passo
-    legs(m, e.t * 12, e.alive ? 0.07 : 0, { f: -1, tailX: 0, tailY: e.alive ? Math.sin(e.t * 12) * 0.02 : 0, headX: e.alive ? Math.sin(e.t * 12) * 0.06 : 0, headY: e.alive ? Math.abs(Math.cos(e.t * 12)) * 0.015 : 0, breathe: 0, shear: 0 });
+    legs(m, e.t * 12, 0, { f: -1, tailX: 0, tailY: e.alive ? Math.sin(e.t * 12) * 0.02 : 0, headX: 0, headY: 0, breathe: 0, shear: 0 });
   });
   // itens: flutuam, giram devagar e pulsam como pequenas luzes
   S.items.forEach((it, i) => {
