@@ -234,7 +234,7 @@ TT.update = (rdt) => {
       e.alive = false; e.dy = -400; S.hitstop = 0.05; S.trauma = Math.min(1, S.trauma + 0.25);
       if (p.mega <= 0) p.vy = -560;
       emit('stomp', { x: e.x + e.w / 2, y: e.y, boss: false });
-    } else hurt();
+    } else { const hp = S.player.hp; hurt(); if (S.player.hp < hp && S.mode === 'play') emit('banner', { text: 'Um pombo te bicou! Pise nele por cima.' }); }
   }
 
   // arena

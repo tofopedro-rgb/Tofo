@@ -392,7 +392,7 @@ const ghosts = []; let ghostT = 0;
 const pugM = [0, 1].map(i => { const m = sprite('pug-walk', 5, true, i ? 0x9aa6cc : NIGHT); m.geometry = legGeo(); m.userData.ph = i * 2; m.userData.own = { 'pug-walk': ownTex('pug-walk') }; m.material.map = m.customDepthMaterial.map = m.userData.own['pug-walk'];
   m.userData.stars = [0, 1, 2].map(() => { const s = add(new THREE.Mesh(planeGeoC, new THREE.MeshBasicMaterial({ map: texStar, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false })), 7); s.scale.set(16, 16, 1); s.visible = false; return s; });
   return m; });
-const pigeonM = S.enemies.map(() => { const m = sprite('pigeon', 5, true, NIGHT); m.geometry = legGeo(); m.userData.own = { pigeon: ownTex('pigeon') }; m.material.map = m.customDepthMaterial.map = m.userData.own.pigeon; return m; });
+const pigeonM = S.enemies.map(() => { const m = sprite('pigeon', 5, true, 0xffffff); m.geometry = legGeo(); m.userData.warn = add(new THREE.Mesh(planeGeoC, glowMat(0xff2a55, 0.8)), 6); m.material.color.setRGB(1.75, 1.6, 1.85); m.userData.own = { pigeon: ownTex('pigeon') }; m.material.map = m.customDepthMaterial.map = m.userData.own.pigeon; return m; });
 const itemM = S.items.map(it => { const m = sprite(it.type === 'gold' ? 'cookie' : it.type, 5, false, it.type === 'gold' ? 0xffd640 : 0xfff4e0); m.geometry = planeGeoC;
   m.userData.glow = add(new THREE.Mesh(planeGeoC, glowMat(it.type === 'monkey' ? 0xff8a2a : it.type === 'cookie' ? 0xffc76a : 0xffe14d)), 4);
   return m; });
@@ -601,9 +601,12 @@ R.frame = (rdt) => {
   });
   // pombos
   S.enemies.forEach((e, i) => {
-    const m = pigeonM[i]; setAnim(m, 'pigeon', 48, e.dir > 0, e.alive ? Math.floor(e.t * 7) : 1, 4);
+    const m = pigeonM[i]; setAnim(m, 'pigeon', 64, e.dir > 0, e.alive ? Math.floor(e.t * 7) : 1, 4);
     m.position.set(e.x + e.w / 2, Y(e.y + e.h) - 2 + (e.alive ? Math.abs(Math.sin(e.t * 12)) * 3 : 0), 0);
     m.rotation.z = e.alive ? 0 : Math.PI; m.visible = e.y < H + 200; m.castShadow = e.alive;
+    // perigo à vista: um halo rosado que pulsa atrás de cada pombo, mais forte quando o Timtim chega perto
+    { const w = m.userData.warn, near = Math.max(0, 1 - Math.abs(tx - m.position.x) / 420), s = 120 + Math.sin(time * 6 + i) * 14 + near * 30;
+      w.visible = e.alive && m.visible; w.position.set(m.position.x, m.position.y + 30, 2); w.scale.set(s * 1.25, s, 1); w.material.opacity = 0.75 + near * 0.25 + Math.sin(time * 6 + i) * 0.15; }
     // pombo anda como pombo: a cabeça vai e volta a cada passo
     legs(m, e.t * 12, 0, { f: -1, tailX: 0, tailY: e.alive ? Math.sin(e.t * 12) * 0.02 : 0, headX: 0, headY: 0, breathe: 0, shear: 0 });
   });
