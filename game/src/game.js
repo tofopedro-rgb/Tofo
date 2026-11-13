@@ -6,7 +6,7 @@ const TT = window.TT = window.TT || {};
 const C = TT.C = {
   W: 960, H: 540, GROUND: 452, GRAV: 2300, JUMP_V: -860, RUN: 310, FAST: 440, SLOW: 175,
   LEVEL_END: 9800, ARENA_X: 8840,
-  grounds: [[0, 1250], [1400, 1000], [2520, 820], [3480, 1100], [4740, 900], [5830, 760], [6820, 700], [7680, 2120]],
+  grounds: [[0, 1250], [1400, 600], [1400, 1000], [2520, 820], [3480, 1100], [4740, 900], [5830, 760], [6820, 700], [7680, 2120]],
   plats: [
     [520, 340, 160], [820, 270, 140], [1180, 330, 150], [1700, 330, 180], [1960, 250, 140],
     [2380, 330, 160], [2850, 320, 140], [3100, 240, 160], [3330, 330, 120], [3800, 320, 200],
@@ -18,7 +18,17 @@ const C = TT.C = {
   // amigos chihuahuas que esperam no caminho e entregam biscoito
   friends: [{ x: 1452, kind: 'chi-pb' }, { x: 4792, kind: 'chi-br' }], GIFT: 3,
 };
-const { W, H, GROUND, GRAV, JUMP_V, RUN, FAST, LEVEL_END, ARENA_X } = C;
+// A fase ensina uma coisa de cada vez: começo só com biscoitos e plataformas, depois um pombo sozinho,
+// depois um chocolate sozinho, e só então tudo junto. Para caber o trecho de aprendizado (1400–2000),
+// tudo o que ficava de 1400 em diante foi empurrado STRETCH px para a direita — sx() faz essa conta.
+const GAP_AT = 1400, STRETCH = 600, sx = x => x >= GAP_AT ? x + STRETCH : x;
+C.LEVEL_END = sx(C.LEVEL_END); C.ARENA_X = sx(C.ARENA_X);
+C.grounds = C.grounds.map(([x, w], i) => [i === 1 ? x : sx(x), w]);
+C.plats = C.plats.map(([x, y, w]) => [sx(x), y, w]).concat([[1560, 330, 140], [1820, 260, 120]]);
+C.checkpoints = C.checkpoints.map(sx); C.friends.forEach(f => { f.x = sx(f.x); });
+// dicas que aparecem uma vez, quando o jogador chega perto da novidade
+C.tips = [{ x: 1300, text: 'Pise nos pombos por cima!' }, { x: 2420, text: 'Chocolate faz mal! Pule por cima' }];
+const { W, H, GROUND, GRAV, JUMP_V, RUN, FAST, LEVEL_END, ARENA_X } = C; // (já com o trecho novo)
 
 // ---- eventos (o jogo avisa; som, tela e interface reagem) ----
 const handlers = {};
@@ -49,15 +59,20 @@ function makeItems() {
   // biscoitos dourados: só o pulo duplo alcança
   [[1325, 165], [3410, 70], [7610, 40]].forEach(([x, y]) => it.push({ type: 'gold', x, y, got: false }));
   // chocolates no chão: cachorro não pode! Dá dor de barriga e ele anda devagar por um tempo. Dá para pular por cima.
-  [1080, 2240, 3900, 5370, 6330, 7830].forEach(x => it.push({ type: 'choco', x, y: GROUND - 34, got: false }));
+  // O primeiro aparece sozinho, depois do pombo de treino e do primeiro amigo.
+  [2240, 3900, 5370, 6330, 7830].forEach(x => it.push({ type: 'choco', x, y: GROUND - 34, got: false }));
   it.push({ type: 'banana', x: 7270, y: 150, got: false });
   it.push({ type: 'banana', x: 2010, y: 205, got: false });
   it.push({ type: 'monkey', x: 4220, y: 170, got: false });
   it.push({ type: 'banana', x: 5550, y: 160, got: false });
+  it.forEach(o => { o.x = sx(o.x); });
+  // trecho de aprendizado (já em coordenadas finais): poucos biscoitos e o pombo de treino
+  [1600, 1640, 1680].forEach(x => cookie(x, 290)); cookie(1860, 220);
   return it;
 }
 function makeEnemies() {
-  return [[900, 700, 1150], [1700, 1570, 2300], [2700, 2560, 3300], [3700, 3520, 4500], [4300, 4150, 4300], [5100, 4930, 5600], [6100, 5860, 6560], [7100, 6840, 7500], [8100, 7700, 8700]]
+  // sem pombo no começo; o primeiro anda sozinho no trecho de aprendizado
+  return [[1750, 1480, 1960], ...[[1700, 1570, 1980], [2700, 2560, 3300], [3700, 3520, 4500], [4300, 4150, 4300], [5100, 4930, 5600], [6100, 5860, 6560], [7100, 6840, 7500], [8100, 7700, 8700]].map(e => e.map(sx))]
     .map(([x, a, b]) => ({ x, y: GROUND - 30, w: 38, h: 30, a, b, dir: -1, alive: true, t: Math.random() * 6, dy: 0 }));
 }
 function makePugs() {
@@ -83,13 +98,13 @@ function reset() {
     player: makePlayer(120), items: makeItems(), enemies: makeEnemies(), pugs: makePugs(),
     cam: { x: 0, y: 0, look: 0 }, time: 0, clock: 0, cookies: 0, arena: false, trauma: 0, hitstop: 0,
     gold: 0, timeScale: 1, slowT: 0, cine: null, checkpoint: -1, bossSeen: false, hpLost: 0, winT: 0, dustT: 0,
-    friends: C.friends.map(f => ({ x: f.x, home: f.x, vx: 0, follow: 0, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [],
+    friends: C.friends.map(f => ({ x: f.x, home: f.x, vx: 0, follow: 0, kind: f.kind, given: false, hop: 0, face: -1, t: 0 })), gifts: [], tip: 0,
   });
   S.totalCookies = S.items.filter(i => i.type === 'cookie').length + C.friends.length * C.GIFT;
 }
 reset();
 
-TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'Os pugs da bruxa estão infernizando a vila…' }); };
+TT.start = () => { reset(); S.mode = 'play'; emit('start'); emit('banner', { text: 'Derrote os dois pugs da bruxa!' }); };
 TT.retry = () => {
   if (S.checkpoint < 0) return TT.start();
   const x = C.checkpoints[S.checkpoint];
@@ -159,6 +174,7 @@ TT.update = (rdt) => {
 
   p.x += p.vx * dt;
   p.x = Math.max(S.arena ? ARENA_X + 4 : 0, Math.min(LEVEL_END - p.w - 4, p.x));
+  while (S.tip < C.tips.length && p.x > C.tips[S.tip].x) emit('banner', { text: C.tips[S.tip++].text }); // dica de novidade, uma vez só
   for (const s of SOLIDS) if (!s.oneWay && overlap(p, s)) { if (p.vx > 0) p.x = s.x - p.w; else if (p.vx < 0) p.x = s.x + s.w; }
   const prevBottom = p.y + p.h;
   p.y += p.vy * dt;

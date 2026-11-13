@@ -97,8 +97,7 @@ const banner = $('banner');
 TT.on('banner', e => { banner.textContent = e.text; banner.classList.remove('show'); void banner.offsetWidth; banner.classList.add('show'); });
 TT.on('hurt', () => { const h = hearts[Math.max(0, S.player.hp)]; if (h) { h.classList.remove('hit'); void h.offsetWidth; h.classList.add('hit'); } });
 TT.on('start', () => { show(null); $('hud').classList.add('on'); stage.classList.remove('cine'); $('bossCard').classList.remove('show'); $('cookieT').textContent = '/' + S.totalCookies; irisOpenFromBlack(); });
-// história: segunda fala da abertura e o balão dos amigos
-TT.on('start', e => { if (!e.retry) setTimeout(() => { if (S.mode === 'play' && !S.arena) TT.emit('banner', { text: 'Derrote os dois pugs da bruxa!' }); }, 3200); });
+// balão dos amigos
 const say = $('say'), LINES = ['Toma um turbo, Timtim!', 'Fica invencível, Timtim!']; let sayF = null, sayEnd = 0;
 TT.on('friend', e => { sayF = S.friends.reduce((a, f) => Math.abs(f.x - e.x) < Math.abs(a.x - e.x) ? f : a); say.textContent = LINES[S.friends.indexOf(sayF) % 2]; sayEnd = performance.now() + 2600; say.classList.add('on'); });
 const uiFrame0 = TT.uiFrame;
