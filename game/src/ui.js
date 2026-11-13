@@ -53,7 +53,7 @@ function irisOpenFromBlack() { iris.style.transition = 'none'; irisTo(true, { x:
 
 function begin(fn) { TT.audioInit(); TT.sfx('ui'); irisTo(true, { x: 0.5, y: 0.5 }); setTimeout(() => { fn(); }, 520); }
 // abertura: três frases sobre a arte do título, com a câmera avançando até a figueira. Qualquer toque pula.
-const titleEl = $('title'), STORY = ['A vizinha bruxa mandou seus dois pugs infernizarem a Reserva Alpha Village.', 'Só Timtim pode derrotá-los. Seus amigos chihuahuas esperam no caminho com poderes.', 'A paz da vila depende de você. Vai, Timtim!'];
+const titleEl = $('title'), STORY = ['A vizinha bruxa mandou seus dois pugs infernizarem a Vila de Reserva.', 'Só Timtim pode derrotá-los. Seus amigos chihuahuas esperam no caminho com poderes.', 'A paz da vila depende de você. Vai, Timtim!'];
 let storyTimer = null, storyAt = 0;
 function storyLine(i) { if (i >= STORY.length) return endStory(); const l = $('storyLine'); l.textContent = STORY[i]; l.classList.remove('show'); void l.offsetWidth; l.classList.add('show'); storyTimer = setTimeout(() => storyLine(i + 1), 3100); }
 function endStory() { if (!titleEl.classList.contains('story') || titleEl.classList.contains('leaving')) return; clearTimeout(storyTimer); titleEl.classList.add('leaving'); begin(TT.start); }
