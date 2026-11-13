@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 const TT = window.TT;
-let ctx = null, master, musicBus, sfxBus, noiseBuf;
+let ctx = null, master, musicBus, trackBus, sfxBus, noiseBuf;
 let muted = false;
 try { muted = localStorage.getItem('tintim-mute') === '1'; } catch (_) {}
 
@@ -17,6 +17,7 @@ function init() {
     const len = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, len, ctx.sampleRate);
     for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
     const hall = ctx.createConvolver(); hall.buffer = ir; const wet = ctx.createGain(); wet.gain.value = 0.55; musicBus.connect(hall).connect(wet).connect(master);
+    trackBus = ctx.createGain(); trackBus.gain.value = 0.62; trackBus.connect(master);
     sfxBus = ctx.createGain(); sfxBus.gain.value = 0.8; sfxBus.connect(master);
     noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate);
     const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
@@ -105,19 +106,48 @@ function schedule() {
     step++; nextT += st;
   }
 }
+// ---- trilha gravada (orquestra): toca em laço com fusão entre o fim e o começo; a trilha sintetizada acima cobre enquanto o arquivo carrega ou se ele faltar ----
+const TRACKS = { title: 'theme', level: 'theme', boss: 'boss' }, bufs = {};
+let track = null;
+function stopTrack() {
+  if (!track) return; const t = track; track = null; t.alive = false;
+  t.g.gain.setTargetAtTime(0, ctx.currentTime, 0.18);
+  setTimeout(() => { t.srcs.forEach(s => { try { s.stop(); } catch (_) {} }); t.g.disconnect(); }, 900);
+}
+function playTrack(file) {
+  const buf = bufs[file], XF = 1.2, g = ctx.createGain(); g.connect(trackBus);
+  const t = track = { file, g, alive: true, srcs: [] };
+  const next = at => {
+    if (!t.alive) return;
+    const s = ctx.createBufferSource(), e = ctx.createGain(), end = at + buf.duration; s.buffer = buf;
+    e.gain.setValueAtTime(0, at); e.gain.linearRampToValueAtTime(1, at + XF); e.gain.setValueAtTime(1, end - XF); e.gain.linearRampToValueAtTime(0, end);
+    s.connect(e).connect(g); s.start(at); t.srcs.push(s); if (t.srcs.length > 3) t.srcs.shift();
+    setTimeout(() => next(Math.max(end - XF, ctx.currentTime + 0.05)), Math.max(0, (end - XF - ctx.currentTime - 1.5) * 1000));
+  };
+  next(ctx.currentTime + 0.05);
+}
+function loadTrack(file) {
+  if (file in bufs) return; bufs[file] = null;
+  fetch('assets/music/' + file + '.mp3').then(r => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(a => ctx.decodeAudioData(a))
+    .then(b => { bufs[file] = b; if (song && TRACKS[song] === file && !track) { clearInterval(timer); timer = null; playTrack(file); } })
+    .catch(() => { bufs[file] = false; });
+}
 TT.music = name => {
   if (name === song) return;
   song = name; step = 0;
-  if (!name) { clearInterval(timer); timer = null; return; }
-  if (!init()) return;
-  nextT = ctx.currentTime + 0.08;
-  if (!timer) timer = setInterval(schedule, 40);
+  const file = name && TRACKS[name];
+  if (ctx && track && track.file !== file) stopTrack();
+  clearInterval(timer); timer = null;
+  if (!name || !init()) return;
+  loadTrack(file);
+  if (bufs[file]) { if (!track) playTrack(file); return; }
+  nextT = ctx.currentTime + 0.08; timer = setInterval(schedule, 40);
 };
 TT.setMuted = m => {
   muted = m; try { localStorage.setItem('tintim-mute', m ? '1' : '0'); } catch (_) {}
   if (ctx) master.gain.setTargetAtTime(m ? 0 : 0.9, ctx.currentTime, 0.03);
 };
 TT.isMuted = () => muted;
-TT.audioDuck = on => { if (ctx) musicBus.gain.setTargetAtTime(on ? 0.1 : 0.32, ctx.currentTime, 0.1); };
+TT.audioDuck = on => { if (ctx) { musicBus.gain.setTargetAtTime(on ? 0.1 : 0.32, ctx.currentTime, 0.1); trackBus.gain.setTargetAtTime(on ? 0.2 : 0.62, ctx.currentTime, 0.1); } };
 TT.audioInit = init;
 })();

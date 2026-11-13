@@ -23,7 +23,7 @@ cd game && python3 -m http.server 8765   # abrir http://localhost:8765
 | `src/game.js` | Regras: física, inimigos, chefão, checkpoints, fluxo. Avisa o resto por eventos. |
 | `src/render3d.js` | Cenário 3D (three.js) desenhado por código, sprites, sombras, luzes, partículas, câmera e pós-processamento. |
 | `src/ui.js` | Controles, placar, telas e transições (HTML/CSS). |
-| `src/audio.js` | Efeitos e trilha gerados no navegador. |
+| `src/audio.js` | Efeitos gerados no navegador e trilha orquestral gravada (`assets/music`), tocada em laço; a trilha sintetizada cobre enquanto o arquivo carrega. |
 | `src/main.js` | Laço principal e qualidade adaptativa. |
 | `docs/design.md` | Decisões de design e de arte. |
 | `tests/smoke.js` | Teste automático do caminho crítico (`node game/tests/smoke.js`). |
