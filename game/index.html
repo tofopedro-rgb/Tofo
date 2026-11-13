@@ -121,7 +121,11 @@
   #title.story .tbg { transform: scale(1.5); filter: brightness(.62); }
   #storyLine { position: absolute; left: 10%; right: 10%; bottom: 13%; text-align: center; font-family: var(--display); font-size: 3.1cqw; line-height: 1.35; letter-spacing: .12cqw; color: #fff4dc; opacity: 0; text-wrap: balance;
     text-shadow: 0 0 1.4cqw rgba(255, 190, 110, .7), 0 .2cqw .8cqw rgba(0, 4, 14, .95); }
-  #title.story #storyLine.show { animation: line 3.1s var(--out) both; }
+  #title.story #storyLine.show { animation: line var(--d, 3.1s) var(--out) both; }
+  #introC { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s; pointer-events: none; }
+  #title.story #introC { opacity: 1; }
+  #introScrim { position: absolute; inset: 0; opacity: 0; transition: opacity 1s; pointer-events: none; background: linear-gradient(180deg, transparent 55%, rgba(6, 10, 24, .75)); }
+  #title.story #introScrim { opacity: 1; }
   @keyframes line { 0% { opacity: 0; transform: translateY(1.2cqw); filter: blur(.4cqw); } 14%, 84% { opacity: 1; transform: none; filter: none; } 100% { opacity: 0; transform: translateY(-.8cqw); } }
   #skip { position: absolute; right: 2.4cqw; bottom: 2.4cqw; font-size: 1.3cqw; letter-spacing: .2cqw; color: var(--dim); opacity: 0; transition: opacity .6s .8s; }
   #title.story #skip { opacity: 1; }
@@ -215,7 +219,7 @@
       <p class="hint">← → andar · Espaço pula, de novo no ar dá a pirueta · os amigos chihuahuas dão poderes · desvie dos chocolates · derrote os 2 pugs da bruxa</p>
       <p id="best"></p>
     </div>
-    <p id="storyLine"></p><span id="skip">toque para pular</span>
+    <canvas id="introC" width="1280" height="720"></canvas><div id="introScrim"></div><p id="storyLine"></p><span id="skip">toque para pular</span>
   </section>
 
   <section id="pause" class="screen scrim"><div class="card">
@@ -251,6 +255,7 @@
 <script src="src/game.js"></script>
 <script src="src/audio.js"></script>
 <script src="src/render3d.js"></script>
+<script src="src/intro.js"></script>
 <script src="src/ui.js"></script>
 <script src="src/main.js"></script>
 </body>

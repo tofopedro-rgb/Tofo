@@ -52,16 +52,17 @@ function irisTo(closed, at) {
 function irisOpenFromBlack() { iris.style.transition = 'none'; irisTo(true, { x: 0.3, y: 0.7 }); void iris.offsetWidth; iris.style.transition = ''; requestAnimationFrame(() => irisTo(false)); }
 
 function begin(fn) { TT.audioInit(); TT.sfx('ui'); irisTo(true, { x: 0.5, y: 0.5 }); setTimeout(() => { fn(); }, 520); }
-// abertura: três frases sobre a arte do título, com a câmera avançando até a figueira. Qualquer toque pula.
-const titleEl = $('title'), STORY = ['A vizinha bruxa mandou seus dois pugs infernizarem a Vila de Reserva.', 'Só Timtim pode derrotá-los. Seus amigos chihuahuas esperam no caminho com poderes.', 'A paz da vila depende de você. Vai, Timtim!'];
+// abertura: introdução cinematográfica (src/intro.js) — três quadros com zoom lento e uma frase em cada. Qualquer toque pula.
+const titleEl = $('title'), STORY = ['A Vizinha Bruxa tirou a paz da Vila de Reserva com seus Pugs barulhentos.', 'Agora cabe ao Timtim…', '…com a ajuda de seus amigos Zara e Elvis, restaurar a paz e a harmonia deste lugar.'];
+const DUR = (TT.intro && TT.intro.durations) || [3.1, 3.1, 3.1];
 let storyTimer = null, storyAt = 0;
-function storyLine(i) { if (i >= STORY.length) return endStory(); const l = $('storyLine'); l.textContent = STORY[i]; l.classList.remove('show'); void l.offsetWidth; l.classList.add('show'); storyTimer = setTimeout(() => storyLine(i + 1), 3100); }
+function storyLine(i) { if (i >= STORY.length) return endStory(); if (TT.intro) TT.intro.scene(i); const l = $('storyLine'); l.textContent = STORY[i]; l.style.setProperty('--d', DUR[i] + 's'); l.classList.remove('show'); void l.offsetWidth; l.classList.add('show'); storyTimer = setTimeout(() => storyLine(i + 1), DUR[i] * 1000); }
 function endStory() { if (!titleEl.classList.contains('story') || titleEl.classList.contains('leaving')) return; clearTimeout(storyTimer); titleEl.classList.add('leaving'); begin(TT.start); }
 $('btnStart').onclick = () => { if (titleEl.classList.contains('story')) return endStory(); TT.audioInit(); TT.sfx('ui'); TT.music('title'); titleEl.classList.add('story'); storyAt = performance.now(); storyLine(0); };
 titleEl.addEventListener('pointerdown', () => { if (titleEl.classList.contains('story') && performance.now() - storyAt > 500) endStory(); });
 const firstTouch = () => { if (S.mode === 'title') { TT.audioInit(); TT.music('title'); } removeEventListener('pointerdown', firstTouch); removeEventListener('keydown', firstTouch); };
 addEventListener('pointerdown', firstTouch); addEventListener('keydown', firstTouch);
-TT.on('start', () => setTimeout(() => titleEl.classList.remove('story', 'leaving'), 600));
+TT.on('start', () => setTimeout(() => { titleEl.classList.remove('story', 'leaving'); if (TT.intro) TT.intro.stop(); }, 600));
 $('btnAgain').onclick = () => begin(TT.start);
 $('btnRestart').onclick = () => begin(TT.start);
 $('btnLoseRestart').onclick = () => begin(TT.start);
